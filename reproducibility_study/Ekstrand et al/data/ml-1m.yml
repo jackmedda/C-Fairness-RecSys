@@ -1,0 +1,36 @@
+ratings:
+  file: ml-1m/ratings.dat
+  format: delimited
+  delimiter: "::"
+  header: false
+  entity_type: rating
+users:
+  file: ml-1m/users.dat
+  format: delimited
+  delimiter: "::"
+  header: false
+  entity_type: user
+  columns:
+  - name: id
+    type: long
+  - name: gender
+    type: string
+  - name: age
+    type: string
+  - name: occupation
+    type: int
+  - name: zip
+    type: string
+movies:
+  file: ml-1m/movies.dat
+  format: delimited
+  delimiter: "::"
+  header: false
+  entity_type: item
+  columns:
+  - name: id
+    type: long
+  - name: title
+    type: string
+  - name: genres
+    type: string

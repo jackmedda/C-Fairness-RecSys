@@ -1,0 +1,14 @@
+/build
+/.idea
+/.idea_modules
+.gradle
+.gradle-*
+/buildSrc/build
+*.iml
+.ipynb_checkpoints
+*.html
+/data/ml-1m
+/data/lastfm-dataset-*
+/node_modules
+*.zip
+gradle.properties

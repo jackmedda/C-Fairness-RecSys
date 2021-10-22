@@ -1,0 +1,192 @@
+name: LFM1K
+datasets:
+- name: "LFM1K.0"
+  entity_types: artist-count
+  train:
+  - type: "textfile"
+    file: "../build/lfm1k-splits/u.part1.train.csv"
+    format: "csv"
+    entity_type: "artist-count"
+    header: true
+    columns:
+      user: {name: "user", type: "long"}
+      item: {name: "item", type: "long"}
+      count: {name: "count", type: "int"}
+  - type: derived
+    source_type: artist-count
+    source_attribute: user
+    entity_type: user
+  - type: derived
+    source_type: artist-count
+    source_attribute: item
+    entity_type: item
+  test:
+  - type: "textfile"
+    file: "../build/lfm1k-splits/u.part1.test.csv"
+    format: "csv"
+    entity_type: "artist-count"
+    header: true
+    columns:
+      user: {name: "user", type: "long"}
+      item: {name: "item", type: "long"}
+      count: {name: "count", type: "int"}
+  - type: derived
+    source_type: artist-count
+    source_attribute: user
+    entity_type: user
+  - type: derived
+    source_type: artist-count
+    source_attribute: item
+    entity_type: item
+- name: "LFM1K.1"
+  entity_types: artist-count
+  train:
+  - type: "textfile"
+    file: "../build/lfm1k-splits/u.part2.train.csv"
+    format: "csv"
+    entity_type: "artist-count"
+    header: true
+    columns:
+      user: {name: "user", type: "long"}
+      item: {name: "item", type: "long"}
+      count: {name: "count", type: "int"}
+  - type: derived
+    source_type: artist-count
+    source_attribute: user
+    entity_type: user
+  - type: derived
+    source_type: artist-count
+    source_attribute: item
+    entity_type: item
+  test:
+  - type: "textfile"
+    file: "../build/lfm1k-splits/u.part2.test.csv"
+    format: "csv"
+    entity_type: "artist-count"
+    header: true
+    columns:
+      user: {name: "user", type: "long"}
+      item: {name: "item", type: "long"}
+      count: {name: "count", type: "int"}
+  - type: derived
+    source_type: artist-count
+    source_attribute: user
+    entity_type: user
+  - type: derived
+    source_type: artist-count
+    source_attribute: item
+    entity_type: item
+- name: "LFM1K.3"
+  entity_types: artist-count
+  train:
+  - type: "textfile"
+    file: "../build/lfm1k-splits/u.part3.train.csv"
+    format: "csv"
+    entity_type: "artist-count"
+    header: true
+    columns:
+      user: {name: "user", type: "long"}
+      item: {name: "item", type: "long"}
+      count: {name: "count", type: "int"}
+  - type: derived
+    source_type: artist-count
+    source_attribute: user
+    entity_type: user
+  - type: derived
+    source_type: artist-count
+    source_attribute: item
+    entity_type: item
+  test:
+  - type: "textfile"
+    file: "../build/lfm1k-splits/u.part3.test.csv"
+    format: "csv"
+    entity_type: "artist-count"
+    header: true
+    columns:
+      user: {name: "user", type: "long"}
+      item: {name: "item", type: "long"}
+      count: {name: "count", type: "int"}
+  - type: derived
+    source_type: artist-count
+    source_attribute: user
+    entity_type: user
+  - type: derived
+    source_type: artist-count
+    source_attribute: item
+    entity_type: item
+- name: "LFM1K.4"
+  entity_types: artist-count
+  train:
+  - type: "textfile"
+    file: "../build/lfm1k-splits/u.part4.train.csv"
+    format: "csv"
+    entity_type: "artist-count"
+    header: true
+    columns:
+      user: {name: "user", type: "long"}
+      item: {name: "item", type: "long"}
+      count: {name: "count", type: "int"}
+  - type: derived
+    source_type: artist-count
+    source_attribute: user
+    entity_type: user
+  - type: derived
+    source_type: artist-count
+    source_attribute: item
+    entity_type: item
+  test:
+  - type: "textfile"
+    file: "../build/lfm1k-splits/u.part4.test.csv"
+    format: "csv"
+    entity_type: "artist-count"
+    header: true
+    columns:
+      user: {name: "user", type: "long"}
+      item: {name: "item", type: "long"}
+      count: {name: "count", type: "int"}
+  - type: derived
+    source_type: artist-count
+    source_attribute: user
+    entity_type: user
+  - type: derived
+    source_type: artist-count
+    source_attribute: item
+    entity_type: item
+- name: "LFM1K.5"
+  entity_types: artist-count
+  train:
+  - type: "textfile"
+    file: "../build/lfm1k-splits/u.part5.train.csv"
+    format: "csv"
+    entity_type: "artist-count"
+    header: true
+    columns:
+      user: {name: "user", type: "long"}
+      item: {name: "item", type: "long"}
+      count: {name: "count", type: "int"}
+  - type: derived
+    source_type: artist-count
+    source_attribute: user
+    entity_type: user
+  - type: derived
+    source_type: artist-count
+    source_attribute: item
+    entity_type: item
+  test:
+  - type: "textfile"
+    file: "../build/lfm1k-splits/u.part5.test.csv"
+    format: "csv"
+    entity_type: "artist-count"
+    header: true
+    columns:
+      user: {name: "user", type: "long"}
+      item: {name: "item", type: "long"}
+      count: {name: "count", type: "int"}
+  - type: derived
+    source_type: artist-count
+    source_attribute: user
+    entity_type: user
+  - type: derived
+    source_type: artist-count
+    source_attribute: item
+    entity_type: item

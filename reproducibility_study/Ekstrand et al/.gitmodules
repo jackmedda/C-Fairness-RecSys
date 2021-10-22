@@ -1,0 +1,9 @@
+[submodule "paper"]
+	path = paper
+	url = https://git.overleaf.com/8855210tyskkctfrhmt
+[submodule "poster-summary"]
+	path = poster-summary
+	url = https://git.overleaf.com/8855210tyskkctfrhmt
+[submodule "fat-paper"]
+	path = fat-paper
+	url = https://git.overleaf.com/11320299rwmpkgzgvfvz

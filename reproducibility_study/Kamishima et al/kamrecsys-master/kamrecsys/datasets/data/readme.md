@@ -1,0 +1,1 @@
+Other sample data files, such as Movielens data, are converted from pubic data by the script in /data directory.

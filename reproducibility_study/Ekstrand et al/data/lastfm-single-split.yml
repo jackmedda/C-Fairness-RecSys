@@ -1,0 +1,49 @@
+name: LastFM
+datasets:
+- name: "LastFM.0"
+  entity_types: artist-count
+  train:
+  - type: "textfile"
+    file: "../build/lastfm-splits/u.part1.train.csv"
+    format: "csv"
+    entity_type: "artist-count"
+    header: true
+    columns:
+      user: {name: "user", type: "long"}
+      item: {name: "item", type: "long"}
+      count: {name: "count", type: "int"}
+  - type: "textfile"
+    file: "../build/lastfm-artists.csv"
+    format: "csv"
+    entity_type: "item"
+    header: true
+    columns:
+      id: {name: "id", type: "long"}
+      artid: {name: "mbid", type: "string"}
+  - type: "textfile"
+    file: "../build/lastfm-users.csv"
+    format: "csv"
+    entity_type: "user"
+    header: true
+    columns:
+      id: {name: "id", type: "long"}
+      gender: {name: "gender", type: "string"}
+      age: {name: "age", type: "int"}
+  test:
+  - type: "textfile"
+    file: "../build/lastfm-splits/u.part1.test.csv"
+    format: "csv"
+    entity_type: "artist-count"
+    header: true
+    columns:
+      user: {name: "user", type: "long"}
+      item: {name: "item", type: "long"}
+      count: {name: "count", type: "int"}
+  - type: derived
+    source_type: artist-count
+    source_attribute: user
+    entity_type: user
+  - type: derived
+    source_type: artist-count
+    source_attribute: item
+    entity_type: item

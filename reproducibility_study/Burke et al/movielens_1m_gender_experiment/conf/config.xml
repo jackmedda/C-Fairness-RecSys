@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<!-- Configuration file for FAT* tutorial 
+	 Example 04: Fairness-aware algorithms -->
+
+<librec-auto>
+	<random-seed>202001</random-seed>
+	<thread-count>1</thread-count>
+
+	<!-- PATH SECTION -->
+	<path>
+		<data>movielens_1m_gender_experiment/data</data>
+		<result>result</result>
+		<log>log</log>
+	</path>
+	
+	<!-- DATA SECTION -->
+	<data>
+		<format>UIR</format>
+		<train-file format="text">movielens_1m_train.csv</train-file>
+	</data>
+
+	<!-- SPLITTER SECTION -->
+	<splitter>
+		<model>testset</model>
+	</splitter>
+	
+	<!-- FEATURES SECTION -->
+	<features>
+		<appender-class>net.librec.data.convertor.appender.UserFeatureAppender</appender-class>
+		<user-feature-file>movielens_1m_user-features_(user_gender).csv</user-feature-file>
+	</features>
+	
+	<!-- ALGORITHM SECTION  -->
+	<alg>
+		<class>net.librec.recommender.cf.ranking.UBLNSLIMRecommender</class>
+		<early-stop>true</early-stop>
+		<similarity type="user">cos</similarity>
+		<neighborhood-size>50</neighborhood-size>
+		<shrinkage>10</shrinkage>
+		<bold-driver>false</bold-driver>
+		<iterator-max>10</iterator-max>
+		<l1-reg>0.1</l1-reg>
+		<l2-reg>0.001</l2-reg>
+		<l3-reg>25</l3-reg>
+		<min-sim>0.0</min-sim>
+	</alg>
+
+	<!-- METRICS SECTION -->
+	<metric>
+		<ranking>true</ranking>
+		<list-size>3706</list-size>
+		<class>precision,net.librec.eval.ranking.NormalizedDCGEvaluator</class>
+		<protected-feature>F</protected-feature>
+	</metric>
+	
+	<!-- POST-PROCESSING SECTION -->
+	<post action='no-parse'>
+		<script lang="python3" src="system">
+			<script-name>result-graphics.py</script-name>
+			<param name="browser">True</param>
+		</script>
+	</post> 
+</librec-auto>

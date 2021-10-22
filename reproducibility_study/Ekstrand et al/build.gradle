@@ -1,0 +1,423 @@
+apply plugin: 'java' // if you use Groovy or Scala, add those plugins
+apply plugin: 'lenskit'
+
+/* Set up the repositories for getting LensKit and other libraries.
+ * These repositories are used for your Java or Groovy code, and for running LensKit.
+ */
+repositories {
+    maven {
+        url project.uri('lenskit-repo-3.0-SNAPSHOT')
+    }
+    mavenCentral()
+}
+
+dependencies {
+    // Code needs to build with LensKit.
+    compile "org.lenskit:lenskit-all:3.0-SNAPSHOT"
+    // To run the code, we also need the LensKit CLI.
+    runtime "org.lenskit:lenskit-cli:3.0-SNAPSHOT"
+
+    // Tests use JUnit
+    testCompile "junit:junit:4.12"
+}
+
+ext.manualPrep = false
+if ((project.findProperty('prep.manual') ?: 'false') =~ /[Yy]([Ee][Ss])?|[Tt]([Rr][Uu][Ee])?/) {
+    ext.manualPrep = true
+}
+
+/* Configure LensKit */
+lenskit {
+    // you can configure the threadCount and maxMemory here, or on the command line
+    // e.g. -PthreadCount=8
+}
+
+
+import edu.boisestate.coen.piret.democool.NotebookExec
+import org.lenskit.gradle.Crossfold
+import org.lenskit.gradle.TrainTest
+
+task balancedMLSample(group: 'preparation', type: NotebookExec) {
+    notebook 'MLBalancedSample.ipynb'
+
+    inputs.dir 'data/ml-1m'
+    outputs.file "$buildDir/ml-ratings-sample-genderbalanced.csv"
+}
+
+task crossfoldML(type: Crossfold, group: 'preparation') {
+    dataSetName 'ML-1M'
+    input 'data/ml-1m.yml'
+    // test on random 5 ratings for each user
+    holdout(5, 'random')
+    // use 5-fold cross-validation
+    partitionCount 5
+}
+
+task crossfoldMLBalanced(type: Crossfold, group: 'preparation') {
+    dataSetName 'ML-1M.GB'
+    input 'data/ml-1m-balanced.yml'
+    inputs.files balancedMLSample
+
+    // test on random 5 ratings for each user
+    holdout(5, 'random')
+    // use 5-fold cross-validation
+    partitionCount 5
+}
+
+task crossfoldMLU(type: Crossfold, group: 'evaluate') {
+    dataSetName 'ML-1M.UI'
+    input 'data/ml-1m.yml'
+    method 'partition-items'
+    // test on random 5 ratings for each item
+    holdout(5, 'random')
+    // use 5-fold cross-validation
+    partitionCount 5
+}
+
+/* Run the LensKit evaluation */
+task evaluateML(type: TrainTest, group: 'evaluate') {
+    description 'Runs the LensKit evaluation.'
+    logFile "$buildDir/movielens.log"
+    logFileLevel 'DEBUG'
+
+    // we add our crossfold task as evaluation input
+    // dataSet crossfoldML
+    // dataSet crossfoldMLBalanced
+	
+	// reproduced custom baseline data
+	// dataSet {
+	//	trainSource 'custom_data/movielens_1m_train.yaml'
+	//	testSource 'custom_data/movielens_1m_test.yaml'
+	// }
+	
+	// reproduced custom gender-balanced data
+	// dataSet {
+	//	trainSource 'custom_data/movielens_1m_train_gender_balanced.yaml'
+	//	testSource 'custom_data/movielens_1m_test_gender_balanced.yaml'
+	// }
+	
+	// reproduced custom age-balanced data
+	dataSet {
+		trainSource 'custom_data/movielens_1m_train_age_balanced.yaml'
+		testSource 'custom_data/movielens_1m_test_age_balanced.yaml'
+	}
+
+
+    // send the output to appropriate files
+    outputFile "$buildDir/movielens-results.csv"
+    userOutputFile "$buildDir/movielens-user-results.csv"
+
+    // configure our algorithms
+    algorithm 'Pop-B', 'algorithms/ml/popular.groovy'
+//    algorithm 'D-G', 'algorithms/ml/gender-pop.groovy'
+//    algorithm 'D-A', 'algorithms/ml/age-pop.groovy'
+//    algorithm 'D-GA', 'algorithms/ml/gender-age-pop.groovy'
+    algorithm 'Mean-E', 'algorithms/ml/pers-mean.groovy'
+    algorithm 'II-E', 'algorithms/ml/item-item.groovy'
+    algorithm 'UU-E', 'algorithms/ml/user-user.groovy'
+    algorithm 'MF-E', 'algorithms/ml/funksvd.groovy'
+    algorithm 'II-B', 'algorithms/ml/item-item-implicit.groovy'
+    algorithm 'UU-B', 'algorithms/ml/user-user-implicit.groovy'
+    algorithm 'MF-B', 'algorithms/ml/funksvd-implicit.groovy'
+
+    // and some evaluation tasks and metrics
+    predict {
+        metric 'rmse'
+		outputFile "$buildDir/movielens_1m_predictions.csv"
+    }
+    recommend {
+        listSize -1
+        metric 'length'
+        metric 'ndcg'
+		outputFile "$buildDir/movielens_1m_recommend.csv"
+    }
+}
+
+task evaluateMLItem(type: TrainTest, group: 'evaluate') {
+    description "Run item-balanced ML evaluation"
+    logFile "$buildDir/movielens.log"
+    logFileLevel 'DEBUG'
+    
+    dataSet crossfoldMLU
+
+    // send the output to appropriate files
+    outputFile "$buildDir/movielens-ui-results.csv"
+    userOutputFile "$buildDir/movielens-ui-user-results.csv"
+
+    // configure our algorithms
+    algorithm 'Pop-B', 'algorithms/ml/popular.groovy'
+//    algorithm 'D-G', 'algorithms/ml/gender-pop.groovy'
+//    algorithm 'D-A', 'algorithms/ml/age-pop.groovy'
+//    algorithm 'D-GA', 'algorithms/ml/gender-age-pop.groovy'
+    algorithm 'Mean-E', 'algorithms/ml/pers-mean.groovy'
+    algorithm 'II-E', 'algorithms/ml/item-item.groovy'
+    algorithm 'UU-E', 'algorithms/ml/user-user.groovy'
+    algorithm 'MF-E', 'algorithms/ml/funksvd.groovy'
+    algorithm 'II-B', 'algorithms/ml/item-item-implicit.groovy'
+    algorithm 'UU-B', 'algorithms/ml/user-user-implicit.groovy'
+    algorithm 'MF-B', 'algorithms/ml/funksvd-implicit.groovy'
+
+    // and some evaluation tasks and metrics
+    recommend {
+        listSize 100
+        labelPrefix 'L100'
+        metric 'ndcg'
+        metric 'mrr'
+        metric 'map'
+    }
+    recommend {
+        listSize -1
+        metric 'length'
+        metric 'ndcg'
+        metric 'mrr'
+        metric 'map'
+    }
+    recommend {
+        listSize -1
+        labelPrefix '1R'
+        separateItems true
+        itemOutputFile "$buildDir/movielens-1R-items.csv"
+        metric 'ndcg'
+        metric 'mrr'
+        metric 'map'
+    }
+}
+
+def lfmAlgos = {
+    // configure our algorithms
+    algorithm 'Pop-B', 'algorithms/lastfm/popular.groovy'
+    algorithm 'Pop-C', 'algorithms/lastfm/pop-count.groovy'
+    algorithm 'II', 'algorithms/lastfm/item-item.groovy'
+    algorithm 'MF', 'algorithms/lastfm/funksvd.groovy'
+    algorithm 'UU', 'algorithms/lastfm/user-user.groovy'
+}
+
+def lfmMetrics = {
+    // and some evaluation tasks and metrics
+    rank {
+        metric('ndcg') {
+            gainAttribute 'count'
+        }
+    }
+    recommend {
+        listSize 100
+        labelPrefix 'L100'
+        metric 'mrr'
+        metric('ndcg') {
+            gainAttribute 'count'
+        }
+        metric 'map'
+    }
+    recommend {
+        listSize 10000
+        labelPrefix 'L10K'
+        metric 'length'
+        metric 'mrr'
+        metric('ndcg') {
+            gainAttribute 'count'
+        }
+        metric 'map'
+    }
+    recommend {
+        listSize -1
+        metric 'length'
+        metric 'mrr'
+        metric('ndcg') {
+            gainAttribute 'count'
+        }
+        metric 'map'
+    }
+}
+
+task prepLFM360K(type: Exec, group: 'preparation') {
+    description 'Preprocess the Last.FM 360K data set'
+
+    inputs.dir 'data/lastfm-dataset-360K'
+    outputs.dir 'data/lastfm-splits'
+    outputs.file 'data/lastfm-users.csv'
+    outputs.file 'data/lastfm-play-counts.csv'
+
+    executable 'Rscript'
+    args 'prep-lastfm-360k.R'
+}
+
+task balancedLFM360KSample(group: 'preparation', type: NotebookExec) {
+    notebook 'LastFMBalancedSample.ipynb'
+
+    inputs.dir 'data/lastfm-dataaset-360K'
+    outputs.file "$buildDir/usersha1-artmbid-artname-plays-sample.tsv"
+    outputs.dir "$buildDir/lastfm-splits-sample"
+
+    doLast {
+        exec {
+            executable 'Rscript'
+            args 'pre-lastfm-360k-gender-balance-sampling.R'
+        }
+    }
+}
+
+task evaluateLFM360K(type: TrainTest, group: 'evaluate') {
+    description 'Runs the LensKit evaluation.'
+    dependsOn prepLFM360K
+    logFile "$buildDir/lastfm.log"
+    logFileLevel 'DEBUG'
+
+    // we add our crossfold task as evaluation input
+    dataSet 'data/lastfm-user-splits.yml'
+
+    // send the output to appropriate files
+    outputFile "$buildDir/lastfm-results.csv"
+    userOutputFile "$buildDir/lastfm-user-results.csv"
+
+    configure lfmAlgos
+    configure lfmMetrics
+}
+
+task evaluateLFM360KItem(type: TrainTest, group: 'evaluate') {
+    description 'Runs the LensKit evaluation.'
+    dependsOn prepLFM360K
+    logFile "$buildDir/lastfm-item.log"
+    logFileLevel 'DEBUG'
+
+    // we add our crossfold task as evaluation input
+    dataSet 'data/lastfm-item-splits.yml'
+
+    // send the output to appropriate files
+    outputFile "$buildDir/lastfm-item-results.csv"
+    userOutputFile "$buildDir/lastfm-item-user-results.csv"
+
+    configure lfmAlgos
+    
+    recommend {
+        listSize -1
+        metric 'length'
+        metric 'mrr'
+        metric('ndcg') {
+            gainAttribute 'count'
+        }
+        metric 'map'
+    }
+    recommend {
+        listSize -1
+        labelPrefix '1R'
+        separateItems true
+        itemOutputFile "$buildDir/lastfm-item-1R-item-results.csv"
+        metric 'mrr'
+        metric('ndcg') {
+            gainAttribute 'count'
+        }
+        metric 'map'
+    }
+}
+
+task evaluateLFM360KBalanced(type: TrainTest, group: 'evaluate') {
+    description 'Runs the LensKit evaluation.'
+    dependsOn balancedLFM360KSample
+    logFile "$buildDir/lastfm-balanced.log"
+    logFileLevel 'DEBUG'
+
+    // we add our crossfold task as evaluation input
+    dataSet 'data/lastfm-balanced-user-splits.yml'
+
+    // send the output to appropriate files
+    outputFile "$buildDir/lastfm-balanced-results.csv"
+    userOutputFile "$buildDir/lastfm-balanced-user-results.csv"
+
+    configure lfmAlgos
+    configure lfmMetrics
+}
+
+task prepLFM1K(type: NotebookExec, group: 'preparation') {
+    description 'Preprocess the Last.FM 1K data set'
+    notebook 'PrepLFM1K.ipynb'
+    inputs.dir 'data/lastfm-dataset-1K'
+    outputs.dir 'data/lfm1k-splits'
+    outputs.file 'data/lfm1k-users.csv'
+    outputs.file 'data/lfm1k-play-counts.csv'
+}
+
+task evaluateLFM1K(type: TrainTest, group: 'evaluate') {
+    description 'Runs the LensKit evaluation.'
+    logFile "$buildDir/lfm1k.log"
+    logFileLevel 'DEBUG'
+    if (!manualPrep) {
+        dependsOn prepLFM1K
+    }
+    inputs.files 'data/lfm1k-splits'
+
+    // we add our crossfold task as evaluation input
+    dataSet 'data/lfm1k-user-splits.yml'
+
+    // send the output to appropriate files
+    outputFile "$buildDir/lfm1k-results.csv"
+    userOutputFile "$buildDir/lfm1k-user-results.csv"
+
+    configure lfmAlgos
+    configure lfmMetrics
+}
+
+task evaluateLFM1KReproduced(type: TrainTest, group: 'evaluate') {
+    description 'Runs the LFM1K Reproduced LensKit evaluation.'
+    logFile "$buildDir/lfm1K_reproduced.log"
+    logFileLevel 'DEBUG'
+
+    // we add our crossfold task as evaluation input
+    // dataSet crossfoldML
+    // dataSet crossfoldMLBalanced
+	
+	// reproduced custom baseline data
+	// dataSet {
+	//	trainSource 'custom_data/filtered(20)_lastfm_1K_train.yaml'
+	//	testSource 'custom_data/filtered(20)_lastfm_1K_test.yaml'
+	// }
+	
+	// reproduced custom gender-balanced data
+	// dataSet {
+	//	trainSource 'custom_data/filtered(20)_lastfm_1K_train_gender_balanced.yaml'
+	//	testSource 'custom_data/filtered(20)_lastfm_1K_test_gender_balanced.yaml'
+	// }
+	
+	// reproduced custom age-balanced data
+	dataSet {
+		trainSource 'custom_data/filtered(20)_lastfm_1K_train_age_balanced.yaml'
+		testSource 'custom_data/filtered(20)_lastfm_1K_test_age_balanced.yaml'
+	}
+
+    // send the output to appropriate files
+    outputFile "$buildDir/filtered(20)_lastfm_1K-results.csv"
+    userOutputFile "$buildDir/filtered(20)_lastfm_1K-user-results.csv"
+
+    // configure our algorithms
+    algorithm 'Pop-B', 'algorithms/ml/popular.groovy'
+//    algorithm 'D-G', 'algorithms/ml/gender-pop.groovy'
+//    algorithm 'D-A', 'algorithms/ml/age-pop.groovy'
+//    algorithm 'D-GA', 'algorithms/ml/gender-age-pop.groovy'
+    algorithm 'Mean-E', 'algorithms/ml/pers-mean.groovy'
+    algorithm 'II-E', 'algorithms/ml/item-item.groovy'
+    algorithm 'UU-E', 'algorithms/ml/user-user.groovy'
+    algorithm 'MF-E', 'algorithms/ml/funksvd.groovy'
+    algorithm 'II-B', 'algorithms/ml/item-item-implicit.groovy'
+    algorithm 'UU-B', 'algorithms/ml/user-user-implicit.groovy'
+    algorithm 'MF-B', 'algorithms/ml/funksvd-implicit.groovy'
+
+    // and some evaluation tasks and metrics
+    predict {
+        metric 'rmse'
+		outputFile "$buildDir/filtered(20)_lastfm_1K_predictions.csv"
+    }
+    recommend {
+        listSize -1
+		metric 'length'
+        metric 'ndcg'
+		outputFile "$buildDir/filtered(20)_lastfm_1K_recommend.csv"
+    }
+}
+
+task evaluateAll {
+    dependsOn evaluateML
+    dependsOn evaluateMLItem
+    dependsOn evaluateLFM1K
+    dependsOn evaluateLFM360K
+    dependsOn evaluateLFM360KItem
+    dependsOn evaluateLFM360KBalanced
+}

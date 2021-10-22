@@ -1,0 +1,18 @@
+ratings:
+  file: ../build/ml-ratings-sample-genderbalanced.csv
+  format: csv
+  header: true
+  entity_type: rating
+movies:
+  file: ml-1m/movies.dat
+  format: delimited
+  delimiter: "::"
+  header: false
+  entity_type: item
+  columns:
+  - name: id
+    type: long
+  - name: title
+    type: string
+  - name: genres
+    type: string

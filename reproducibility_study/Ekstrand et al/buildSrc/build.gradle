@@ -1,0 +1,13 @@
+repositories {
+    maven {
+        url project.uri('../lenskit-repo-3.0-SNAPSHOT')
+    }
+    mavenCentral()
+}
+
+apply plugin: 'java'
+apply plugin: 'groovy'
+
+dependencies {
+    runtime 'org.lenskit:lenskit-gradle:3.0-SNAPSHOT'
+}
