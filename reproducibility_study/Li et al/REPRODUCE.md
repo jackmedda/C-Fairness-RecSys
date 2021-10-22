@@ -26,6 +26,11 @@ or the following one in Linux (possible command and wheel file):
 pip3 install torch-1.0.0-cp37-cp37m-linux_x86_64.whl
 ```
 
+The fairness-aware post-processing method requires differnet libraries that can be installed in the same way using the `requirements.txt` file
+inside **src**. In particular, this paper makes use of [Gurobi](https://www.gurobi.com/), a commercial optimization solver. To run this code,
+it is necessary to install Gurobi and purchase a license. Without a license or fail to install properly, this code will not be able to run.
+A license can be purchased or obtained for [academic use only](https://www.gurobi.com/academia/academic-program-and-licenses/).
+
 ## 2. Original code and Modifications
 The original code was linked in the paper and available in a [public repository](https://github.com/rutgerswiselab/user-fairness), which, however, contains only the
 fairness-aware post-processing method. We contacted the authors that sent us the link of another [public repository](https://github.com/rutgerswiselab/NLR) that contains the training and testing

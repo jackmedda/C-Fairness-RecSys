@@ -10,6 +10,12 @@ from helpers.logger import RcLogger
 Commands to choose the right dataset from which the data for algorithms is generated
   
   # MovieLens 1M
+      Example with 70% train set, 10% validation set, 20% test set for gender:
+      python -m projects.reproducibility_study.generate_input_data -dataset movielens 
+      --dataset_size 1m -model Pointwise --n_reps 2 --train_val_test_split_type per_user_timestamp
+      --train_val_test_split 70% 10% 20% --users_field user_id --items_field movie_id --rating_field user_rating
+      --sensitive_field user_gender
+      
       Example with 70% train set, 10% validation set, 20% test set for age:
       python -m projects.reproducibility_study.generate_input_data -dataset movielens 
       --dataset_size 1m -model Pointwise --n_reps 2 --train_val_test_split_type per_user_timestamp
@@ -17,11 +23,17 @@ Commands to choose the right dataset from which the data for algorithms is gener
       --sensitive_field bucketized_user_age
       
   # Last.FM 1K
-      Example with 70% train set, 10% validation set, 20% test set  for gender:
+      Example with 70% train set, 10% validation set, 20% test set for gender:
       python -m projects.reproducibility_study.generate_input_data -dataset lastfm --dataset_size 1K
       -model Pointwise --n_reps 2 --min_interactions 20 --train_val_test_split_type per_user_random 
       --train_val_test_split 70% 10% 20% --users_field user_id --items_field artist_id --rating_field user_rating
       --sensitive_field user_gender
+      
+      Example with 70% train set, 10% validation set, 20% test set for age:
+      python -m projects.reproducibility_study.generate_input_data -dataset lastfm --dataset_size 1K
+      -model Pointwise --n_reps 2 --min_interactions 20 --train_val_test_split_type per_user_random 
+      --train_val_test_split 70% 10% 20% --users_field user_id --items_field artist_id --rating_field user_rating
+      --sensitive_field user_age
   
   The specific files to create can be specified with one of the arguments inside
   RecSysArgumentParser._add_other_features_args inside helpers.recsys_arg_parser, which name ends with `input_data`
@@ -40,14 +52,13 @@ if __name__ == "__main__":
         train = data_utils.load_tf_features_dataset(metadata, "binary", split="train")
     else:
         train = None
-                
 
     if metadata['dataset'] == "movielens":
         sensitive_values = ['Male', 'Female'] if args.sensitive_field == 'user_gender' else ['1-34', '35-56+']
     
         kwargs = {
             'fairgo_sensitive_fields': ['user_gender', 'bucketized_user_age', None],
-            'model_paths' = {
+            'model_paths': {
                 'PMF': r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\NLR\result\PMF\11_PMF_movielens-1m_2018_bat128_dro1_dro0.2_ear0_epo100_gra10_ive64_l21e-05_l2b0_l2s0.0_los1_lr0.001_optAdam_sam1.0_tes100_tra1_uve64__test.npy",
                 'NeuMF': r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\NLR\result\NCF\11_NCF_movielens-1m_2018_bat128_dro1_dro0.2_ear0_epo100_gra10_ive64_l21e-05_l2b0_l2s0.0_lay[32,16,8]_los1_lr0.001_optAdam_pla[64]_sam1.0_tes100_tra1_uve64__test.npy",
                 'STAMP': r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\NLR\result\STAMP\11_STAMP_movielens-1m_2018_all0_att64_bat128_dro1_dro1_dro0.2_ear0_epo100_gra10_hid64_ive64_l21e-05_l2b0_l2s0.0_los1_lr0.001_max30_neg0_neg1_neg0_neg[]_num1_optAdam_pla[64]_sam1.0_spa0_sup0_tes100_tra1_uve64__test.npy",
@@ -58,16 +69,16 @@ if __name__ == "__main__":
         }
     else:
         sensitive_values = ['Male', 'Female'] if args.sensitive_field == 'user_gender' else ['1-24', '25+']
-    
+
         kwargs = {
             'fairgo_sensitive_fields': ['user_gender', 'user_age'],
-            'model_paths' = {
+            'model_paths': {
                 'PMF': r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\NLR\result\PMF\11_PMF_filtered(20)-lastfm-1K_2018_bat128_dro1_dro0.2_ear0_epo100_gra10_ive64_l21e-05_l2b0_l2s0.0_los1_lr0.001_optAdam_sam1.0_tes100_tra1_uve64__test.npy",
                 'NeuMF': r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\NLR\result\NCF\11_NCF_filtered(20)-lastfm-1K_2018_bat128_dro1_dro0.2_ear0_epo100_gra10_ive64_l21e-05_l2b0_l2s0.0_lay[32,16,8]_los1_lr0.001_optAdam_pla[64]_sam1.0_tes100_tra1_uve64__test.npy",
                 'STAMP': r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\NLR\result\STAMP\11_STAMP_filtered(20)-lastfm-1K_2018_all0_att64_bat128_dro1_dro1_dro0.2_ear0_epo100_gra10_hid64_ive64_l21e-05_l2b0_l2s0.0_los1_lr0.001_max30_neg0_neg1_neg0_neg[]_num1_optAdam_pla[64]_sam1.0_spa0_sup0_tes100_tra1_uve64__test.npy",
                 'BiasedMF': r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\NLR\result\BiasedMF\11_BiasedMF_filtered(20)-lastfm-1K_2018_bat128_dro1_dro0.2_ear0_epo100_gra10_ive64_l21e-05_l2b0_l2s0.0_los1_lr0.001_optAdam_sam1.0_tes100_tra1_uve64__test.npy"
             },
-            'test_path' = r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\NLR\dataset\filtered(20)_lastfm_1K\filtered(20)_lastfm_1K.test.csv",
+            'test_path': r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\NLR\dataset\filtered(20)_lastfm_1K\filtered(20)_lastfm_1K.test.csv",
             'sensitive_values': sensitive_values
         }
         

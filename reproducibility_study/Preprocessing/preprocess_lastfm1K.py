@@ -22,14 +22,6 @@ from data.datasets.lastfm import lastfm_utils
  --sensitive_field user_gender --train_val_test_split_type per_user_random --train_val_test_split 70% 10% 20%
  --min_interactions 20 --attribute_to_binary user_age --binary_le_delimiter 24 -model Pointwise --n_reps 2
  --overwrite_preprocessed_dataset
- 
- # k_fold with 5 folds and train-validation-test split 70%-10%-20% and age binarised with age <= 24
- python -m projects.reproducibility_study.preprocess_lastfm1K -dataset lastfm --dataset_size 1K
- --subdatasets plays users --dataset_split train train --users_field user_id --items_field artist_id 
- --dataset columns user_id artist_id plays - user_id user_gender user_age --rating_field user_rating
- --sensitive_field user_gender --train_val_test_split_type k_fold --n_folds 5 --train_val_test_split 70% 10% 20% 
- --min_interactions 20 --attribute_to_binary user_age --binary_le_delimiter 24 -model Pointwise --n_reps 2
- --overwrite_preprocessed_dataset
 """
 
 
@@ -95,20 +87,11 @@ if __name__ == "__main__":
                                                  },
                                                  n_folds=args.n_folds)
 
-    if args.train_val_test_split_type == 'k_fold':
-        for k in range(args.n_folds):
-            data_utils.save_train_test(metadata,
-                                       train[k],
-                                       test[k],
-                                       validation=val[k],
-                                       model_data_type=f"fold-{k + 1}",
-                                       overwrite=args.overwrite_preprocessed_dataset)
-    else:
-        data_utils.save_train_test(metadata,
-                                   train,
-                                   test,
-                                   validation=val,
-                                   overwrite=args.overwrite_preprocessed_dataset)
+    data_utils.save_train_test(metadata,
+                               train,
+                               test,
+                               validation=val,
+                               overwrite=args.overwrite_preprocessed_dataset)
 
     observed_items, unobserved_items, _ = data_utils.get_train_test_features(args.users_field,
                                                                              args.items_field,

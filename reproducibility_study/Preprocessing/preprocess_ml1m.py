@@ -3,15 +3,11 @@ from typing import Set, Text, DefaultDict
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
-import pandas as pd
 import numpy as np
-import tensorflow as tf
-import tensorflow_datasets as tfds
 
 import data.utils as data_utils
 from helpers.recsys_arg_parser import RecSysArgumentParser
 from helpers.logger import RcLogger
-from data.datasets.lastfm import lastfm_utils
 
 
 """
@@ -31,11 +27,13 @@ if __name__ == "__main__":
 
     metadata = vars(args).copy()
 
-    plays, users = data_utils.load_dataset(args.dataset,
-                                           split=args.dataset_split,
-                                           size=args.dataset_size,
-                                           sub_datasets=args.subdatasets,
-                                           columns=args.dataset_columns)
+    ratings = data_utils.load_dataset(args.dataset,
+                                      split=args.dataset_split,
+                                      size=args.dataset_size,
+                                      sub_datasets=args.subdatasets,
+                                      columns=args.dataset_columns)
+
+    data = ratings
 
     if args.min_interactions > 0 or args.balance_ratio is not None or args.sample_n is not None:
         data, dataset_info = data_utils.filter_interactions(data,
@@ -67,20 +65,11 @@ if __name__ == "__main__":
                                                  },
                                                  n_folds=args.n_folds)
 
-    if args.train_val_test_split_type == 'k_fold':
-        for k in range(args.n_folds):
-            data_utils.save_train_test(metadata,
-                                       train[k],
-                                       test[k],
-                                       validation=val[k],
-                                       model_data_type=f"fold-{k + 1}",
-                                       overwrite=args.overwrite_preprocessed_dataset)
-    else:
-        data_utils.save_train_test(metadata,
-                                   train,
-                                   test,
-                                   validation=val,
-                                   overwrite=args.overwrite_preprocessed_dataset)
+    data_utils.save_train_test(metadata,
+                               train,
+                               test,
+                               validation=val,
+                               overwrite=args.overwrite_preprocessed_dataset)
 
     observed_items, unobserved_items, _ = data_utils.get_train_test_features(args.users_field,
                                                                              args.items_field,
