@@ -1,4 +1,5 @@
 import os
+import inspect
 import argparse
 import pickle
 import itertools
@@ -46,458 +47,463 @@ arg_parser.add_argument('--only_plot',
 
 args = arg_parser.parse_args()
 
+base_reproduce_path = os.path.join(os.path.dirname(inspect.getsourcefile(lambda: 0)), os.pardir)
+
 # Attributes of each value of the following arrays in order:
-# - target: `Ranking` or `Rating`, it is the prediction target,
-# - paper: name or nickname that identify the related paper,
-# - model name: the model to which the fairness approach is applied or
-#               the new name of a fairness-aware baseline, e.g. ParityLBM,
-# - run_id or path: the path, list of paths, callable that returns paths as a list (even with one only path),
-#                   or `run_id`, which is the run id of a relevance matrix inside `data\relevance_matrices` generated
-#                   with `recommender_codebase` saving function to save relevance matrices,
-# - baseline: 1) same as `run_id or path` but for the baseline,
-#             2) a tuple where the first value is the same for `run_id or path` and the second is the specific name of
-#             the baseline, otherwise `baseline` string will be added at the end of `model name`,
-# - function to retrieve data (OPTIONAL): function to read the file with predictions (use one of the functions of the
-#                                         class RelevanceMatrix that start with `from_...` inside `models\utils.py`,
-# - function to retrieve baseline data (OPTIONAL): the same for `function to retrieve data (OPTIONAL)`
-#                                                  but for the baseline
+# - `target`: `Ranking` (top-n recommendation) or `Rating` (rating prediction), it is the prediction target,
+# - `paper`: name or nickname that identify the related paper,
+# - `model name`: the model to which the fairness approach is applied or the new name of a fairness-aware baseline,
+#                 e.g. ParityLBM, BN-SLIM-U.
+# - `path`: it can be
+#     - a full path
+#     - a list of paths (e.g. Ekstrand et al. experiments contain multiple runs, the paths of the predictions need to be in
+#       a list)
+#     - callable that returns paths as a list, even with one only path (not used, but it is supported)
+# - `baseline`: it can be
+#     - same as `path` but for the baseline
+#     - a tuple where the first value is the same for `path` and the second value is the specific name of the baseline,
+#     (e.g. GCN, SLIM-U), otherwise the string *baseline* will be added at the end of `model name`,
+# - `function to retrieve data` (OPTIONAL): function to read the file containing the predictions (it should be one of the
+#    functions of the class RelevanceMatrix that start with `from_...` inside **models\utils.py**
+# - `function to retrieve baseline data` (OPTIONAL): the same for `function to retrieve data (OPTIONAL)` but for the
+#    baseline predictions
 
 experiments_models_gender_ml1m = [
     ('Rating', 'Ekstrand', 'User-User',
-     [f.path for f in os.scandir(r"D:\Reproducibility Study\All the cool kids\results\movielens_1m\gender_balanced") if "UU-E" in f.name],
-     [f.path for f in os.scandir(r"D:\Reproducibility Study\All the cool kids\results\movielens_1m\baseline") if "UU-E" in f.name][0],
+     [f.path for f in os.scandir(os.path.join(base_reproduce_path, 'Esktrand et al', r"results\movielens_1m\gender_balanced")) if "UU-E" in f.name],
+     [f.path for f in os.scandir(os.path.join(base_reproduce_path, 'Esktrand et al', r"results\movielens_1m\baseline")) if "UU-E" in f.name][0],
      RelevanceMatrix.from_cool_kids_result,
      RelevanceMatrix.from_cool_kids_result),
     ('Rating', 'Ekstrand', 'Item-Item',
-     [f.path for f in os.scandir(r"D:\Reproducibility Study\All the cool kids\results\movielens_1m\gender_balanced") if "II-E" in f.name],
-     [f.path for f in os.scandir(r"D:\Reproducibility Study\All the cool kids\results\movielens_1m\baseline") if "II-E" in f.name][0],
+     [f.path for f in os.scandir(os.path.join(base_reproduce_path, 'Esktrand et al', r"results\movielens_1m\gender_balanced")) if "II-E" in f.name],
+     [f.path for f in os.scandir(os.path.join(base_reproduce_path, 'Esktrand et al', r"results\movielens_1m\baseline")) if "II-E" in f.name][0],
      RelevanceMatrix.from_cool_kids_result,
      RelevanceMatrix.from_cool_kids_result),
     ('Rating', 'Ekstrand', 'FunkSVD',
-     [f.path for f in os.scandir(r"D:\Reproducibility Study\All the cool kids\results\movielens_1m\gender_balanced") if "MF-E" in f.name],
-     [f.path for f in os.scandir(r"D:\Reproducibility Study\All the cool kids\results\movielens_1m\baseline") if "MF-E" in f.name][0],
+     [f.path for f in os.scandir(os.path.join(base_reproduce_path, 'Esktrand et al', r"results\movielens_1m\gender_balanced")) if "MF-E" in f.name],
+     [f.path for f in os.scandir(os.path.join(base_reproduce_path, 'Esktrand et al', r"results\movielens_1m\baseline")) if "MF-E" in f.name][0],
      RelevanceMatrix.from_cool_kids_result,
      RelevanceMatrix.from_cool_kids_result),
     ('Ranking', 'Ekstrand', 'TopPopular',
-     [f.path for f in os.scandir(r"D:\Reproducibility Study\All the cool kids\results\movielens_1m\gender_balanced") if "Pop-B" in f.name],
-     [f.path for f in os.scandir(r"D:\Reproducibility Study\All the cool kids\results\movielens_1m\baseline") if "Pop-B" in f.name][0],
+     [f.path for f in os.scandir(os.path.join(base_reproduce_path, 'Esktrand et al', r"results\movielens_1m\gender_balanced")) if "Pop-B" in f.name],
+     [f.path for f in os.scandir(os.path.join(base_reproduce_path, 'Esktrand et al', r"results\movielens_1m\baseline")) if "Pop-B" in f.name][0],
      RelevanceMatrix.from_cool_kids_result,
      RelevanceMatrix.from_cool_kids_result),
     ('Rating', 'Ekstrand', 'Mean',
-     [f.path for f in os.scandir(r"D:\Reproducibility Study\All the cool kids\results\movielens_1m\gender_balanced") if "Mean-E" in f.name],
-     [f.path for f in os.scandir(r"D:\Reproducibility Study\All the cool kids\results\movielens_1m\baseline") if "Mean-E" in f.name][0],
+     [f.path for f in os.scandir(os.path.join(base_reproduce_path, 'Esktrand et al', r"results\movielens_1m\gender_balanced")) if "Mean-E" in f.name],
+     [f.path for f in os.scandir(os.path.join(base_reproduce_path, 'Esktrand et al', r"results\movielens_1m\baseline")) if "Mean-E" in f.name][0],
      RelevanceMatrix.from_cool_kids_result,
      RelevanceMatrix.from_cool_kids_result),
     ('Ranking', 'Ekstrand', 'User-User',
-     [f.path for f in os.scandir(r"D:\Reproducibility Study\All the cool kids\results\movielens_1m\gender_balanced") if "UU-B" in f.name],
-     [f.path for f in os.scandir(r"D:\Reproducibility Study\All the cool kids\results\movielens_1m\baseline") if "UU-B" in f.name][0],
+     [f.path for f in os.scandir(os.path.join(base_reproduce_path, 'Esktrand et al', r"results\movielens_1m\gender_balanced")) if "UU-B" in f.name],
+     [f.path for f in os.scandir(os.path.join(base_reproduce_path, 'Esktrand et al', r"results\movielens_1m\baseline")) if "UU-B" in f.name][0],
      RelevanceMatrix.from_cool_kids_result,
      RelevanceMatrix.from_cool_kids_result),
     ('Ranking', 'Ekstrand', 'Item-Item',
-     [f.path for f in os.scandir(r"D:\Reproducibility Study\All the cool kids\results\movielens_1m\gender_balanced") if "II-B" in f.name],
-     [f.path for f in os.scandir(r"D:\Reproducibility Study\All the cool kids\results\movielens_1m\baseline") if "II-B" in f.name][0],
+     [f.path for f in os.scandir(os.path.join(base_reproduce_path, 'Esktrand et al', r"results\movielens_1m\gender_balanced")) if "II-B" in f.name],
+     [f.path for f in os.scandir(os.path.join(base_reproduce_path, 'Esktrand et al', r"results\movielens_1m\baseline")) if "II-B" in f.name][0],
      RelevanceMatrix.from_cool_kids_result,
      RelevanceMatrix.from_cool_kids_result),
     ('Ranking', 'Ekstrand', 'FunkSVD',
-     [f.path for f in os.scandir(r"D:\Reproducibility Study\All the cool kids\results\movielens_1m\gender_balanced") if "MF-B" in f.name],
-     [f.path for f in os.scandir(r"D:\Reproducibility Study\All the cool kids\results\movielens_1m\baseline") if "MF-B" in f.name][0],
+     [f.path for f in os.scandir(os.path.join(base_reproduce_path, 'Esktrand et al', r"results\movielens_1m\gender_balanced")) if "MF-B" in f.name],
+     [f.path for f in os.scandir(os.path.join(base_reproduce_path, 'Esktrand et al', r"results\movielens_1m\baseline")) if "MF-B" in f.name][0],
      RelevanceMatrix.from_cool_kids_result,
      RelevanceMatrix.from_cool_kids_result),
     ('Rating', 'Kamishima', ['PMF Mean Matching', 'PMF BDist Matching', 'PMF Mi Normal'],
      [
-         r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\Recommendation Independence\movielens_1m_out_mean_matching_gender.json",
-         r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\Recommendation Independence\movielens_1m_out_bdist_matching_gender.json",
-         r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\Recommendation Independence\movielens_1m_out_mi_normal_gender.json"
-     ], (r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\Recommendation Independence\movielens_1m_out_pmf_baseline.json", 'PMF'),
+         os.path.join(base_reproduce_path, 'Kamishima et al', "movielens_1m_out_mean_matching_gender.json"),
+         os.path.join(base_reproduce_path, 'Kamishima et al', "movielens_1m_out_bdist_matching_gender.json"),
+         os.path.join(base_reproduce_path, 'Kamishima et al', "movielens_1m_out_mi_normal_gender.json")
+     ], (os.path.join(base_reproduce_path, 'Kamishima et al', "movielens_1m_out_pmf_baseline.json"), 'PMF'),
      RelevanceMatrix.from_rec_indep_json,
      RelevanceMatrix.from_rec_indep_json),
     ('Ranking', 'User-oriented fairness', 'PMF',
-     r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\recommender_codebase\data\user-oriented fairness files\PMF_112997d298_Gender___per_user_timestamp_split[80%, 20%]_out.csv",
-     r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\NLR\result\PMF\11_PMF_movielens-1m_2018_bat128_dro1_dro0.2_ear0_epo100_gra10_ive64_l21e-05_l2b0_l2s0.0_los1_lr0.001_optAdam_sam1.0_tes100_tra1_uve64__test.npy",
+     os.path.join(base_reproduce_path, 'Li et al', 'out_results', "movielens_1m_PMF_Gender_out.csv"),
+     os.path.join(base_reproduce_path, 'Li et al', 'NLR', 'result', r"PMF\11_PMF_movielens-1m_2018_bat128_dro1_dro0.2_ear0_epo100_gra10_ive64_l21e-05_l2b0_l2s0.0_los1_lr0.001_optAdam_sam1.0_tes100_tra1_uve64__test.npy"),
      RelevanceMatrix.from_user_oriented_fairness_files,
      RelevanceMatrix.from_nlr_models_result),
     ('Ranking', 'User-oriented fairness', 'NeuMF',
-     r'C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\recommender_codebase\data\user-oriented fairness files\NeuMF_112997d298_Gender___per_user_timestamp_split[80%, 20%]_out.csv',
-     r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\NLR\result\NCF\11_NCF_movielens-1m_2018_bat128_dro1_dro0.2_ear0_epo100_gra10_ive64_l21e-05_l2b0_l2s0.0_lay[32,16,8]_los1_lr0.001_optAdam_pla[64]_sam1.0_tes100_tra1_uve64__test.npy",
+     os.path.join(base_reproduce_path, 'Li et al', 'out_results', "movielens_1m_NeuMF_Gender_out.csv"),
+     os.path.join(base_reproduce_path, 'Li et al', 'NLR', 'result', r"NCF\11_NCF_movielens-1m_2018_bat128_dro1_dro0.2_ear0_epo100_gra10_ive64_l21e-05_l2b0_l2s0.0_lay[32,16,8]_los1_lr0.001_optAdam_pla[64]_sam1.0_tes100_tra1_uve64__test.npy"),
      RelevanceMatrix.from_user_oriented_fairness_files,
      RelevanceMatrix.from_nlr_models_result),
     ('Ranking', 'User-oriented fairness', 'BiasedMF',
-     r'C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\recommender_codebase\data\user-oriented fairness files\BiasedMF_112997d298_Gender___per_user_timestamp_split[80%, 20%]_out.csv',
-     r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\NLR\result\BiasedMF\11_BiasedMF_movielens-1m_2018_bat128_dro1_dro0.2_ear0_epo100_gra10_ive64_l21e-05_l2b0_l2s0.0_los1_lr0.001_optAdam_sam1.0_tes100_tra1_uve64__test.npy",
+     os.path.join(base_reproduce_path, 'Li et al', 'out_results', "movielens_1m_BiasedMF_Gender_out.csv"),
+     os.path.join(base_reproduce_path, 'Li et al', 'NLR', 'result', r"BiasedMF\11_BiasedMF_movielens-1m_2018_bat128_dro1_dro0.2_ear0_epo100_gra10_ive64_l21e-05_l2b0_l2s0.0_los1_lr0.001_optAdam_sam1.0_tes100_tra1_uve64__test.npy"),
      RelevanceMatrix.from_user_oriented_fairness_files,
      RelevanceMatrix.from_nlr_models_result),
     ('Ranking', 'User-oriented fairness', 'STAMP',
-     r'C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\recommender_codebase\data\user-oriented fairness files\STAMP_112997d298_Gender___per_user_timestamp_split[80%, 20%]_out.csv',
-     r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\NLR\result\STAMP\11_STAMP_movielens-1m_2018_all0_att64_bat128_dro1_dro1_dro0.2_ear0_epo100_gra10_hid64_ive64_l21e-05_l2b0_l2s0.0_los1_lr0.001_max30_neg0_neg1_neg0_neg[]_num1_optAdam_pla[64]_sam1.0_spa0_sup0_tes100_tra1_uve64__test.npy",
+     os.path.join(base_reproduce_path, 'Li et al', 'out_results', "movielens_1m_STAMP_Gender_out.csv"),
+     os.path.join(base_reproduce_path, 'Li et al', 'NLR', 'result', r"STAMP\11_STAMP_movielens-1m_2018_all0_att64_bat128_dro1_dro1_dro0.2_ear0_epo100_gra10_hid64_ive64_l21e-05_l2b0_l2s0.0_los1_lr0.001_max30_neg0_neg1_neg0_neg[]_num1_optAdam_pla[64]_sam1.0_spa0_sup0_tes100_tra1_uve64__test.npy"),
      RelevanceMatrix.from_user_oriented_fairness_files,
      RelevanceMatrix.from_nlr_models_result),
     ('Ranking', 'Co-clustering', 'Parity LBM',
-     r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\Co-clustering for fair recommendation\results\movielens_1m\block_0_run_2_gender.pkl",
-     (r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\Co-clustering for fair recommendation\results\movielens_1m\block_0_baseline.pkl", 'Standard LBM'),
+     os.path.join(base_reproduce_path, 'Frisch et al', 'results', r"movielens_1m\block_0_run_2_gender.pkl"),
+     (os.path.join(base_reproduce_path, 'Frisch et al', 'results', r"movielens_1m\block_0_baseline.pkl"), 'Standard LBM'),
      RelevanceMatrix.from_co_clustering_fair_pickle,
      RelevanceMatrix.from_co_clustering_fair_pickle),
     ('Ranking', 'Librec', 'BN-SLIM-U',
-     r'C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\Librec-auto tutorial\movielens_1m_gender_experiment\exp00000\result\out-1.txt',
-     (r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\Librec-auto tutorial\movielens_1m_SLIM_U\exp00000\result\out-1.txt", 'SLIM-U'),
+     os.path.join(base_reproduce_path, 'Burke et al', r"movielens_1m_gender_experiment\exp00000\result\out-1.txt"),
+     (os.path.join(base_reproduce_path, 'Burke et al', r"movielens_1m_SLIM_U\exp00000\result\out-1.txt"), 'SLIM-U'),
      RelevanceMatrix.from_librec_result,
      RelevanceMatrix.from_librec_result),
     ('Rating', 'Antidote Data', 'ALS MF',
-     r'C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\antidote-data-framework\movielens_1m_antidote_group_out_als_MF_Gender.csv',
-     r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\antidote-data-framework\movielens_1m_antidote_group_out_als_MF_baseline.csv",
+     os.path.join(base_reproduce_path, 'Rastegarpanah et al', r"movielens_1m_antidote_group_out_als_MF_Gender.csv"),
+     os.path.join(base_reproduce_path, 'Rastegarpanah et al', r"movielens_1m_antidote_group_out_als_MF_baseline.csv"),
      RelevanceMatrix.from_antidote_data,
      RelevanceMatrix.from_antidote_data),
     ('Rating', 'Antidote Data', 'LMaFit MF',
-     r'C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\antidote-data-framework\movielens_1m_antidote_group_out_lmafit_MF_Gender.csv',
-     r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\antidote-data-framework\movielens_1m_antidote_group_out_lmafit_MF_baseline.csv",
+     os.path.join(base_reproduce_path, 'Rastegarpanah et al', r"movielens_1m_antidote_group_out_lmafit_MF_Gender.csv"),
+     os.path.join(base_reproduce_path, 'Rastegarpanah et al', r"movielens_1m_antidote_group_out_lmafit_MF_baseline.csv"),
      RelevanceMatrix.from_antidote_data,
      RelevanceMatrix.from_antidote_data),
     ('Rating', 'FairGo', 'FairGo GCN',
-     r'C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\FairGO\movielens_1m_reproduce_data\predictions_gender.pkl',
-     (r'C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\FairGO\movielens_1m_reproduce_data\predictions_baseline.pkl', "GCN"),
+     os.path.join(base_reproduce_path, 'Wu et al', r"movielens_1m_reproduce_data\predictions_gender.pkl"),
+     (os.path.join(base_reproduce_path, 'Wu et al', r"movielens_1m_reproduce_data\predictions_baseline.pkl"), "GCN"),
      RelevanceMatrix.from_fair_go_predictions,
      RelevanceMatrix.from_fair_go_predictions),
     ('Rating', 'Haas', ['ALS BiasedMF Parity', 'ALS BiasedMF Val'],
      [
-         r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\RatingPredictionFairness\results\movielens_1m\ALS_parity_adj_user_gender.csv",
-         r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\RatingPredictionFairness\results\movielens_1m\ALS_val_adj_user_gender.csv"
-     ], (r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\RatingPredictionFairness\results\movielens_1m\ALS_orig_user_gender.csv", "ALS BiasedMF"),
+         os.path.join(base_reproduce_path, 'Ashokan et al', 'results', r"movielens_1m\ALS_parity_adj_user_gender.csv"),
+         os.path.join(base_reproduce_path, 'Ashokan et al', 'results', r"movielens_1m\ALS_val_adj_user_gender.csv")
+     ], (os.path.join(base_reproduce_path, 'Ashokan et al', 'results', r"movielens_1m\ALS_orig_user_gender.csv"), "ALS BiasedMF"),
      RelevanceMatrix.from_rating_prediction_fairness_result,
      RelevanceMatrix.from_rating_prediction_fairness_result),
     ('Rating', 'Haas', ['Item-Item Parity', 'Item-Item Val'],
      [
-         r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\RatingPredictionFairness\results\movielens_1m\ItemItem_parity_adj_user_gender.csv",
-         r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\RatingPredictionFairness\results\movielens_1m\ItemItem_val_adj_user_gender.csv"
-     ], (r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\RatingPredictionFairness\results\movielens_1m\ItemItem_orig_user_gender.csv", "Item-Item"),
+         os.path.join(base_reproduce_path, 'Ashokan et al', 'results', r"movielens_1m\ItemItem_parity_adj_user_gender.csv"),
+         os.path.join(base_reproduce_path, 'Ashokan et al', 'results', r"movielens_1m\ItemItem_val_adj_user_gender.csv")
+     ], (os.path.join(base_reproduce_path, 'Ashokan et al', 'results', r"movielens_1m\ItemItem_orig_user_gender.csv"), "Item-Item"),
      RelevanceMatrix.from_rating_prediction_fairness_result,
      RelevanceMatrix.from_rating_prediction_fairness_result)
 ]
 
 experiments_models_age_ml1m = [
     ('Rating', 'Ekstrand', 'User-User',
-     [f.path for f in os.scandir(r"D:\Reproducibility Study\All the cool kids\results\movielens_1m\age_balanced") if "UU-E" in f.name],
-     [f.path for f in os.scandir(r"D:\Reproducibility Study\All the cool kids\results\movielens_1m\baseline") if "UU-E" in f.name][0],
+     [f.path for f in os.scandir(os.path.join(base_reproduce_path, 'Esktrand et al', r"results\movielens_1m\age_balanced")) if "UU-E" in f.name],
+     [f.path for f in os.scandir(os.path.join(base_reproduce_path, 'Esktrand et al', r"results\movielens_1m\baseline")) if "UU-E" in f.name][0],
      RelevanceMatrix.from_cool_kids_result,
      RelevanceMatrix.from_cool_kids_result),
     ('Rating', 'Ekstrand', 'Item-Item',
-     [f.path for f in os.scandir(r"D:\Reproducibility Study\All the cool kids\results\movielens_1m\age_balanced") if "II-E" in f.name],
-     [f.path for f in os.scandir(r"D:\Reproducibility Study\All the cool kids\results\movielens_1m\baseline") if "II-E" in f.name][0],
+     [f.path for f in os.scandir(os.path.join(base_reproduce_path, 'Esktrand et al', r"results\movielens_1m\age_balanced")) if "II-E" in f.name],
+     [f.path for f in os.scandir(os.path.join(base_reproduce_path, 'Esktrand et al', r"results\movielens_1m\baseline")) if "II-E" in f.name][0],
      RelevanceMatrix.from_cool_kids_result,
      RelevanceMatrix.from_cool_kids_result),
     ('Rating', 'Ekstrand', 'FunkSVD',
-     [f.path for f in os.scandir(r"D:\Reproducibility Study\All the cool kids\results\movielens_1m\age_balanced") if "MF-E" in f.name],
-     [f.path for f in os.scandir(r"D:\Reproducibility Study\All the cool kids\results\movielens_1m\baseline") if "MF-E" in f.name][0],
+     [f.path for f in os.scandir(os.path.join(base_reproduce_path, 'Esktrand et al', r"results\movielens_1m\age_balanced")) if "MF-E" in f.name],
+     [f.path for f in os.scandir(os.path.join(base_reproduce_path, 'Esktrand et al', r"results\movielens_1m\baseline")) if "MF-E" in f.name][0],
      RelevanceMatrix.from_cool_kids_result,
      RelevanceMatrix.from_cool_kids_result),
     ('Ranking', 'Ekstrand', 'TopPopular',
-     [f.path for f in os.scandir(r"D:\Reproducibility Study\All the cool kids\results\movielens_1m\age_balanced") if "Pop-B" in f.name],
-     [f.path for f in os.scandir(r"D:\Reproducibility Study\All the cool kids\results\movielens_1m\baseline") if "Pop-B" in f.name][0],
+     [f.path for f in os.scandir(os.path.join(base_reproduce_path, 'Esktrand et al', r"results\movielens_1m\age_balanced")) if "Pop-B" in f.name],
+     [f.path for f in os.scandir(os.path.join(base_reproduce_path, 'Esktrand et al', r"results\movielens_1m\baseline")) if "Pop-B" in f.name][0],
      RelevanceMatrix.from_cool_kids_result,
      RelevanceMatrix.from_cool_kids_result),
     ('Rating', 'Ekstrand', 'Mean',
-     [f.path for f in os.scandir(r"D:\Reproducibility Study\All the cool kids\results\movielens_1m\age_balanced") if "Mean-E" in f.name],
-     [f.path for f in os.scandir(r"D:\Reproducibility Study\All the cool kids\results\movielens_1m\baseline") if "Mean-E" in f.name][0],
+     [f.path for f in os.scandir(os.path.join(base_reproduce_path, 'Esktrand et al', r"results\movielens_1m\age_balanced")) if "Mean-E" in f.name],
+     [f.path for f in os.scandir(os.path.join(base_reproduce_path, 'Esktrand et al', r"results\movielens_1m\baseline")) if "Mean-E" in f.name][0],
      RelevanceMatrix.from_cool_kids_result,
      RelevanceMatrix.from_cool_kids_result),
     ('Ranking', 'Ekstrand', 'User-User',
-     [f.path for f in os.scandir(r"D:\Reproducibility Study\All the cool kids\results\movielens_1m\age_balanced") if "UU-B" in f.name],
-     [f.path for f in os.scandir(r"D:\Reproducibility Study\All the cool kids\results\movielens_1m\baseline") if "UU-B" in f.name][0],
+     [f.path for f in os.scandir(os.path.join(base_reproduce_path, 'Esktrand et al', r"results\movielens_1m\age_balanced")) if "UU-B" in f.name],
+     [f.path for f in os.scandir(os.path.join(base_reproduce_path, 'Esktrand et al', r"results\movielens_1m\baseline")) if "UU-B" in f.name][0],
      RelevanceMatrix.from_cool_kids_result,
      RelevanceMatrix.from_cool_kids_result),
     ('Ranking', 'Ekstrand', 'Item-Item',
-     [f.path for f in os.scandir(r"D:\Reproducibility Study\All the cool kids\results\movielens_1m\age_balanced") if "II-B" in f.name],
-     [f.path for f in os.scandir(r"D:\Reproducibility Study\All the cool kids\results\movielens_1m\baseline") if "II-B" in f.name][0],
+     [f.path for f in os.scandir(os.path.join(base_reproduce_path, 'Esktrand et al', r"results\movielens_1m\age_balanced")) if "II-B" in f.name],
+     [f.path for f in os.scandir(os.path.join(base_reproduce_path, 'Esktrand et al', r"results\movielens_1m\baseline")) if "II-B" in f.name][0],
      RelevanceMatrix.from_cool_kids_result,
      RelevanceMatrix.from_cool_kids_result),
     ('Ranking', 'Ekstrand', 'FunkSVD',
-     [f.path for f in os.scandir(r"D:\Reproducibility Study\All the cool kids\results\movielens_1m\age_balanced") if "MF-B" in f.name],
-     [f.path for f in os.scandir(r"D:\Reproducibility Study\All the cool kids\results\movielens_1m\baseline") if "MF-B" in f.name][0],
+     [f.path for f in os.scandir(os.path.join(base_reproduce_path, 'Esktrand et al', r"results\movielens_1m\age_balanced")) if "MF-B" in f.name],
+     [f.path for f in os.scandir(os.path.join(base_reproduce_path, 'Esktrand et al', r"results\movielens_1m\baseline")) if "MF-B" in f.name][0],
      RelevanceMatrix.from_cool_kids_result,
      RelevanceMatrix.from_cool_kids_result),
     ('Rating', 'Kamishima', ['PMF Mean Matching', 'PMF BDist Matching', 'PMF Mi Normal'],
      [
-         r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\Recommendation Independence\movielens_1m_out_mean_matching_age.json",
-         r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\Recommendation Independence\movielens_1m_out_bdist_matching_age.json",
-         r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\Recommendation Independence\movielens_1m_out_mi_normal_age.json"
-     ], (r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\Recommendation Independence\movielens_1m_out_pmf_baseline.json", 'PMF'),
+         os.path.join(base_reproduce_path, 'Kamishima et al', "movielens_1m_out_mean_matching_age.json"),
+         os.path.join(base_reproduce_path, 'Kamishima et al', "movielens_1m_out_bdist_matching_age.json"),
+         os.path.join(base_reproduce_path, 'Kamishima et al', "movielens_1m_out_mi_normal_age.json")
+     ], (os.path.join(base_reproduce_path, 'Kamishima et al', "movielens_1m_out_pmf_baseline.json"), 'PMF'),
      RelevanceMatrix.from_rec_indep_json,
      RelevanceMatrix.from_rec_indep_json),
     ('Ranking', 'User-oriented fairness', 'PMF',
-     r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\recommender_codebase\data\user-oriented fairness files\PMF_de3706b370_Age___per_user_timestamp_split[80%, 20%]_out.csv",
-     r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\NLR\result\PMF\11_PMF_movielens-1m_2018_bat128_dro1_dro0.2_ear0_epo100_gra10_ive64_l21e-05_l2b0_l2s0.0_los1_lr0.001_optAdam_sam1.0_tes100_tra1_uve64__test.npy",
+     os.path.join(base_reproduce_path, 'Li et al', 'out_results', "movielens_1m_PMF_Age_out.csv"),
+     os.path.join(base_reproduce_path, 'Li et al', 'NLR', 'result', r"PMF\11_PMF_movielens-1m_2018_bat128_dro1_dro0.2_ear0_epo100_gra10_ive64_l21e-05_l2b0_l2s0.0_los1_lr0.001_optAdam_sam1.0_tes100_tra1_uve64__test.npy"),
      RelevanceMatrix.from_user_oriented_fairness_files,
      RelevanceMatrix.from_nlr_models_result),
     ('Ranking', 'User-oriented fairness', 'NeuMF',
-     r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\recommender_codebase\data\user-oriented fairness files\NeuMF_de3706b370_Age___per_user_timestamp_split[80%, 20%]_out.csv",
-     r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\NLR\result\NCF\11_NCF_movielens-1m_2018_bat128_dro1_dro0.2_ear0_epo100_gra10_ive64_l21e-05_l2b0_l2s0.0_lay[32,16,8]_los1_lr0.001_optAdam_pla[64]_sam1.0_tes100_tra1_uve64__test.npy",
+     os.path.join(base_reproduce_path, 'Li et al', 'out_results', "movielens_1m_NeuMF_Age_out.csv"),
+     os.path.join(base_reproduce_path, 'Li et al', 'NLR', 'result', r"NCF\11_NCF_movielens-1m_2018_bat128_dro1_dro0.2_ear0_epo100_gra10_ive64_l21e-05_l2b0_l2s0.0_lay[32,16,8]_los1_lr0.001_optAdam_pla[64]_sam1.0_tes100_tra1_uve64__test.npy"),
      RelevanceMatrix.from_user_oriented_fairness_files,
      RelevanceMatrix.from_nlr_models_result),
     ('Ranking', 'User-oriented fairness', 'BiasedMF',
-     r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\recommender_codebase\data\user-oriented fairness files\BiasedMF_de3706b370_Age___per_user_timestamp_split[80%, 20%]_out.csv",
-     r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\NLR\result\BiasedMF\11_BiasedMF_movielens-1m_2018_bat128_dro1_dro0.2_ear0_epo100_gra10_ive64_l21e-05_l2b0_l2s0.0_los1_lr0.001_optAdam_sam1.0_tes100_tra1_uve64__test.npy",
+     os.path.join(base_reproduce_path, 'Li et al', 'out_results', "movielens_1m_BiasedMF_Age_out.csv"),
+     os.path.join(base_reproduce_path, 'Li et al', 'NLR', 'result', r"BiasedMF\11_BiasedMF_movielens-1m_2018_bat128_dro1_dro0.2_ear0_epo100_gra10_ive64_l21e-05_l2b0_l2s0.0_los1_lr0.001_optAdam_sam1.0_tes100_tra1_uve64__test.npy"),
      RelevanceMatrix.from_user_oriented_fairness_files,
      RelevanceMatrix.from_nlr_models_result),
     ('Ranking', 'User-oriented fairness', 'STAMP',
-     r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\recommender_codebase\data\user-oriented fairness files\STAMP_de3706b370_Age___per_user_timestamp_split[80%, 20%]_out.csv",
-     r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\NLR\result\STAMP\11_STAMP_movielens-1m_2018_all0_att64_bat128_dro1_dro1_dro0.2_ear0_epo100_gra10_hid64_ive64_l21e-05_l2b0_l2s0.0_los1_lr0.001_max30_neg0_neg1_neg0_neg[]_num1_optAdam_pla[64]_sam1.0_spa0_sup0_tes100_tra1_uve64__test.npy",
+     os.path.join(base_reproduce_path, 'Li et al', 'out_results', "movielens_1m_STAMP_Age_out.csv"),
+     os.path.join(base_reproduce_path, 'Li et al', 'NLR', 'result', r"STAMP\11_STAMP_movielens-1m_2018_all0_att64_bat128_dro1_dro1_dro0.2_ear0_epo100_gra10_hid64_ive64_l21e-05_l2b0_l2s0.0_los1_lr0.001_max30_neg0_neg1_neg0_neg[]_num1_optAdam_pla[64]_sam1.0_spa0_sup0_tes100_tra1_uve64__test.npy"),
      RelevanceMatrix.from_user_oriented_fairness_files,
      RelevanceMatrix.from_nlr_models_result),
     ('Ranking', 'Co-clustering', 'Parity LBM',
-     r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\Co-clustering for fair recommendation\results\movielens_1m\block_0_run_15_age.pkl",
-     (r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\Co-clustering for fair recommendation\results\movielens_1m\block_0_baseline.pkl", 'Standard LBM'),
+     os.path.join(base_reproduce_path, 'Frisch et al', 'results', r"movielens_1m\block_0_run_15_age.pkl"),
+     (os.path.join(base_reproduce_path, 'Frisch et al', 'results', r"movielens_1m\block_0_baseline.pkl"), 'Standard LBM'),
      RelevanceMatrix.from_co_clustering_fair_pickle,
      RelevanceMatrix.from_co_clustering_fair_pickle),
     ('Ranking', 'Librec', 'BN-SLIM-U',
-     r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\Librec-auto tutorial\movielens_1m_age_experiment\exp00000\result\out-1.txt",
-    (r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\Librec-auto tutorial\movielens_1m_SLIM_U\exp00000\result\out-1.txt", 'SLIM-U'),
+     os.path.join(base_reproduce_path, 'Burke et al', r"movielens_1m_age_experiment\exp00000\result\out-1.txt"),
+    (os.path.join(base_reproduce_path, 'Burke et al', r"movielens_1m_SLIM_U\exp00000\result\out-1.txt"), 'SLIM-U'),
      RelevanceMatrix.from_librec_result,
      RelevanceMatrix.from_librec_result),
     ('Rating', 'Antidote Data', 'ALS MF',
-     r'C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\antidote-data-framework\movielens_1m_antidote_group_out_als_MF_Age.csv',
-     r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\antidote-data-framework\movielens_1m_antidote_group_out_als_MF_baseline.csv",
+     os.path.join(base_reproduce_path, 'Rastegarpanah et al', r"movielens_1m_antidote_group_out_als_MF_Age.csv"),
+     os.path.join(base_reproduce_path, 'Rastegarpanah et al', r"movielens_1m_antidote_group_out_als_MF_baseline.csv"),
      RelevanceMatrix.from_antidote_data,
      RelevanceMatrix.from_antidote_data),
     ('Rating', 'Antidote Data', 'LMaFit MF',
-     r'C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\antidote-data-framework\movielens_1m_antidote_group_out_lmafit_MF_Age.csv',
-     r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\antidote-data-framework\movielens_1m_antidote_group_out_lmafit_MF_baseline.csv",
+     os.path.join(base_reproduce_path, 'Rastegarpanah et al', r"movielens_1m_antidote_group_out_lmafit_MF_Age.csv"),
+     os.path.join(base_reproduce_path, 'Rastegarpanah et al', r"movielens_1m_antidote_group_out_lmafit_MF_baseline.csv"),
      RelevanceMatrix.from_antidote_data,
      RelevanceMatrix.from_antidote_data),
     ('Rating', 'FairGo', 'FairGo GCN',
-     r'C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\FairGO\movielens_1m_reproduce_data\predictions_age.pkl',
-     (r'C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\FairGO\movielens_1m_reproduce_data\predictions_baseline.pkl', "GCN"),
+     os.path.join(base_reproduce_path, 'Wu et al', r"movielens_1m_reproduce_data\predictions_age.pkl"),
+     (os.path.join(base_reproduce_path, 'Wu et al', r"movielens_1m_reproduce_data\predictions_baseline.pkl"), "GCN"),
      RelevanceMatrix.from_fair_go_predictions,
      RelevanceMatrix.from_fair_go_predictions),
     ('Rating', 'Haas', ['ALS BiasedMF Parity', 'ALS BiasedMF Val'],
      [
-         r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\RatingPredictionFairness\results\movielens_1m\ALS_parity_adj_bucketized_user_age.csv",
-         r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\RatingPredictionFairness\results\movielens_1m\ALS_val_adj_bucketized_user_age.csv"
-     ], (r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\RatingPredictionFairness\results\movielens_1m\ALS_orig_bucketized_user_age.csv", "ALS BiasedMF"),
+         os.path.join(base_reproduce_path, 'Ashokan et al', 'results', r"movielens_1m\ALS_parity_adj_bucketized_user_age.csv"),
+         os.path.join(base_reproduce_path, 'Ashokan et al', 'results', r"movielens_1m\ALS_val_adj_bucketized_user_age.csv")
+     ], (os.path.join(base_reproduce_path, 'Ashokan et al', 'results', r"movielens_1m\ALS_orig_bucketized_user_age.csv"), "ALS BiasedMF"),
      RelevanceMatrix.from_rating_prediction_fairness_result,
      RelevanceMatrix.from_rating_prediction_fairness_result),
     ('Rating', 'Haas', ['Item-Item Parity', 'Item-Item Val'],
      [
-         r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\RatingPredictionFairness\results\movielens_1m\ItemItem_parity_adj_bucketized_user_age.csv",
-         r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\RatingPredictionFairness\results\movielens_1m\ItemItem_val_adj_bucketized_user_age.csv"
-     ], (r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\RatingPredictionFairness\results\movielens_1m\ItemItem_orig_bucketized_user_age.csv", "Item-Item"),
+         os.path.join(base_reproduce_path, 'Ashokan et al', 'results', r"movielens_1m\ItemItem_parity_adj_bucketized_user_age.csv"),
+         os.path.join(base_reproduce_path, 'Ashokan et al', 'results', r"movielens_1m\ItemItem_val_adj_bucketized_user_age.csv")
+     ], (os.path.join(base_reproduce_path, 'Ashokan et al', 'results', r"movielens_1m\ItemItem_orig_bucketized_user_age.csv"), "Item-Item"),
      RelevanceMatrix.from_rating_prediction_fairness_result,
      RelevanceMatrix.from_rating_prediction_fairness_result)
 ]
 
 experiments_models_gender_lfm1k = [
     ('Rating', 'Ekstrand', 'User-User',
-     [f.path for f in os.scandir(r"D:\Reproducibility Study\All the cool kids\results\filtered(20)_lastfm_1K\gender_balanced") if "UU-E" in f.name],
-     [f.path for f in os.scandir(r"D:\Reproducibility Study\All the cool kids\results\filtered(20)_lastfm_1K\baseline") if "UU-E" in f.name][0],
+     [f.path for f in os.scandir(os.path.join(base_reproduce_path, 'Esktrand et al', r"results\filtered(20)_lastfm_1K\gender_balanced")) if "UU-E" in f.name],
+     [f.path for f in os.scandir(os.path.join(base_reproduce_path, 'Esktrand et al', r"results\filtered(20)_lastfm_1K\baseline")) if "UU-E" in f.name][0],
      RelevanceMatrix.from_cool_kids_result,
      RelevanceMatrix.from_cool_kids_result),
     ('Rating', 'Ekstrand', 'Item-Item',
-     [f.path for f in os.scandir(r"D:\Reproducibility Study\All the cool kids\results\filtered(20)_lastfm_1K\gender_balanced") if "II-E" in f.name],
-     [f.path for f in os.scandir(r"D:\Reproducibility Study\All the cool kids\results\filtered(20)_lastfm_1K\baseline") if "II-E" in f.name][0],
+     [f.path for f in os.scandir(os.path.join(base_reproduce_path, 'Esktrand et al', r"results\filtered(20)_lastfm_1K\gender_balanced")) if "II-E" in f.name],
+     [f.path for f in os.scandir(os.path.join(base_reproduce_path, 'Esktrand et al', r"results\filtered(20)_lastfm_1K\baseline")) if "II-E" in f.name][0],
      RelevanceMatrix.from_cool_kids_result,
      RelevanceMatrix.from_cool_kids_result),
     ('Rating', 'Ekstrand', 'FunkSVD',
-     [f.path for f in os.scandir(r"D:\Reproducibility Study\All the cool kids\results\filtered(20)_lastfm_1K\gender_balanced") if "MF-E" in f.name],
-     [f.path for f in os.scandir(r"D:\Reproducibility Study\All the cool kids\results\filtered(20)_lastfm_1K\baseline") if "MF-E" in f.name][0],
+     [f.path for f in os.scandir(os.path.join(base_reproduce_path, 'Esktrand et al', r"results\filtered(20)_lastfm_1K\gender_balanced")) if "MF-E" in f.name],
+     [f.path for f in os.scandir(os.path.join(base_reproduce_path, 'Esktrand et al', r"results\filtered(20)_lastfm_1K\baseline")) if "MF-E" in f.name][0],
      RelevanceMatrix.from_cool_kids_result,
      RelevanceMatrix.from_cool_kids_result),
     ('Ranking', 'Ekstrand', 'TopPopular',
-     [f.path for f in os.scandir(r"D:\Reproducibility Study\All the cool kids\results\filtered(20)_lastfm_1K\gender_balanced") if "Pop-B" in f.name],
-     [f.path for f in os.scandir(r"D:\Reproducibility Study\All the cool kids\results\filtered(20)_lastfm_1K\baseline") if "Pop-B" in f.name][0],
+     [f.path for f in os.scandir(os.path.join(base_reproduce_path, 'Esktrand et al', r"results\filtered(20)_lastfm_1K\gender_balanced")) if "Pop-B" in f.name],
+     [f.path for f in os.scandir(os.path.join(base_reproduce_path, 'Esktrand et al', r"results\filtered(20)_lastfm_1K\baseline")) if "Pop-B" in f.name][0],
      RelevanceMatrix.from_cool_kids_result,
      RelevanceMatrix.from_cool_kids_result),
     ('Rating', 'Ekstrand', 'Mean',
-     [f.path for f in os.scandir(r"D:\Reproducibility Study\All the cool kids\results\filtered(20)_lastfm_1K\gender_balanced") if "Mean-E" in f.name],
-     [f.path for f in os.scandir(r"D:\Reproducibility Study\All the cool kids\results\filtered(20)_lastfm_1K\baseline") if "Mean-E" in f.name][0],
+     [f.path for f in os.scandir(os.path.join(base_reproduce_path, 'Esktrand et al', r"results\filtered(20)_lastfm_1K\gender_balanced")) if "Mean-E" in f.name],
+     [f.path for f in os.scandir(os.path.join(base_reproduce_path, 'Esktrand et al', r"results\filtered(20)_lastfm_1K\baseline")) if "Mean-E" in f.name][0],
      RelevanceMatrix.from_cool_kids_result,
      RelevanceMatrix.from_cool_kids_result),
     ('Ranking', 'Ekstrand', 'User-User',
-     [f.path for f in os.scandir(r"D:\Reproducibility Study\All the cool kids\results\filtered(20)_lastfm_1K\gender_balanced") if "UU-B" in f.name],
-     [f.path for f in os.scandir(r"D:\Reproducibility Study\All the cool kids\results\filtered(20)_lastfm_1K\baseline") if "UU-B" in f.name][0],
+     [f.path for f in os.scandir(os.path.join(base_reproduce_path, 'Esktrand et al', r"results\filtered(20)_lastfm_1K\gender_balanced")) if "UU-B" in f.name],
+     [f.path for f in os.scandir(os.path.join(base_reproduce_path, 'Esktrand et al', r"results\filtered(20)_lastfm_1K\baseline")) if "UU-B" in f.name][0],
      RelevanceMatrix.from_cool_kids_result,
      RelevanceMatrix.from_cool_kids_result),
     ('Ranking', 'Ekstrand', 'Item-Item',
-     [f.path for f in os.scandir(r"D:\Reproducibility Study\All the cool kids\results\filtered(20)_lastfm_1K\gender_balanced") if "II-B" in f.name],
-     [f.path for f in os.scandir(r"D:\Reproducibility Study\All the cool kids\results\filtered(20)_lastfm_1K\baseline") if "II-B" in f.name][0],
+     [f.path for f in os.scandir(os.path.join(base_reproduce_path, 'Esktrand et al', r"results\filtered(20)_lastfm_1K\gender_balanced")) if "II-B" in f.name],
+     [f.path for f in os.scandir(os.path.join(base_reproduce_path, 'Esktrand et al', r"results\filtered(20)_lastfm_1K\baseline")) if "II-B" in f.name][0],
      RelevanceMatrix.from_cool_kids_result,
      RelevanceMatrix.from_cool_kids_result),
     ('Ranking', 'Ekstrand', 'FunkSVD',
-     [f.path for f in os.scandir(r"D:\Reproducibility Study\All the cool kids\results\filtered(20)_lastfm_1K\gender_balanced") if "MF-B" in f.name],
-     [f.path for f in os.scandir(r"D:\Reproducibility Study\All the cool kids\results\filtered(20)_lastfm_1K\baseline") if "MF-B" in f.name][0],
+     [f.path for f in os.scandir(os.path.join(base_reproduce_path, 'Esktrand et al', r"results\filtered(20)_lastfm_1K\gender_balanced")) if "MF-B" in f.name],
+     [f.path for f in os.scandir(os.path.join(base_reproduce_path, 'Esktrand et al', r"results\filtered(20)_lastfm_1K\baseline")) if "MF-B" in f.name][0],
      RelevanceMatrix.from_cool_kids_result,
      RelevanceMatrix.from_cool_kids_result),
     ('Rating', 'Kamishima', ['PMF Mean Matching', 'PMF BDist Matching', 'PMF Mi Normal'],
      [
-         r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\Recommendation Independence\filtered(20)_lastfm_1K_out_mean_matching_gender.json",
-         r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\Recommendation Independence\filtered(20)_lastfm_1K_out_bdist_matching_gender.json",
-         r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\Recommendation Independence\filtered(20)_lastfm_1K_out_mi_normal_gender.json"
-     ], (r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\Recommendation Independence\filtered(20)_lastfm_1K_out_pmf_baseline.json", 'PMF'),
+         os.path.join(base_reproduce_path, 'Kamishima et al', "filtered(20)_lastfm_1K_out_mean_matching_gender.json"),
+         os.path.join(base_reproduce_path, 'Kamishima et al', "filtered(20)_lastfm_1K_out_bdist_matching_gender.json"),
+         os.path.join(base_reproduce_path, 'Kamishima et al', "filtered(20)_lastfm_1K_out_mi_normal_gender.json")
+     ], (os.path.join(base_reproduce_path, 'Kamishima et al', "filtered(20)_lastfm_1K_out_pmf_baseline.json"), 'PMF'),
      RelevanceMatrix.from_rec_indep_json,
      RelevanceMatrix.from_rec_indep_json),
     ('Ranking', 'User-oriented fairness', 'PMF',
-     r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\recommender_codebase\data\user-oriented fairness files\filtered(20)_lastfm_1K_PMF_034b94c16d_lastfm___per_user_timestamp_split[80%, 20%]_out.csv",
-     r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\NLR\result\PMF\11_PMF_filtered(20)-lastfm-1K_2018_bat128_dro1_dro0.2_ear0_epo100_gra10_ive64_l21e-05_l2b0_l2s0.0_los1_lr0.001_optAdam_sam1.0_tes100_tra1_uve64__test.npy",
+     os.path.join(base_reproduce_path, 'Li et al', 'out_results', "filtered(20)_lastfm_1K_PMF_Gender_out.csv"),
+     os.path.join(base_reproduce_path, 'Li et al', 'NLR', 'result', r"PMF\11_PMF_filtered(20)-lastfm-1K_2018_bat128_dro1_dro0.2_ear0_epo100_gra10_ive64_l21e-05_l2b0_l2s0.0_los1_lr0.001_optAdam_sam1.0_tes100_tra1_uve64__test.npy"),
      RelevanceMatrix.from_user_oriented_fairness_files,
      RelevanceMatrix.from_nlr_models_result),
     ('Ranking', 'User-oriented fairness', 'NeuMF',
-     r'C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\recommender_codebase\data\user-oriented fairness files\filtered(20)_lastfm_1K_NeuMF_034b94c16d_lastfm___per_user_timestamp_split[80%, 20%]_out.csv',
-     r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\NLR\result\NCF\11_NCF_filtered(20)-lastfm-1K_2018_bat128_dro1_dro0.2_ear0_epo100_gra10_ive64_l21e-05_l2b0_l2s0.0_lay[32,16,8]_los1_lr0.001_optAdam_pla[64]_sam1.0_tes100_tra1_uve64__test.npy",
+     os.path.join(base_reproduce_path, 'Li et al', 'out_results', "filtered(20)_lastfm_1K_NeuMF_Gender_out.csv"),
+     os.path.join(base_reproduce_path, 'Li et al', 'NLR', 'result', r"NCF\11_NCF_filtered(20)-lastfm-1K_2018_bat128_dro1_dro0.2_ear0_epo100_gra10_ive64_l21e-05_l2b0_l2s0.0_lay[32,16,8]_los1_lr0.001_optAdam_pla[64]_sam1.0_tes100_tra1_uve64__test.npy"),
      RelevanceMatrix.from_user_oriented_fairness_files,
      RelevanceMatrix.from_nlr_models_result),
     ('Ranking', 'User-oriented fairness', 'BiasedMF',
-     r'C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\recommender_codebase\data\user-oriented fairness files\filtered(20)_lastfm_1K_BiasedMF_034b94c16d_lastfm___per_user_timestamp_split[80%, 20%]_out.csv',
-     r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\NLR\result\BiasedMF\11_BiasedMF_filtered(20)-lastfm-1K_2018_bat128_dro1_dro0.2_ear0_epo100_gra10_ive64_l21e-05_l2b0_l2s0.0_los1_lr0.001_optAdam_sam1.0_tes100_tra1_uve64__test.npy",
+     os.path.join(base_reproduce_path, 'Li et al', 'out_results', "filtered(20)_lastfm_1K_BiasedMF_Gender_out.csv"),
+     os.path.join(base_reproduce_path, 'Li et al', 'NLR', 'result', r"BiasedMF\11_BiasedMF_filtered(20)-lastfm-1K_2018_bat128_dro1_dro0.2_ear0_epo100_gra10_ive64_l21e-05_l2b0_l2s0.0_los1_lr0.001_optAdam_sam1.0_tes100_tra1_uve64__test.npy"),
      RelevanceMatrix.from_user_oriented_fairness_files,
      RelevanceMatrix.from_nlr_models_result),
     ('Ranking', 'User-oriented fairness', 'STAMP',
-     r'C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\recommender_codebase\data\user-oriented fairness files\filtered(20)_lastfm_1K_STAMP_034b94c16d_lastfm___per_user_timestamp_split[80%, 20%]_out.csv',
-     r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\NLR\result\STAMP\11_STAMP_filtered(20)-lastfm-1K_2018_all0_att64_bat128_dro1_dro1_dro0.2_ear0_epo100_gra10_hid64_ive64_l21e-05_l2b0_l2s0.0_los1_lr0.001_max30_neg0_neg1_neg0_neg[]_num1_optAdam_pla[64]_sam1.0_spa0_sup0_tes100_tra1_uve64__test.npy",
+     os.path.join(base_reproduce_path, 'Li et al', 'out_results', "filtered(20)_lastfm_1K_STAMP_Gender_out.csv"),
+     os.path.join(base_reproduce_path, 'Li et al', 'NLR', 'result', r"STAMP\11_STAMP_filtered(20)-lastfm-1K_2018_all0_att64_bat128_dro1_dro1_dro0.2_ear0_epo100_gra10_hid64_ive64_l21e-05_l2b0_l2s0.0_los1_lr0.001_max30_neg0_neg1_neg0_neg[]_num1_optAdam_pla[64]_sam1.0_spa0_sup0_tes100_tra1_uve64__test.npy"),
      RelevanceMatrix.from_user_oriented_fairness_files,
      RelevanceMatrix.from_nlr_models_result),
     ('Ranking', 'Co-clustering', 'Parity LBM',
-     r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\Co-clustering for fair recommendation\results\filtered(20)_lastfm_1K\filtered(20)_lastfm_1K_block_0_run_14_user_gender.pkl",
-     (r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\Co-clustering for fair recommendation\results\filtered(20)_lastfm_1K\filtered(20)_lastfm_1K_block_0_baseline.pkl", 'Standard LBM'),
+     os.path.join(base_reproduce_path, 'Frisch et al', 'results', r"filtered(20)_lastfm_1K\filtered(20)_lastfm_1K_block_0_run_14_user_gender.pkl"),
+     (os.path.join(base_reproduce_path, 'Frisch et al', 'results', r"filtered(20)_lastfm_1K\filtered(20)_lastfm_1K_block_0_baseline.pkl"), 'Standard LBM'),
      RelevanceMatrix.from_co_clustering_fair_pickle,
      RelevanceMatrix.from_co_clustering_fair_pickle),
     ('Ranking', 'Librec', 'BN-SLIM-U',
-     r'C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\Librec-auto tutorial\filtered(20)_lastfm_1K_gender_experiment\exp00000\result\out-1.txt',
-     (r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\Librec-auto tutorial\filtered(20)_lastfm_1K_SLIM_U\exp00000\result\out-1.txt", 'SLIM-U'),
+     os.path.join(base_reproduce_path, 'Burke et al', r"filtered(20)_lastfm_1K_gender_experiment\exp00000\result\out-1.txt"),
+     (os.path.join(base_reproduce_path, 'Burke et al', r"filtered(20)_lastfm_1K_SLIM_U\exp00000\result\out-1.txt"), 'SLIM-U'),
      RelevanceMatrix.from_librec_result,
      RelevanceMatrix.from_librec_result),
-    # ('Rating', 'Antidote Data', 'ALS MF',
-    #  r'C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\antidote-data-framework\filtered(20)_lastfm_1K_antidote_group_out_als_MF_user_gender.csv',
-    #  r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\antidote-data-framework\filtered(20)_lastfm_1K_antidote_group_out_als_MF_baseline.csv",
-    #  RelevanceMatrix.from_antidote_data,
-    #  RelevanceMatrix.from_antidote_data),
+    ('Rating', 'Antidote Data', 'ALS MF',
+     os.path.join(base_reproduce_path, 'Rastegarpanah et al', r"filtered(20)_lastfm_1K_antidote_group_out_als_MF_user_gender.csv"),
+     os.path.join(base_reproduce_path, 'Rastegarpanah et al', r"filtered(20)_lastfm_1K_antidote_group_out_als_MF_baseline.csv"),
+     RelevanceMatrix.from_antidote_data,
+     RelevanceMatrix.from_antidote_data),
     ('Rating', 'Antidote Data', 'LMaFit MF',
-     r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\antidote-data-framework\filtered(20)_lastfm_1K_antidote_group_out_lmafit_MF_user_gender.csv",
-     r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\antidote-data-framework\filtered(20)_lastfm_1K_antidote_group_out_lmafit_MF_baseline.csv",
+     os.path.join(base_reproduce_path, 'Rastegarpanah et al', r"filtered(20)_lastfm_1K_antidote_group_out_lmafit_MF_user_gender.csv"),
+     os.path.join(base_reproduce_path, 'Rastegarpanah et al', r"filtered(20)_lastfm_1K_antidote_group_out_lmafit_MF_baseline.csv"),
      RelevanceMatrix.from_antidote_data,
      RelevanceMatrix.from_antidote_data),
     ('Rating', 'FairGo', 'FairGo GCN',
-     r'C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\FairGO\filtered(20)_lastfm_1K_reproduce_data\predictions_gender.pkl',
-     (r'C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\FairGO\filtered(20)_lastfm_1K_reproduce_data\predictions_baseline.pkl', "GCN"),
+     os.path.join(base_reproduce_path, 'Wu et al', r"filtered(20)_lastfm_1K_reproduce_data\predictions_gender.pkl"),
+     (os.path.join(base_reproduce_path, 'Wu et al', r"filtered(20)_lastfm_1K_reproduce_data\predictions_baseline.pkl"), "GCN"),
      RelevanceMatrix.from_fair_go_predictions,
      RelevanceMatrix.from_fair_go_predictions),
     ('Rating', 'Haas', ['ALS BiasedMF Parity', 'ALS BiasedMF Val'],
      [
-         r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\RatingPredictionFairness\results\filtered(20)_lastfm_1K\ALS_parity_adj_user_gender.csv",
-         r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\RatingPredictionFairness\results\filtered(20)_lastfm_1K\ALS_val_adj_user_gender.csv"
-     ], (r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\RatingPredictionFairness\results\filtered(20)_lastfm_1K\ALS_orig_user_gender.csv", "ALS BiasedMF"),
+         os.path.join(base_reproduce_path, 'Ashokan et al', 'results', r"filtered(20)_lastfm_1K\ALS_parity_adj_user_gender.csv"),
+         os.path.join(base_reproduce_path, 'Ashokan et al', 'results', r"filtered(20)_lastfm_1K\ALS_val_adj_user_gender.csv")
+     ], (os.path.join(base_reproduce_path, 'Ashokan et al', 'results', r"filtered(20)_lastfm_1K\ALS_orig_user_gender.csv"), "ALS BiasedMF"),
      RelevanceMatrix.from_rating_prediction_fairness_result,
      RelevanceMatrix.from_rating_prediction_fairness_result),
     ('Rating', 'Haas', ['Item-Item Parity', 'Item-Item Val'],
      [
-         r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\RatingPredictionFairness\results\filtered(20)_lastfm_1K\ItemItem_parity_adj_user_gender.csv",
-         r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\RatingPredictionFairness\results\filtered(20)_lastfm_1K\ItemItem_val_adj_user_gender.csv"
-     ], (r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\RatingPredictionFairness\results\filtered(20)_lastfm_1K\ItemItem_orig_user_gender.csv", "Item-Item"),
+         os.path.join(base_reproduce_path, 'Ashokan et al', 'results', r"filtered(20)_lastfm_1K\ItemItem_parity_adj_user_gender.csv"),
+         os.path.join(base_reproduce_path, 'Ashokan et al', 'results', r"filtered(20)_lastfm_1K\ItemItem_val_adj_user_gender.csv")
+     ], (os.path.join(base_reproduce_path, 'Ashokan et al', 'results', r"filtered(20)_lastfm_1K\ItemItem_orig_user_gender.csv"), "Item-Item"),
      RelevanceMatrix.from_rating_prediction_fairness_result,
      RelevanceMatrix.from_rating_prediction_fairness_result)
 ]
 
 experiments_models_age_lfm1k = [
     ('Rating', 'Ekstrand', 'User-User',
-     [f.path for f in os.scandir(r"D:\Reproducibility Study\All the cool kids\results\filtered(20)_lastfm_1K\age_balanced") if "UU-E" in f.name],
-     [f.path for f in os.scandir(r"D:\Reproducibility Study\All the cool kids\results\filtered(20)_lastfm_1K\baseline") if "UU-E" in f.name][0],
+     [f.path for f in os.scandir(os.path.join(base_reproduce_path, 'Esktrand et al', r"results\filtered(20)_lastfm_1K\age_balanced")) if "UU-E" in f.name],
+     [f.path for f in os.scandir(os.path.join(base_reproduce_path, 'Esktrand et al', r"results\filtered(20)_lastfm_1K\baseline")) if "UU-E" in f.name][0],
      RelevanceMatrix.from_cool_kids_result,
      RelevanceMatrix.from_cool_kids_result),
     ('Rating', 'Ekstrand', 'Item-Item',
-     [f.path for f in os.scandir(r"D:\Reproducibility Study\All the cool kids\results\filtered(20)_lastfm_1K\age_balanced") if "II-E" in f.name],
-     [f.path for f in os.scandir(r"D:\Reproducibility Study\All the cool kids\results\filtered(20)_lastfm_1K\baseline") if "II-E" in f.name][0],
+     [f.path for f in os.scandir(os.path.join(base_reproduce_path, 'Esktrand et al', r"results\filtered(20)_lastfm_1K\age_balanced")) if "II-E" in f.name],
+     [f.path for f in os.scandir(os.path.join(base_reproduce_path, 'Esktrand et al', r"results\filtered(20)_lastfm_1K\baseline")) if "II-E" in f.name][0],
      RelevanceMatrix.from_cool_kids_result,
      RelevanceMatrix.from_cool_kids_result),
     ('Rating', 'Ekstrand', 'FunkSVD',
-     [f.path for f in os.scandir(r"D:\Reproducibility Study\All the cool kids\results\filtered(20)_lastfm_1K\age_balanced") if "MF-E" in f.name],
-     [f.path for f in os.scandir(r"D:\Reproducibility Study\All the cool kids\results\filtered(20)_lastfm_1K\baseline") if "MF-E" in f.name][0],
+     [f.path for f in os.scandir(os.path.join(base_reproduce_path, 'Esktrand et al', r"results\filtered(20)_lastfm_1K\age_balanced")) if "MF-E" in f.name],
+     [f.path for f in os.scandir(os.path.join(base_reproduce_path, 'Esktrand et al', r"results\filtered(20)_lastfm_1K\baseline")) if "MF-E" in f.name][0],
      RelevanceMatrix.from_cool_kids_result,
      RelevanceMatrix.from_cool_kids_result),
     ('Ranking', 'Ekstrand', 'TopPopular',
-     [f.path for f in os.scandir(r"D:\Reproducibility Study\All the cool kids\results\filtered(20)_lastfm_1K\age_balanced") if "Pop-B" in f.name],
-     [f.path for f in os.scandir(r"D:\Reproducibility Study\All the cool kids\results\filtered(20)_lastfm_1K\baseline") if "Pop-B" in f.name][0],
+     [f.path for f in os.scandir(os.path.join(base_reproduce_path, 'Esktrand et al', r"results\filtered(20)_lastfm_1K\age_balanced")) if "Pop-B" in f.name],
+     [f.path for f in os.scandir(os.path.join(base_reproduce_path, 'Esktrand et al', r"results\filtered(20)_lastfm_1K\baseline")) if "Pop-B" in f.name][0],
      RelevanceMatrix.from_cool_kids_result,
      RelevanceMatrix.from_cool_kids_result),
     ('Rating', 'Ekstrand', 'Mean',
-     [f.path for f in os.scandir(r"D:\Reproducibility Study\All the cool kids\results\filtered(20)_lastfm_1K\age_balanced") if "Mean-E" in f.name],
-     [f.path for f in os.scandir(r"D:\Reproducibility Study\All the cool kids\results\filtered(20)_lastfm_1K\baseline") if "Mean-E" in f.name][0],
+     [f.path for f in os.scandir(os.path.join(base_reproduce_path, 'Esktrand et al', r"results\filtered(20)_lastfm_1K\age_balanced")) if "Mean-E" in f.name],
+     [f.path for f in os.scandir(os.path.join(base_reproduce_path, 'Esktrand et al', r"results\filtered(20)_lastfm_1K\baseline")) if "Mean-E" in f.name][0],
      RelevanceMatrix.from_cool_kids_result,
      RelevanceMatrix.from_cool_kids_result),
     ('Ranking', 'Ekstrand', 'User-User',
-     [f.path for f in os.scandir(r"D:\Reproducibility Study\All the cool kids\results\filtered(20)_lastfm_1K\age_balanced") if "UU-B" in f.name],
-     [f.path for f in os.scandir(r"D:\Reproducibility Study\All the cool kids\results\filtered(20)_lastfm_1K\baseline") if "UU-B" in f.name][0],
+     [f.path for f in os.scandir(os.path.join(base_reproduce_path, 'Esktrand et al', r"results\filtered(20)_lastfm_1K\age_balanced")) if "UU-B" in f.name],
+     [f.path for f in os.scandir(os.path.join(base_reproduce_path, 'Esktrand et al', r"results\filtered(20)_lastfm_1K\baseline")) if "UU-B" in f.name][0],
      RelevanceMatrix.from_cool_kids_result,
      RelevanceMatrix.from_cool_kids_result),
     ('Ranking', 'Ekstrand', 'Item-Item',
-     [f.path for f in os.scandir(r"D:\Reproducibility Study\All the cool kids\results\filtered(20)_lastfm_1K\age_balanced") if "II-B" in f.name],
-     [f.path for f in os.scandir(r"D:\Reproducibility Study\All the cool kids\results\filtered(20)_lastfm_1K\baseline") if "II-B" in f.name][0],
+     [f.path for f in os.scandir(os.path.join(base_reproduce_path, 'Esktrand et al', r"results\filtered(20)_lastfm_1K\age_balanced")) if "II-B" in f.name],
+     [f.path for f in os.scandir(os.path.join(base_reproduce_path, 'Esktrand et al', r"results\filtered(20)_lastfm_1K\baseline")) if "II-B" in f.name][0],
      RelevanceMatrix.from_cool_kids_result,
      RelevanceMatrix.from_cool_kids_result),
     ('Ranking', 'Ekstrand', 'FunkSVD',
-     [f.path for f in os.scandir(r"D:\Reproducibility Study\All the cool kids\results\filtered(20)_lastfm_1K\age_balanced") if "MF-B" in f.name],
-     [f.path for f in os.scandir(r"D:\Reproducibility Study\All the cool kids\results\filtered(20)_lastfm_1K\baseline") if "MF-B" in f.name][0],
+     [f.path for f in os.scandir(os.path.join(base_reproduce_path, 'Esktrand et al', r"results\filtered(20)_lastfm_1K\age_balanced")) if "MF-B" in f.name],
+     [f.path for f in os.scandir(os.path.join(base_reproduce_path, 'Esktrand et al', r"results\filtered(20)_lastfm_1K\baseline")) if "MF-B" in f.name][0],
      RelevanceMatrix.from_cool_kids_result,
      RelevanceMatrix.from_cool_kids_result),
     ('Rating', 'Kamishima', ['PMF Mean Matching', 'PMF BDist Matching', 'PMF Mi Normal'],
      [
-         r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\Recommendation Independence\filtered(20)_lastfm_1K_out_mean_matching_age.json",
-         r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\Recommendation Independence\filtered(20)_lastfm_1K_out_bdist_matching_age.json",
-         r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\Recommendation Independence\filtered(20)_lastfm_1K_out_mi_normal_age.json"
-     ], (r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\Recommendation Independence\filtered(20)_lastfm_1K_out_pmf_baseline.json", 'PMF'),
+         os.path.join(base_reproduce_path, 'Kamishima et al', "filtered(20)_lastfm_1K_out_mean_matching_age.json"),
+         os.path.join(base_reproduce_path, 'Kamishima et al', "filtered(20)_lastfm_1K_out_bdist_matching_age.json"),
+         os.path.join(base_reproduce_path, 'Kamishima et al', "filtered(20)_lastfm_1K_out_mi_normal_age.json")
+     ], (os.path.join(base_reproduce_path, 'Kamishima et al', "filtered(20)_lastfm_1K_out_pmf_baseline.json"), 'PMF'),
      RelevanceMatrix.from_rec_indep_json,
      RelevanceMatrix.from_rec_indep_json),
     ('Ranking', 'User-oriented fairness', 'PMF',
-     r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\recommender_codebase\data\user-oriented fairness files\filtered(20)_lastfm_1K_PMF_41d1bbe242_lastfm___per_user_timestamp_split[80%, 20%]_out.csv",
-     r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\NLR\result\PMF\11_PMF_filtered(20)-lastfm-1K_2018_bat128_dro1_dro0.2_ear0_epo100_gra10_ive64_l21e-05_l2b0_l2s0.0_los1_lr0.001_optAdam_sam1.0_tes100_tra1_uve64__test.npy",
+     os.path.join(base_reproduce_path, 'Li et al', 'out_results', "filtered(20)_lastfm_1K_PMF_Age_out.csv"),
+     os.path.join(base_reproduce_path, 'Li et al', 'NLR', 'result', r"PMF\11_PMF_filtered(20)-lastfm-1K_2018_bat128_dro1_dro0.2_ear0_epo100_gra10_ive64_l21e-05_l2b0_l2s0.0_los1_lr0.001_optAdam_sam1.0_tes100_tra1_uve64__test.npy"),
      RelevanceMatrix.from_user_oriented_fairness_files,
      RelevanceMatrix.from_nlr_models_result),
     ('Ranking', 'User-oriented fairness', 'NeuMF',
-     r'C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\recommender_codebase\data\user-oriented fairness files\filtered(20)_lastfm_1K_NeuMF_41d1bbe242_lastfm___per_user_timestamp_split[80%, 20%]_out.csv',
-     r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\NLR\result\NCF\11_NCF_filtered(20)-lastfm-1K_2018_bat128_dro1_dro0.2_ear0_epo100_gra10_ive64_l21e-05_l2b0_l2s0.0_lay[32,16,8]_los1_lr0.001_optAdam_pla[64]_sam1.0_tes100_tra1_uve64__test.npy",
+     os.path.join(base_reproduce_path, 'Li et al', 'out_results', "filtered(20)_lastfm_1K_NeuMF_Age_out.csv"),
+     os.path.join(base_reproduce_path, 'Li et al', 'NLR', 'result', r"NCF\11_NCF_filtered(20)-lastfm-1K_2018_bat128_dro1_dro0.2_ear0_epo100_gra10_ive64_l21e-05_l2b0_l2s0.0_lay[32,16,8]_los1_lr0.001_optAdam_pla[64]_sam1.0_tes100_tra1_uve64__test.npy"),
      RelevanceMatrix.from_user_oriented_fairness_files,
      RelevanceMatrix.from_nlr_models_result),
     ('Ranking', 'User-oriented fairness', 'BiasedMF',
-     r'C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\recommender_codebase\data\user-oriented fairness files\filtered(20)_lastfm_1K_BiasedMF_41d1bbe242_lastfm___per_user_timestamp_split[80%, 20%]_out.csv',
-     r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\NLR\result\BiasedMF\11_BiasedMF_filtered(20)-lastfm-1K_2018_bat128_dro1_dro0.2_ear0_epo100_gra10_ive64_l21e-05_l2b0_l2s0.0_los1_lr0.001_optAdam_sam1.0_tes100_tra1_uve64__test.npy",
+     os.path.join(base_reproduce_path, 'Li et al', 'out_results', "filtered(20)_lastfm_1K_BiasedMF_Age_out.csv"),
+     os.path.join(base_reproduce_path, 'Li et al', 'NLR', 'result', r"BiasedMF\11_BiasedMF_filtered(20)-lastfm-1K_2018_bat128_dro1_dro0.2_ear0_epo100_gra10_ive64_l21e-05_l2b0_l2s0.0_los1_lr0.001_optAdam_sam1.0_tes100_tra1_uve64__test.npy"),
      RelevanceMatrix.from_user_oriented_fairness_files,
      RelevanceMatrix.from_nlr_models_result),
     ('Ranking', 'User-oriented fairness', 'STAMP',
-     r'C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\recommender_codebase\data\user-oriented fairness files\filtered(20)_lastfm_1K_STAMP_41d1bbe242_lastfm___per_user_timestamp_split[80%, 20%]_out.csv',
-     r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\NLR\result\STAMP\11_STAMP_filtered(20)-lastfm-1K_2018_all0_att64_bat128_dro1_dro1_dro0.2_ear0_epo100_gra10_hid64_ive64_l21e-05_l2b0_l2s0.0_los1_lr0.001_max30_neg0_neg1_neg0_neg[]_num1_optAdam_pla[64]_sam1.0_spa0_sup0_tes100_tra1_uve64__test.npy",
+     os.path.join(base_reproduce_path, 'Li et al', 'out_results', "filtered(20)_lastfm_1K_STAMP_Age_out.csv"),
+     os.path.join(base_reproduce_path, 'Li et al', 'NLR', 'result', r"STAMP\11_STAMP_filtered(20)-lastfm-1K_2018_all0_att64_bat128_dro1_dro1_dro0.2_ear0_epo100_gra10_hid64_ive64_l21e-05_l2b0_l2s0.0_los1_lr0.001_max30_neg0_neg1_neg0_neg[]_num1_optAdam_pla[64]_sam1.0_spa0_sup0_tes100_tra1_uve64__test.npy"),
      RelevanceMatrix.from_user_oriented_fairness_files,
      RelevanceMatrix.from_nlr_models_result),
     ('Ranking', 'Co-clustering', 'Parity LBM',
-     r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\Co-clustering for fair recommendation\results\filtered(20)_lastfm_1K\filtered(20)_lastfm_1K_block_0_run_17_user_age.pkl",
-     (r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\Co-clustering for fair recommendation\results\filtered(20)_lastfm_1K\filtered(20)_lastfm_1K_block_0_baseline.pkl", 'Standard LBM'),
+     os.path.join(base_reproduce_path, 'Frisch et al', 'results', r"filtered(20)_lastfm_1K\filtered(20)_lastfm_1K_block_0_run_17_user_age.pkl"),
+     (os.path.join(base_reproduce_path, 'Frisch et al', 'results', r"filtered(20)_lastfm_1K\filtered(20)_lastfm_1K_block_0_baseline.pkl"), 'Standard LBM'),
      RelevanceMatrix.from_co_clustering_fair_pickle,
      RelevanceMatrix.from_co_clustering_fair_pickle),
     ('Ranking', 'Librec', 'BN-SLIM-U',
-     r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\Librec-auto tutorial\filtered(20)_lastfm_1K_age_experiment\exp00000\result\out-1.txt",
-     (r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\Librec-auto tutorial\filtered(20)_lastfm_1K_SLIM_U\exp00000\result\out-1.txt", 'SLIM-U'),
+     os.path.join(base_reproduce_path, 'Burke et al', r"filtered(20)_lastfm_1K_age_experiment\exp00000\result\out-1.txt"),
+     (os.path.join(base_reproduce_path, 'Burke et al', r"filtered(20)_lastfm_1K_SLIM_U\exp00000\result\out-1.txt"), 'SLIM-U'),
      RelevanceMatrix.from_librec_result,
      RelevanceMatrix.from_librec_result),
-    # ('Rating', 'Antidote Data', 'ALS MF',
-    #  r'C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\antidote-data-framework\filtered(20)_lastfm_1K_antidote_group_out_als_MF_user_age.csv',
-    #  r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\antidote-data-framework\filtered(20)_lastfm_1K_antidote_group_out_als_MF_baseline.csv",
-    #  RelevanceMatrix.from_antidote_data,
-    #  RelevanceMatrix.from_antidote_data),
+    ('Rating', 'Antidote Data', 'ALS MF',
+     os.path.join(base_reproduce_path, 'Rastegarpanah et al', r"filtered(20)_lastfm_1K_antidote_group_out_als_MF_user_age.csv"),
+     os.path.join(base_reproduce_path, 'Rastegarpanah et al', r"filtered(20)_lastfm_1K_antidote_group_out_als_MF_baseline.csv"),
+     RelevanceMatrix.from_antidote_data,
+     RelevanceMatrix.from_antidote_data),
     ('Rating', 'Antidote Data', 'LMaFit MF',
-     r'C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\antidote-data-framework\filtered(20)_lastfm_1K_antidote_group_out_lmafit_MF_user_age.csv',
-     r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\antidote-data-framework\filtered(20)_lastfm_1K_antidote_group_out_lmafit_MF_baseline.csv",
+     os.path.join(base_reproduce_path, 'Rastegarpanah et al', r"filtered(20)_lastfm_1K_antidote_group_out_lmafit_MF_user_age.csv"),
+     os.path.join(base_reproduce_path, 'Rastegarpanah et al', r"filtered(20)_lastfm_1K_antidote_group_out_lmafit_MF_baseline.csv"),
      RelevanceMatrix.from_antidote_data,
      RelevanceMatrix.from_antidote_data),
     ('Rating', 'FairGo', 'FairGo GCN',
-     r'C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\FairGO\filtered(20)_lastfm_1K_reproduce_data\predictions_age.pkl',
-     (r'C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\FairGO\filtered(20)_lastfm_1K_reproduce_data\predictions_baseline.pkl', "GCN"),
+     os.path.join(base_reproduce_path, 'Wu et al', r"filtered(20)_lastfm_1K_reproduce_data\predictions_age.pkl"),
+     (os.path.join(base_reproduce_path, 'Wu et al', r"filtered(20)_lastfm_1K_reproduce_data\predictions_baseline.pkl"), "GCN"),
      RelevanceMatrix.from_fair_go_predictions,
      RelevanceMatrix.from_fair_go_predictions),
     ('Rating', 'Haas', ['ALS BiasedMF Parity', 'ALS BiasedMF Val'],
      [
-         r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\RatingPredictionFairness\results\filtered(20)_lastfm_1K\ALS_parity_adj_user_age.csv",
-         r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\RatingPredictionFairness\results\filtered(20)_lastfm_1K\ALS_val_adj_user_age.csv"
-     ], (r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\RatingPredictionFairness\results\filtered(20)_lastfm_1K\ALS_orig_user_age.csv", "ALS BiasedMF"),
+         os.path.join(base_reproduce_path, 'Ashokan et al', 'results', r"filtered(20)_lastfm_1K\ALS_parity_adj_user_age.csv"),
+         os.path.join(base_reproduce_path, 'Ashokan et al', 'results', r"filtered(20)_lastfm_1K\ALS_val_adj_user_age.csv")
+     ], (os.path.join(base_reproduce_path, 'Ashokan et al', 'results', r"filtered(20)_lastfm_1K\ALS_orig_user_age.csv"), "ALS BiasedMF"),
      RelevanceMatrix.from_rating_prediction_fairness_result,
      RelevanceMatrix.from_rating_prediction_fairness_result),
     ('Rating', 'Haas', ['Item-Item Parity', 'Item-Item Val'],
      [
-         r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\RatingPredictionFairness\results\filtered(20)_lastfm_1K\ItemItem_parity_adj_user_age.csv",
-         r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\RatingPredictionFairness\results\filtered(20)_lastfm_1K\ItemItem_val_adj_user_age.csv"
-     ], (r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\RatingPredictionFairness\results\filtered(20)_lastfm_1K\ItemItem_orig_user_age.csv", "Item-Item"),
+         os.path.join(base_reproduce_path, 'Ashokan et al', 'results', r"filtered(20)_lastfm_1K\ItemItem_parity_adj_user_age.csv"),
+         os.path.join(base_reproduce_path, 'Ashokan et al', 'results', r"filtered(20)_lastfm_1K\ItemItem_val_adj_user_age.csv")
+     ], (os.path.join(base_reproduce_path, 'Ashokan et al', 'results', r"filtered(20)_lastfm_1K\ItemItem_orig_user_age.csv"), "Item-Item"),
      RelevanceMatrix.from_rating_prediction_fairness_result,
      RelevanceMatrix.from_rating_prediction_fairness_result)
 ]
@@ -528,7 +534,7 @@ if args.dataset == "movielens_1m":
 else:
     age_short_values = {"1-24": "Y", "25+": "O"}
 
-# _compute_equity_score
+# equity_score
 metrics = {
     "Ranking": ["ndcg", "ks", "mannwhitneyu", "ndcg_user_oriented_fairness", "epsilon_fairness", "f1_score", "mrr"],
     "Rating": ["ks", "mannwhitneyu", "mae", "rmse"]#, "value_unfairness", "absolute_unfairness",
@@ -1311,7 +1317,7 @@ def results_to_paper_table():
         new_df = pd.concat([ut_df, fair_df]).reset_index(drop=True)
 
         new_df["Status"] = new_df.apply(
-            lambda x: 'Bef' if f"{x['Paper']} \n {x['Model']}" in paper_baseline_names_model else 'Aft',
+            lambda x: 'Base' if f"{x['Paper']} \n {x['Model']}" in paper_baseline_names_model else 'Mit',
             axis=1
         ).to_list()
 
@@ -1336,7 +1342,7 @@ def results_to_paper_table():
                         for _mod_name in m_name[1:]:
                             new_df = new_df.append(b_row.copy(), ignore_index=True)
                             new_df.loc[new_df.index[-1], "Model"] = _mod_name
-                            new_df.loc[new_df.index[-1], "Status"] = "Bef"
+                            new_df.loc[new_df.index[-1], "Status"] = "Base"
 
         new_df = new_df.reset_index(drop=True)
 
@@ -1344,7 +1350,7 @@ def results_to_paper_table():
         new_df_grouped = new_df.groupby(["Metric", "Status"])
         # metric_order = ["Total"] + sensitive_values + ["DS", "KS"]
         metric_order = ["Total"] + ["DS", "KS"]
-        status_order = itertools.product(metric_order, ["Bef", "Aft"])
+        status_order = itertools.product(metric_order, ["Base", "Mit"])
         new_df = pd.concat([new_df_grouped.get_group(group_name) for group_name in status_order])
 
         new_df = new_df.round(3)
@@ -1358,7 +1364,7 @@ def results_to_paper_table():
         for stat_metric, stat_data in [("DS", st_df), ("KS", stat_ks_df)]:
             for idx, row in new_df[new_df["Metric"] == stat_metric].iterrows():
                 stat_d = stat_data.loc[stat_data["Paper"] == row["Paper"]]
-                if row["Status"] == "Aft":
+                if row["Status"] == "Mit":
                     model_name = row["Model"]
                 else:
                     model_name = stat_model_baseline[f"{row['Paper']} \n {row['Model']}"]
@@ -1410,7 +1416,7 @@ def results_to_paper_table():
                 multicolumn_format="c",
                 label=f"{ut.lower()}_{args.sensitive_attribute.lower()}_{args.dataset.lower()}",
                 escape=False
-            ).replace('Aft', '\\multicolumn{1}{c}{Aft}').replace('Bef', '\\multicolumn{1}{c}{Bef}'))
+            ).replace('Mit', '\\multicolumn{1}{c}{Mit}').replace('Base', '\\multicolumn{1}{c}{Base}'))
 
 
 def results_to_paper_table_fused_datasets():
@@ -1558,7 +1564,7 @@ def results_to_paper_table_fused_datasets():
             new_df = pd.concat([ut_df, fair_df]).reset_index(drop=True)
 
             new_df["Status"] = new_df.apply(
-                lambda x: 'Bef' if f"{x['Paper']} \n {x['Model']}" in paper_baseline_names_model else 'Aft',
+                lambda x: 'Base' if f"{x['Paper']} \n {x['Model']}" in paper_baseline_names_model else 'Mit',
                 axis=1
             ).to_list()
 
@@ -1583,7 +1589,7 @@ def results_to_paper_table_fused_datasets():
                             for _mod_name in m_name[1:]:
                                 new_df = new_df.append(b_row.copy(), ignore_index=True)
                                 new_df.loc[new_df.index[-1], "Model"] = _mod_name
-                                new_df.loc[new_df.index[-1], "Status"] = "Bef"
+                                new_df.loc[new_df.index[-1], "Status"] = "Base"
 
             new_df = new_df.reset_index(drop=True)
 
@@ -1591,7 +1597,7 @@ def results_to_paper_table_fused_datasets():
             new_df_grouped = new_df.groupby(["Metric", "Status"])
             # metric_order = ["Total"] + sensitive_values + ["DS", "KS"]
             metric_order = ["Total"] + ["DS", "KS"]
-            status_order = itertools.product(metric_order, ["Bef", "Aft"])
+            status_order = itertools.product(metric_order, ["Base", "Mit"])
             new_df = pd.concat([new_df_grouped.get_group(group_name) for group_name in status_order])
 
             new_df = new_df.round(3)
@@ -1605,7 +1611,7 @@ def results_to_paper_table_fused_datasets():
             for stat_metric, stat_data in [("DS", st_df), ("KS", stat_ks_df)]:
                 for idx, row in new_df[new_df["Metric"] == stat_metric].iterrows():
                     stat_d = stat_data.loc[stat_data["Paper"] == row["Paper"]]
-                    if row["Status"] == "Aft":
+                    if row["Status"] == "Mit":
                         model_name = row["Model"]
                     else:
                         model_name = stat_model_baseline[f"{row['Paper']} \n {row['Model']}"]
@@ -1662,7 +1668,7 @@ def results_to_paper_table_fused_datasets():
                 multicolumn_format="c",
                 label=f"{ut.lower()}_{args.sensitive_attribute.lower()}_{args.dataset.lower()}",
                 escape=False
-            ).replace('Aft', '\\multicolumn{1}{c}{Aft}').replace('Bef', '\\multicolumn{1}{c}{Bef}'))
+            ).replace('Mit', '\\multicolumn{1}{c}{Mit}').replace('Base', '\\multicolumn{1}{c}{Base}'))
 
 
 if __name__ == "__main__":

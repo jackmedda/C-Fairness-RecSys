@@ -57,8 +57,8 @@ of ItemKNN to 20 and the number of features of BiasedMF to 50.
 Once the input data files have been copied inside the folder `custom_data` that you can find in this directory, you can execute the code inside the file 
 **external_cool_kids_exp/train.py** which is related to a directory outside this path. This code automatically creates the input csv files pointed by the `yaml`
 files that you copied inside the folder `custom_data`, saves them in `custom_data`, execute the source code of this paper using the input csv files and saves the
-predictions grouped by model inside the folder `results`. The folder `results` is also present in this directory and structued as **DATASET/XXXX**, with **DATASET**
-being one of `movielens_1m` of `filtered(20)_lastfm_1K` and `XXXX` one of the list described in [Section 3](input-data-preparation-and-hyper-parameters-setting)
+predictions grouped by model inside the folder `results`. The folder `results` is present in this directory and structued as **DATASET/XXXX**, with **DATASET**
+being `movielens_1m` or `filtered(20)_lastfm_1K` and `XXXX` one of the list described in [Section 3](input-data-preparation-and-hyper-parameters-setting)
 of this document.
 
 The script to execute contains different values that must be modified to change the dataset or the experiment you want to perform:

@@ -43,13 +43,7 @@ add type to parameters or return types.
 ## `data` Folders Structure
 
 > ***datasets***  
-> Its purpose is to store TensorFlow custom datasets, currently only **coco_recommendations** has been added
-> (WARNING! TensorFlow already contains a dataset called [coco](https://www.tensorflow.org/datasets/catalog/coco),
-> but it is a dataset for object detection)
-
-> ***indexes***  
-> Its purpose is to store TensorFlow Recommenders indexes (currently not used because of a bug inside TensorFlow
-> Recommenders), useful components to make items predictions for the users
+> Its purpose is to store TensorFlow custom datasets
 
 > ***logs***  
 > Its purpose is to store logs of the application with different log levels to record every step of the code executions

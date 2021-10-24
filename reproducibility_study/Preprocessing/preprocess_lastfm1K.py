@@ -16,7 +16,7 @@ from data.datasets.lastfm import lastfm_utils
 
 """
  # per_user_random train-validation-test split 70%-10%-20%, age binarised with age <= 24 
- python -m projects.reproducibility_study.preprocess_lastfm1K -dataset lastfm --dataset_size 1K 
+ python -m reproducibility_study.Preprocessing.preprocess_lastfm1K -dataset lastfm --dataset_size 1K 
  --subdatasets plays users --dataset_split train train --users_field user_id --items_field artist_id 
  --dataset_columns user_id artist_id plays - user_id user_gender user_age --rating_field user_rating 
  --sensitive_field user_gender --train_val_test_split_type per_user_random --train_val_test_split 70% 10% 20%

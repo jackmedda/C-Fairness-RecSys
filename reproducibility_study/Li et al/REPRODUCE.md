@@ -52,10 +52,12 @@ post-processing method. Use the same procedure that you used to create the first
 `--create_user_oriented_fairness_files_input_data`. You also need to specify the paths of the predictions obtained from the training and testing of the baselines
 inside the `kwargs` dictionary of `generate_input_data.py`, and the `test_path` attribute, which is the test file of the relative dataset used to train and test
 the baselines. These attribute and values are necessary to create the input data for the fairness-aware post-processing method.
-The input data just generated need to be copied inside the folder **data** inside this directory.
+The input data just generated need to be copied inside the folder **data/DATASET_NAME** inside this directory, where **DATASET_NAME** is the name
+of the dataset that you specified for the variable `dataset_name`, which is described in the list below.
 To select which input data to use in the fairness-aware post-processing method you need to modify the following variables of the file **src/model.py**:
-- `model_name` (line 238): it should be the concatenation of the dataset name and the selected model (ex. `movielens_1m_NCF`)
-- `group_1` and `group_2` (line 243\-244/248\-249/252\-253): only one `group_1` and one `group_2` must be set for each experiment, and they should obviously
+- `dataset_name` (line 236-237): the dataset name (ex. `movielens_1m`) 
+- `model_name` (line 239): the selected model (ex. `NCF`)
+- `group_1` and `group_2` (line 244\-245/249\-250/253\-254): only one `group_1` and one `group_2` must be set for each experiment, and they should obviously
                                                              related (you cannot mix gender and age groups).
 - `run_id` (line 256): it is a unique id that is added by `generate_input_data.py` in the filename for the creation of the input files for the fairness-aware
 post-processing method. It is used to identify the right files with the string `rank` and the values of `group_1` and `group_2`.

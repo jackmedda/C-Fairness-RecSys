@@ -295,8 +295,7 @@ class RelevanceMatrix(object):
                                         test_data: tf.data.Dataset,
                                         user_field: str,
                                         item_field: str,
-                                        map_values_groups: Dict[Any, Text] = None,
-                                        folderpath = None
+                                        folderpath=None
                                         ):
         RcLogger.get().info("Generating files to be used on reranking `User-oriented fairness in recommendation`")
         
@@ -347,10 +346,7 @@ class RelevanceMatrix(object):
         for sens_value, group_df in test_sensitive.items():
             group_df = group_df.astype({'uid': 'int32', 'iid': 'int32'})
 
-            if map_values_groups is not None:
-                out_group_df_sens = map_values_groups[sens_value]
-            else:
-                out_group_df_sens = sens_value
+            out_group_df_sens = sens_value
 
             group_df.to_csv(os.path.join(
                 folderpath,

@@ -800,7 +800,8 @@ def to_nlr_input_data(metadata, orig_train, test, train=None, validation=None, *
     out_path = os.path.join(
         constants.INPUT_DATA_REPRODUCIBILITY,
         f"{metadata['dataset']}_{metadata['dataset_size']}",
-        "nlr_input_data"
+        "Li et al",
+        "NLR"
     )
     out_filename = f"{metadata['dataset']}_{metadata['dataset_size']}"
 
@@ -919,12 +920,10 @@ def to_user_oriented_fairness_files_input_data(metadata, orig_train, test, train
     rating_field = metadata['rating_field']
     sensitive_field = metadata['sensitive_field']
 
-    sensitive_map = {True: 'M', False: 'F'}
-
     out_path = os.path.join(
         constants.INPUT_DATA_REPRODUCIBILITY,
         f"{metadata['dataset']}_{metadata['dataset_size']}",
-        "user_oriented_fairness_files_input_data"
+        "Li et al"
     )
 
     RcLogger.get().info(f"Generating input data in {out_path} for User-oriented Fairness in Recommendation")
@@ -976,7 +975,6 @@ def to_user_oriented_fairness_files_input_data(metadata, orig_train, test, train
                                                test,
                                                users_field,
                                                items_field,
-                                               map_values_groups=dict(zip([True, False], sensitive_values)),
                                                folderpath=out_path)
 
 
@@ -992,7 +990,7 @@ def to_co_clustering_for_fair_input_data(metadata, orig_train, test, train=None,
     out_path = os.path.join(
         constants.INPUT_DATA_REPRODUCIBILITY,
         f"{metadata['dataset']}_{metadata['dataset_size']}",
-        "co_clustering_for_fair_input_data"
+        "Frisch et al"
     )
 
     RcLogger.get().info(f"Generating input data in {out_path} for Co-clustering for fair recommendation")
@@ -1088,7 +1086,7 @@ def to_fairgo_input_data(metadata, orig_train, test, train=None, validation=None
     out_path = os.path.join(
         constants.INPUT_DATA_REPRODUCIBILITY,
         f"{metadata['dataset']}_{metadata['dataset_size']}",
-        "fairgo_input_data"
+        "Wu et al"
     )
 
     RcLogger.get().info(f"Generating input data in {out_path} for "
@@ -1244,7 +1242,7 @@ def to_all_the_cool_kids_input_data(metadata, orig_train, test, train=None, vali
     out_path = os.path.join(
         constants.INPUT_DATA_REPRODUCIBILITY,
         f"{metadata['dataset']}_{metadata['dataset_size']}",
-        "all_the_cool_kids_input_data"
+        "Ekstrand et al"
     )
 
     RcLogger.get().info(f"Generating input data in {out_path} for "
@@ -1446,7 +1444,7 @@ def to_rec_independence_input_data(metadata, orig_train, test, train=None, valid
     out_path = os.path.join(
         constants.INPUT_DATA_REPRODUCIBILITY,
         f"{metadata['dataset']}_{metadata['dataset_size']}",
-        "rec_independence_input_data"
+        "Kamishima et al"
     )
 
     RcLogger.get().info(f"Generating input data in {out_path} for Recommendation Independence")
@@ -1489,7 +1487,7 @@ def to_antidote_data_input_data(metadata, orig_train, test, train=None, validati
     out_path = os.path.join(
         constants.INPUT_DATA_REPRODUCIBILITY,
         f"{metadata['dataset']}_{metadata['dataset_size']}",
-        "antidote_data_input_data"
+        "Rastegarpanah et al"
     )
 
     RcLogger.get().info(f"Generating input data in {out_path} for "
@@ -1550,7 +1548,7 @@ def to_librec_auto_input_data(metadata, orig_train, test, train=None, validation
     out_path = os.path.join(
         constants.INPUT_DATA_REPRODUCIBILITY,
         f"{metadata['dataset']}_{metadata['dataset_size']}",
-        "librec_auto_input_data"
+        "Burke et al"
     )
 
     RcLogger.get().info(f"Generating input data in {out_path} for "
@@ -1608,7 +1606,7 @@ def to_rating_prediction_fairness_input_data(metadata, orig_train, test, train=N
     out_path = os.path.join(
         constants.INPUT_DATA_REPRODUCIBILITY,
         f"{metadata['dataset']}_{metadata['dataset_size']}",
-        "rating_prediction_fairness_input_data"
+        "Ashokan et al"
     )
 
     RcLogger.get().info(f"Generating input data in {out_path} for "
