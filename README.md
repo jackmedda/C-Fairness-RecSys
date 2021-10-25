@@ -120,7 +120,71 @@ specifying which are the commands to execute to get the desired results.
 
 # Results
 
-## Top-N Recommendation Gender
+## MovieLens 1M Top-N Recommendation Gender
+| Metric   | Paper           | Model      | Result Type   | Value                   |
+|:---------|:----------------|:-----------|:--------------|:------------------------|
+| NDCG     | Burke et al.    | SLIM-U     | Base          | 0.035                   |
+| NDCG     | Burke et al.    | SLIM-U     | Mit           | 0.099                   |
+| NDCG     | Ekstrand et al. | FunkSVD    | Base          | 0.018                   |
+| NDCG     | Ekstrand et al. | FunkSVD    | Mit           | 0.013                   |
+| NDCG     | Ekstrand et al. | ItemKNN    | Base          | 0.137                   |
+| NDCG     | Ekstrand et al. | ItemKNN    | Mit           | 0.131                   |
+| NDCG     | Ekstrand et al. | TopPopular | Base          | 0.110                   |
+| NDCG     | Ekstrand et al. | TopPopular | Mit           | 0.104                   |
+| NDCG     | Ekstrand et al. | UserKNN    | Base          | 0.135                   |
+| NDCG     | Ekstrand et al. | UserKNN    | Mit           | 0.130                   |
+| NDCG     | Frisch et al.   | LBM        | Base          | 0.046                   |
+| NDCG     | Frisch et al.   | LBM        | Mit           | 0.022                   |
+| NDCG     | Li et al.       | BiasedMF   | Base          | 0.108                   |
+| NDCG     | Li et al.       | BiasedMF   | Mit           | 0.108                   |
+| NDCG     | Li et al.       | NCF        | Base          | 0.116                   |
+| NDCG     | Li et al.       | NCF        | Mit           | 0.116                   |
+| NDCG     | Li et al.       | PMF        | Base          | 0.107                   |
+| NDCG     | Li et al.       | PMF        | Mit           | 0.107                   |
+| NDCG     | Li et al.       | STAMP      | Base          | 0.008                   |
+| NDCG     | Li et al.       | STAMP      | Mit           | 0.008                   |
+| DS       | Burke et al.    | SLIM-U     | Base          | ^0.009 |
+| DS       | Burke et al.    | SLIM-U     | Mit           | ^0.084 |
+| DS       | Ekstrand et al. | FunkSVD    | Base          | ^0.003 |
+| DS       | Ekstrand et al. | FunkSVD    | Mit           | *0.002    |
+| DS       | Ekstrand et al. | ItemKNN    | Base          | ^0.040 |
+| DS       | Ekstrand et al. | ItemKNN    | Mit           | ^0.033 |
+| DS       | Ekstrand et al. | TopPopular | Base          | ^0.035 |
+| DS       | Ekstrand et al. | TopPopular | Mit           | ^0.030 |
+| DS       | Ekstrand et al. | UserKNN    | Base          | ^0.029 |
+| DS       | Ekstrand et al. | UserKNN    | Mit           | ^0.026 |
+| DS       | Frisch et al.   | LBM        | Base          | ^0.006 |
+| DS       | Frisch et al.   | LBM        | Mit           | ^0.004 |
+| DS       | Li et al.       | BiasedMF   | Base          | ^0.017 |
+| DS       | Li et al.       | BiasedMF   | Mit           | *0.012    |
+| DS       | Li et al.       | NCF        | Base          | ^0.018 |
+| DS       | Li et al.       | NCF        | Mit           | ^0.015 |
+| DS       | Li et al.       | PMF        | Base          | ^0.018 |
+| DS       | Li et al.       | PMF        | Mit           | ^0.014 |
+| DS       | Li et al.       | STAMP      | Base          | 0.002                   |
+| DS       | Li et al.       | STAMP      | Mit           | 0.001                   |
+| KS       | Burke et al.    | SLIM-U     | Base          | ^0.011 |
+| KS       | Burke et al.    | SLIM-U     | Mit           | ^0.601 |
+| KS       | Ekstrand et al. | FunkSVD    | Base          | ^0.021 |
+| KS       | Ekstrand et al. | FunkSVD    | Mit           | ^0.026 |
+| KS       | Ekstrand et al. | ItemKNN    | Base          | ^0.017 |
+| KS       | Ekstrand et al. | ItemKNN    | Mit           | ^0.020 |
+| KS       | Ekstrand et al. | TopPopular | Base          | ^0.007 |
+| KS       | Ekstrand et al. | TopPopular | Mit           | ^0.007 |
+| KS       | Ekstrand et al. | UserKNN    | Base          | ^0.078 |
+| KS       | Ekstrand et al. | UserKNN    | Mit           | ^0.060 |
+| KS       | Frisch et al.   | LBM        | Base          | ^0.015 |
+| KS       | Frisch et al.   | LBM        | Mit           | ^0.025 |
+| KS       | Li et al.       | BiasedMF   | Base          | ^0.035 |
+| KS       | Li et al.       | BiasedMF   | Mit           | ^0.006 |
+| KS       | Li et al.       | NCF        | Base          | ^0.023 |
+| KS       | Li et al.       | NCF        | Mit           | ^0.006 |
+| KS       | Li et al.       | PMF        | Base          | ^0.035 |
+| KS       | Li et al.       | PMF        | Mit           | ^0.006 |
+| KS       | Li et al.       | STAMP      | Base          | ^0.006 |
+| KS       | Li et al.       | STAMP      | Mit           | ^0.006 |
+
+## Last.FM 1K Top-N Recommendation Gender
 | Metric   | Paper           | Model      | Result Type   | Value                    |
 |:---------|:----------------|:-----------|:--------------|:-------------------------|
 | NDCG     | Burke et al.    | SLIM-U     | Base          | 0.197                    |
@@ -184,7 +248,71 @@ specifying which are the commands to execute to get the desired results.
 | KS       | Li et al.       | STAMP      | Base          | ^0.001  |
 | KS       | Li et al.       | STAMP      | Mit           | ^0.001  |
 
-## Top-N Recommendation Age
+## MovieLens 1M Top-N Recommendation Age
+| Metric   | Paper           | Model      | Result Type   | Value                   |
+|:---------|:----------------|:-----------|:--------------|:------------------------|
+| NDCG     | Burke et al.    | SLIM-U     | Base          | 0.035                   |
+| NDCG     | Burke et al.    | SLIM-U     | Mit           | 0.064                   |
+| NDCG     | Ekstrand et al. | FunkSVD    | Base          | 0.018                   |
+| NDCG     | Ekstrand et al. | FunkSVD    | Mit           | 0.011                   |
+| NDCG     | Ekstrand et al. | ItemKNN    | Base          | 0.137                   |
+| NDCG     | Ekstrand et al. | ItemKNN    | Mit           | 0.133                   |
+| NDCG     | Ekstrand et al. | TopPopular | Base          | 0.110                   |
+| NDCG     | Ekstrand et al. | TopPopular | Mit           | 0.107                   |
+| NDCG     | Ekstrand et al. | UserKNN    | Base          | 0.135                   |
+| NDCG     | Ekstrand et al. | UserKNN    | Mit           | 0.132                   |
+| NDCG     | Frisch et al.   | LBM        | Base          | 0.046                   |
+| NDCG     | Frisch et al.   | LBM        | Mit           | 0.044                   |
+| NDCG     | Li et al.       | BiasedMF   | Base          | 0.108                   |
+| NDCG     | Li et al.       | BiasedMF   | Mit           | 0.108                   |
+| NDCG     | Li et al.       | NCF        | Base          | 0.116                   |
+| NDCG     | Li et al.       | NCF        | Mit           | 0.116                   |
+| NDCG     | Li et al.       | PMF        | Base          | 0.107                   |
+| NDCG     | Li et al.       | PMF        | Mit           | 0.107                   |
+| NDCG     | Li et al.       | STAMP      | Base          | 0.008                   |
+| NDCG     | Li et al.       | STAMP      | Mit           | 0.008                   |
+| DS       | Burke et al.    | SLIM-U     | Base          | 0.000                   |
+| DS       | Burke et al.    | SLIM-U     | Mit           | ^0.026 |
+| DS       | Ekstrand et al. | FunkSVD    | Base          | ^0.006 |
+| DS       | Ekstrand et al. | FunkSVD    | Mit           | 0.003                   |
+| DS       | Ekstrand et al. | ItemKNN    | Base          | ^0.026 |
+| DS       | Ekstrand et al. | ItemKNN    | Mit           | ^0.024 |
+| DS       | Ekstrand et al. | TopPopular | Base          | ^0.038 |
+| DS       | Ekstrand et al. | TopPopular | Mit           | ^0.034 |
+| DS       | Ekstrand et al. | UserKNN    | Base          | ^0.027 |
+| DS       | Ekstrand et al. | UserKNN    | Mit           | ^0.024 |
+| DS       | Frisch et al.   | LBM        | Base          | *0.005    |
+| DS       | Frisch et al.   | LBM        | Mit           | ^0.006 |
+| DS       | Li et al.       | BiasedMF   | Base          | ^0.017 |
+| DS       | Li et al.       | BiasedMF   | Mit           | ^0.016 |
+| DS       | Li et al.       | NCF        | Base          | ^0.020 |
+| DS       | Li et al.       | NCF        | Mit           | ^0.018 |
+| DS       | Li et al.       | PMF        | Base          | ^0.016 |
+| DS       | Li et al.       | PMF        | Mit           | ^0.016 |
+| DS       | Li et al.       | STAMP      | Base          | 0.000                   |
+| DS       | Li et al.       | STAMP      | Mit           | 0.000                   |
+| KS       | Burke et al.    | SLIM-U     | Base          | ^0.008 |
+| KS       | Burke et al.    | SLIM-U     | Mit           | ^0.056 |
+| KS       | Ekstrand et al. | FunkSVD    | Base          | ^0.024 |
+| KS       | Ekstrand et al. | FunkSVD    | Mit           | ^0.016 |
+| KS       | Ekstrand et al. | ItemKNN    | Base          | ^0.019 |
+| KS       | Ekstrand et al. | ItemKNN    | Mit           | ^0.020 |
+| KS       | Ekstrand et al. | TopPopular | Base          | ^0.006 |
+| KS       | Ekstrand et al. | TopPopular | Mit           | ^0.006 |
+| KS       | Ekstrand et al. | UserKNN    | Base          | ^0.063 |
+| KS       | Ekstrand et al. | UserKNN    | Mit           | ^0.050 |
+| KS       | Frisch et al.   | LBM        | Base          | ^0.021 |
+| KS       | Frisch et al.   | LBM        | Mit           | ^0.027 |
+| KS       | Li et al.       | BiasedMF   | Base          | ^0.046 |
+| KS       | Li et al.       | BiasedMF   | Mit           | ^0.006 |
+| KS       | Li et al.       | NCF        | Base          | ^0.026 |
+| KS       | Li et al.       | NCF        | Mit           | ^0.006 |
+| KS       | Li et al.       | PMF        | Base          | ^0.048 |
+| KS       | Li et al.       | PMF        | Mit           | ^0.006 |
+| KS       | Li et al.       | STAMP      | Base          | ^0.006 |
+| KS       | Li et al.       | STAMP      | Mit           | ^0.006 |
+
+## Last.FM 1K Top-N Recommendation Age
 | Metric   | Paper           | Model      | Result Type   | Value                    |
 |:---------|:----------------|:-----------|:--------------|:-------------------------|
 | NDCG     | Burke et al.    | SLIM-U     | Base          | 0.197                    |
@@ -248,12 +376,94 @@ specifying which are the commands to execute to get the desired results.
 | KS       | Li et al.       | STAMP      | Base          | ^0.005  |
 | KS       | Li et al.       | STAMP      | Mit           | ^0.005  |
 
-## Rating Prediction Gender
+## MovieLens 1M Rating Prediction Gender
+| Metric   | Paper                | Model            | Result Type   | Value                    |
+|:---------|:---------------------|:-----------------|:--------------|:-------------------------|
+| RMSE     | Ashokan et al.       | ALS BiasedMF Par | Base          | 0.867                    |
+| RMSE     | Ashokan et al.       | ALS BiasedMF Par | Mit           | 0.868                    |
+| RMSE     | Ashokan et al.       | ALS BiasedMF Val | Base          | 0.867                    |
+| RMSE     | Ashokan et al.       | ALS BiasedMF Val | Mit           | 0.867                    |
+| RMSE     | Ashokan et al.       | ItemKNN Par      | Base          | 0.865                    |
+| RMSE     | Ashokan et al.       | ItemKNN Par      | Mit           | 0.866                    |
+| RMSE     | Ashokan et al.       | ItemKNN Val      | Base          | 0.865                    |
+| RMSE     | Ashokan et al.       | ItemKNN Val      | Mit           | 0.865                    |
+| RMSE     | Ekstrand et al.      | AvgRating        | Base          | 0.905                    |
+| RMSE     | Ekstrand et al.      | AvgRating        | Mit           | 0.914                    |
+| RMSE     | Ekstrand et al.      | FunkSVD          | Base          | 0.868                    |
+| RMSE     | Ekstrand et al.      | FunkSVD          | Mit           | 0.886                    |
+| RMSE     | Ekstrand et al.      | ItemKNN          | Base          | 0.865                    |
+| RMSE     | Ekstrand et al.      | ItemKNN          | Mit           | 0.883                    |
+| RMSE     | Ekstrand et al.      | UserKNN          | Base          | 0.897                    |
+| RMSE     | Ekstrand et al.      | UserKNN          | Mit           | 0.912                    |
+| RMSE     | Kamishima et al.     | PMF BDist        | Base          | 0.898                    |
+| RMSE     | Kamishima et al.     | PMF BDist        | Mit           | 0.915                    |
+| RMSE     | Kamishima et al.     | PMF Mean         | Base          | 0.898                    |
+| RMSE     | Kamishima et al.     | PMF Mean         | Mit           | 0.917                    |
+| RMSE     | Kamishima et al.     | PMF Mi           | Base          | 0.898                    |
+| RMSE     | Kamishima et al.     | PMF Mi           | Mit           | 0.918                    |
+| RMSE     | Rastegarpanah et al. | ALS              | Base          | 0.913                    |
+| RMSE     | Rastegarpanah et al. | ALS              | Mit           | 0.899                    |
+| RMSE     | Wu et al.            | FairGo GCN       | Base          | 1.282                    |
+| RMSE     | Wu et al.            | FairGo GCN       | Mit           | 0.947                    |
+| DS       | Ashokan et al.       | ALS BiasedMF Par | Base          | ^-0.030 |
+| DS       | Ashokan et al.       | ALS BiasedMF Par | Mit           | ^-0.029 |
+| DS       | Ashokan et al.       | ALS BiasedMF Val | Base          | ^-0.030 |
+| DS       | Ashokan et al.       | ALS BiasedMF Val | Mit           | ^-0.031 |
+| DS       | Ashokan et al.       | ItemKNN Par      | Base          | ^-0.034 |
+| DS       | Ashokan et al.       | ItemKNN Par      | Mit           | ^-0.033 |
+| DS       | Ashokan et al.       | ItemKNN Val      | Base          | ^-0.034 |
+| DS       | Ashokan et al.       | ItemKNN Val      | Mit           | ^-0.034 |
+| DS       | Ekstrand et al.      | AvgRating        | Base          | ^-0.032 |
+| DS       | Ekstrand et al.      | AvgRating        | Mit           | *-0.027    |
+| DS       | Ekstrand et al.      | FunkSVD          | Base          | ^-0.032 |
+| DS       | Ekstrand et al.      | FunkSVD          | Mit           | *-0.027    |
+| DS       | Ekstrand et al.      | ItemKNN          | Base          | ^-0.034 |
+| DS       | Ekstrand et al.      | ItemKNN          | Mit           | *-0.029    |
+| DS       | Ekstrand et al.      | UserKNN          | Base          | ^-0.035 |
+| DS       | Ekstrand et al.      | UserKNN          | Mit           | *-0.031    |
+| DS       | Kamishima et al.     | PMF BDist        | Base          | ^-0.036 |
+| DS       | Kamishima et al.     | PMF BDist        | Mit           | ^-0.083 |
+| DS       | Kamishima et al.     | PMF Mean         | Base          | ^-0.036 |
+| DS       | Kamishima et al.     | PMF Mean         | Mit           | ^-0.087 |
+| DS       | Kamishima et al.     | PMF Mi           | Base          | ^-0.036 |
+| DS       | Kamishima et al.     | PMF Mi           | Mit           | ^-0.085 |
+| DS       | Rastegarpanah et al. | ALS              | Base          | ^-0.032 |
+| DS       | Rastegarpanah et al. | ALS              | Mit           | ^-0.035 |
+| DS       | Wu et al.            | FairGo GCN       | Base          | *-0.025    |
+| DS       | Wu et al.            | FairGo GCN       | Mit           | *-0.020    |
+| KS       | Ashokan et al.       | ALS BiasedMF Par | Base          | ^0.056  |
+| KS       | Ashokan et al.       | ALS BiasedMF Par | Mit           | ^0.034  |
+| KS       | Ashokan et al.       | ALS BiasedMF Val | Base          | ^0.056  |
+| KS       | Ashokan et al.       | ALS BiasedMF Val | Mit           | ^0.057  |
+| KS       | Ashokan et al.       | ItemKNN Par      | Base          | ^0.055  |
+| KS       | Ashokan et al.       | ItemKNN Par      | Mit           | ^0.036  |
+| KS       | Ashokan et al.       | ItemKNN Val      | Base          | ^0.055  |
+| KS       | Ashokan et al.       | ItemKNN Val      | Mit           | ^0.052  |
+| KS       | Ekstrand et al.      | AvgRating        | Base          | ^0.047  |
+| KS       | Ekstrand et al.      | AvgRating        | Mit           | ^0.045  |
+| KS       | Ekstrand et al.      | FunkSVD          | Base          | ^0.054  |
+| KS       | Ekstrand et al.      | FunkSVD          | Mit           | ^0.053  |
+| KS       | Ekstrand et al.      | ItemKNN          | Base          | ^0.055  |
+| KS       | Ekstrand et al.      | ItemKNN          | Mit           | ^0.052  |
+| KS       | Ekstrand et al.      | UserKNN          | Base          | ^0.054  |
+| KS       | Ekstrand et al.      | UserKNN          | Mit           | ^0.052  |
+| KS       | Kamishima et al.     | PMF BDist        | Base          | ^0.050  |
+| KS       | Kamishima et al.     | PMF BDist        | Mit           | ^0.046  |
+| KS       | Kamishima et al.     | PMF Mean         | Base          | ^0.050  |
+| KS       | Kamishima et al.     | PMF Mean         | Mit           | ^0.044  |
+| KS       | Kamishima et al.     | PMF Mi           | Base          | ^0.050  |
+| KS       | Kamishima et al.     | PMF Mi           | Mit           | ^0.049  |
+| KS       | Rastegarpanah et al. | ALS              | Base          | ^0.001  |
+| KS       | Rastegarpanah et al. | ALS              | Mit           | ^0.011  |
+| KS       | Wu et al.            | FairGo GCN       | Base          | ^0.038  |
+| KS       | Wu et al.            | FairGo GCN       | Mit           | ^0.068  |
+
+## Last.FM 1K Rating Prediction Gender
 | Metric   | Paper                | Model            | Result Type   | Value                   |
 |:---------|:---------------------|:-----------------|:--------------|:------------------------|
-| RMSE     | Ashokan et al.       | ALS BiasedMF Par | Base          | 1.147                   |
+| RMSE     | Ashokan et al.       | ALS BiasedMF Par | Base          | 1.146                   |
 | RMSE     | Ashokan et al.       | ALS BiasedMF Par | Mit           | 1.148                   |
-| RMSE     | Ashokan et al.       | ALS BiasedMF Val | Base          | 1.147                   |
+| RMSE     | Ashokan et al.       | ALS BiasedMF Val | Base          | 1.146                   |
 | RMSE     | Ashokan et al.       | ALS BiasedMF Val | Mit           | 1.152                   |
 | RMSE     | Ashokan et al.       | ItemKNN Par      | Base          | 1.182                   |
 | RMSE     | Ashokan et al.       | ItemKNN Par      | Mit           | 1.191                   |
@@ -275,8 +485,6 @@ specifying which are the commands to execute to get the desired results.
 | RMSE     | Kamishima et al.     | PMF Mi           | Mit           | 1.374                   |
 | RMSE     | Rastegarpanah et al. | ALS              | Base          | 2.280                   |
 | RMSE     | Rastegarpanah et al. | ALS              | Mit           | 2.271                   |
-| RMSE     | Rastegarpanah et al. | LMaFit           | Base          | 2.568                   |
-| RMSE     | Rastegarpanah et al. | LMaFit           | Mit           | 2.549                   |
 | RMSE     | Wu et al.            | FairGo GCN       | Base          | 1.663                   |
 | RMSE     | Wu et al.            | FairGo GCN       | Mit           | 1.261                   |
 | DS       | Ashokan et al.       | ALS BiasedMF Par | Base          | 0.015                   |
@@ -303,8 +511,6 @@ specifying which are the commands to execute to get the desired results.
 | DS       | Kamishima et al.     | PMF Mi           | Mit           | 0.009                   |
 | DS       | Rastegarpanah et al. | ALS              | Base          | 0.052                   |
 | DS       | Rastegarpanah et al. | ALS              | Mit           | 0.045                   |
-| DS       | Rastegarpanah et al. | LMaFit           | Base          | 0.048                   |
-| DS       | Rastegarpanah et al. | LMaFit           | Mit           | 0.024                   |
 | DS       | Wu et al.            | FairGo GCN       | Base          | ^0.146 |
 | DS       | Wu et al.            | FairGo GCN       | Mit           | 0.028                   |
 | KS       | Ashokan et al.       | ALS BiasedMF Par | Base          | ^0.048 |
@@ -331,13 +537,92 @@ specifying which are the commands to execute to get the desired results.
 | KS       | Kamishima et al.     | PMF Mi           | Mit           | ^0.066 |
 | KS       | Rastegarpanah et al. | ALS              | Base          | ^0.008 |
 | KS       | Rastegarpanah et al. | ALS              | Mit           | ^0.010 |
-| KS       | Rastegarpanah et al. | LMaFit           | Base          | ^0.007 |
-| KS       | Rastegarpanah et al. | LMaFit           | Mit           | ^0.022 |
 | KS       | Wu et al.            | FairGo GCN       | Base          | ^0.087 |
 | KS       | Wu et al.            | FairGo GCN       | Mit           | ^0.052 |
 
-## Rating Prediction Age
+## MovieLens 1M Rating Prediction Age
+| Metric   | Paper                | Model            | Result Type   | Value                   |
+|:---------|:---------------------|:-----------------|:--------------|:------------------------|
+| RMSE     | Ashokan et al.       | ALS BiasedMF Par | Base          | 0.867                   |
+| RMSE     | Ashokan et al.       | ALS BiasedMF Par | Mit           | 0.871                   |
+| RMSE     | Ashokan et al.       | ALS BiasedMF Val | Base          | 0.867                   |
+| RMSE     | Ashokan et al.       | ALS BiasedMF Val | Mit           | 0.866                   |
+| RMSE     | Ashokan et al.       | ItemKNN Par      | Base          | 0.865                   |
+| RMSE     | Ashokan et al.       | ItemKNN Par      | Mit           | 0.870                   |
+| RMSE     | Ashokan et al.       | ItemKNN Val      | Base          | 0.865                   |
+| RMSE     | Ashokan et al.       | ItemKNN Val      | Mit           | 0.864                   |
+| RMSE     | Ekstrand et al.      | AvgRating        | Base          | 0.905                   |
+| RMSE     | Ekstrand et al.      | AvgRating        | Mit           | 0.904                   |
+| RMSE     | Ekstrand et al.      | FunkSVD          | Base          | 0.868                   |
+| RMSE     | Ekstrand et al.      | FunkSVD          | Mit           | 0.875                   |
+| RMSE     | Ekstrand et al.      | ItemKNN          | Base          | 0.865                   |
+| RMSE     | Ekstrand et al.      | ItemKNN          | Mit           | 0.871                   |
+| RMSE     | Ekstrand et al.      | UserKNN          | Base          | 0.897                   |
+| RMSE     | Ekstrand et al.      | UserKNN          | Mit           | 0.901                   |
+| RMSE     | Kamishima et al.     | PMF BDist        | Base          | 0.898                   |
+| RMSE     | Kamishima et al.     | PMF BDist        | Mit           | 0.913                   |
+| RMSE     | Kamishima et al.     | PMF Mean         | Base          | 0.898                   |
+| RMSE     | Kamishima et al.     | PMF Mean         | Mit           | 0.912                   |
+| RMSE     | Kamishima et al.     | PMF Mi           | Base          | 0.898                   |
+| RMSE     | Kamishima et al.     | PMF Mi           | Mit           | 0.912                   |
+| RMSE     | Rastegarpanah et al. | ALS              | Base          | 0.913                   |
+| RMSE     | Rastegarpanah et al. | ALS              | Mit           | 0.900                   |
+| RMSE     | Wu et al.            | FairGo GCN       | Base          | 1.282                   |
+| RMSE     | Wu et al.            | FairGo GCN       | Mit           | 0.948                   |
+| DS       | Ashokan et al.       | ALS BiasedMF Par | Base          | ^0.041 |
+| DS       | Ashokan et al.       | ALS BiasedMF Par | Mit           | ^0.048 |
+| DS       | Ashokan et al.       | ALS BiasedMF Val | Base          | ^0.041 |
+| DS       | Ashokan et al.       | ALS BiasedMF Val | Mit           | ^0.042 |
+| DS       | Ashokan et al.       | ItemKNN Par      | Base          | ^0.040 |
+| DS       | Ashokan et al.       | ItemKNN Par      | Mit           | ^0.048 |
+| DS       | Ashokan et al.       | ItemKNN Val      | Base          | ^0.040 |
+| DS       | Ashokan et al.       | ItemKNN Val      | Mit           | ^0.042 |
+| DS       | Ekstrand et al.      | AvgRating        | Base          | ^0.051 |
+| DS       | Ekstrand et al.      | AvgRating        | Mit           | ^0.056 |
+| DS       | Ekstrand et al.      | FunkSVD          | Base          | ^0.042 |
+| DS       | Ekstrand et al.      | FunkSVD          | Mit           | ^0.049 |
+| DS       | Ekstrand et al.      | ItemKNN          | Base          | ^0.039 |
+| DS       | Ekstrand et al.      | ItemKNN          | Mit           | ^0.046 |
+| DS       | Ekstrand et al.      | UserKNN          | Base          | ^0.047 |
+| DS       | Ekstrand et al.      | UserKNN          | Mit           | ^0.051 |
+| DS       | Kamishima et al.     | PMF BDist        | Base          | ^0.032 |
+| DS       | Kamishima et al.     | PMF BDist        | Mit           | ^0.016 |
+| DS       | Kamishima et al.     | PMF Mean         | Base          | ^0.032 |
+| DS       | Kamishima et al.     | PMF Mean         | Mit           | ^0.018 |
+| DS       | Kamishima et al.     | PMF Mi           | Base          | ^0.032 |
+| DS       | Kamishima et al.     | PMF Mi           | Mit           | ^0.018 |
+| DS       | Rastegarpanah et al. | ALS              | Base          | ^0.052 |
+| DS       | Rastegarpanah et al. | ALS              | Mit           | ^0.030 |
+| DS       | Wu et al.            | FairGo GCN       | Base          | ^0.036 |
+| DS       | Wu et al.            | FairGo GCN       | Mit           | ^0.054 |
+| KS       | Ashokan et al.       | ALS BiasedMF Par | Base          | ^0.073 |
+| KS       | Ashokan et al.       | ALS BiasedMF Par | Mit           | ^0.027 |
+| KS       | Ashokan et al.       | ALS BiasedMF Val | Base          | ^0.073 |
+| KS       | Ashokan et al.       | ALS BiasedMF Val | Mit           | ^0.080 |
+| KS       | Ashokan et al.       | ItemKNN Par      | Base          | ^0.074 |
+| KS       | Ashokan et al.       | ItemKNN Par      | Mit           | ^0.031 |
+| KS       | Ashokan et al.       | ItemKNN Val      | Base          | ^0.074 |
+| KS       | Ashokan et al.       | ItemKNN Val      | Mit           | ^0.071 |
+| KS       | Ekstrand et al.      | AvgRating        | Base          | ^0.071 |
+| KS       | Ekstrand et al.      | AvgRating        | Mit           | ^0.072 |
+| KS       | Ekstrand et al.      | FunkSVD          | Base          | ^0.076 |
+| KS       | Ekstrand et al.      | FunkSVD          | Mit           | ^0.078 |
+| KS       | Ekstrand et al.      | ItemKNN          | Base          | ^0.074 |
+| KS       | Ekstrand et al.      | ItemKNN          | Mit           | ^0.076 |
+| KS       | Ekstrand et al.      | UserKNN          | Base          | ^0.089 |
+| KS       | Ekstrand et al.      | UserKNN          | Mit           | ^0.096 |
+| KS       | Kamishima et al.     | PMF BDist        | Base          | ^0.076 |
+| KS       | Kamishima et al.     | PMF BDist        | Mit           | ^0.071 |
+| KS       | Kamishima et al.     | PMF Mean         | Base          | ^0.076 |
+| KS       | Kamishima et al.     | PMF Mean         | Mit           | ^0.070 |
+| KS       | Kamishima et al.     | PMF Mi           | Base          | ^0.076 |
+| KS       | Kamishima et al.     | PMF Mi           | Mit           | ^0.074 |
+| KS       | Rastegarpanah et al. | ALS              | Base          | ^0.007 |
+| KS       | Rastegarpanah et al. | ALS              | Mit           | ^0.030 |
+| KS       | Wu et al.            | FairGo GCN       | Base          | ^0.055 |
+| KS       | Wu et al.            | FairGo GCN       | Mit           | ^0.083 |
 
+## Last.FM 1K Rating Prediction Age
 | Metric   | Paper                | Model            | Result Type   | Value                   |
 |:---------|:---------------------|:-----------------|:--------------|:------------------------|
 | RMSE     | Ashokan et al.       | ALS BiasedMF Par | Base          | 1.146                   |
@@ -364,8 +649,6 @@ specifying which are the commands to execute to get the desired results.
 | RMSE     | Kamishima et al.     | PMF Mi           | Mit           | 1.362                   |
 | RMSE     | Rastegarpanah et al. | ALS              | Base          | 2.280                   |
 | RMSE     | Rastegarpanah et al. | ALS              | Mit           | 2.253                   |
-| RMSE     | Rastegarpanah et al. | LMaFit           | Base          | 2.568                   |
-| RMSE     | Rastegarpanah et al. | LMaFit           | Mit           | 2.538                   |
 | RMSE     | Wu et al.            | FairGo GCN       | Base          | 1.663                   |
 | RMSE     | Wu et al.            | FairGo GCN       | Mit           | 1.273                   |
 | DS       | Ashokan et al.       | ALS BiasedMF Par | Base          | 0.044                   |
@@ -392,8 +675,6 @@ specifying which are the commands to execute to get the desired results.
 | DS       | Kamishima et al.     | PMF Mi           | Mit           | 0.051                   |
 | DS       | Rastegarpanah et al. | ALS              | Base          | *0.115    |
 | DS       | Rastegarpanah et al. | ALS              | Mit           | *0.127    |
-| DS       | Rastegarpanah et al. | LMaFit           | Base          | *0.128    |
-| DS       | Rastegarpanah et al. | LMaFit           | Mit           | ^0.141 |
 | DS       | Wu et al.            | FairGo GCN       | Base          | *0.091    |
 | DS       | Wu et al.            | FairGo GCN       | Mit           | *0.058    |
 | KS       | Ashokan et al.       | ALS BiasedMF Par | Base          | ^0.080 |
@@ -420,7 +701,5 @@ specifying which are the commands to execute to get the desired results.
 | KS       | Kamishima et al.     | PMF Mi           | Mit           | ^0.101 |
 | KS       | Rastegarpanah et al. | ALS              | Base          | ^0.011 |
 | KS       | Rastegarpanah et al. | ALS              | Mit           | ^0.006 |
-| KS       | Rastegarpanah et al. | LMaFit           | Base          | ^0.005 |
-| KS       | Rastegarpanah et al. | LMaFit           | Mit           | ^0.011 |
 | KS       | Wu et al.            | FairGo GCN       | Base          | ^0.039 |
 | KS       | Wu et al.            | FairGo GCN       | Mit           | ^0.133 |
