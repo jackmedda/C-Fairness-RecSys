@@ -21,19 +21,19 @@ or the following one in Linux:
 pip3 install jupyter
 ```
 
-The other libraries have been installed using `R`. The [README.md](README.md) file of the authors recommend using Anaconda,
+The other libraries have been installed using `R`. The [README.md](../README.md) file of the authors recommend using Anaconda,
 but we cannot give hints on this procedure, since our study did not depend on conda.
 
 ## 2. Original code and Modifications
 The original code is not linked in the paper, but it is available in a [public repository](https://scholarworks.boisestate.edu/cs_scripts/4/).
 
-We modified the main file, which is [build.gradle](build.gradle), by commenting the section that use a 5-fold cross-validation of `evaluateML` task and adding the lines to use
+We modified the main file, which is [build.gradle](../build.gradle), by commenting the section that use a 5-fold cross-validation of `evaluateML` task and adding the lines to use
 custom train and test files, and modified the `predict` and `recommend` task to also save the predictions and not only the computed metrics. We created a new task
 similar to `evaluateML`, named it `evaluateLFM1KReproduced` and modified it to prepare it for input data of Last.FM 1K.
 
 ## 3. Input Data Preparation and Hyper-parameters Setting
 The input data can be generated with the script `generate_input_data.py` inside **/reproducibility_study/Preprocessing** by using the generation commands
-inside the same file or the [REPRODUCE.md](../Preprocessing/REPRODUCE.md) file inside the same folder. Once you specified the selected metadata for the dataset and sensitive attribute,
+inside the same file or the [REPRODUCE.md](../../Preprocessing/REPRODUCE.md) file inside the same folder. Once you specified the selected metadata for the dataset and sensitive attribute,
 you need to add the argument `--create_all_the_cool_kids_input_data` to generate the input files for this paper. You must copy the files from the
 related directory and copy them inside the folder `custom_data` that you can find in this directory.
 To select which input data to use you need to uncomment/comment the lines of the `evaluateML` task (if you want to execute an experiment for MovieLens 1M)
@@ -55,7 +55,7 @@ of ItemKNN to 20 and the number of features of BiasedMF to 50.
 
 ## 4. Code Execution
 Once the input data files have been copied inside the folder `custom_data` that you can find in this directory, you can execute the code inside the file 
-[external_cool_kids_exp/train.py](../external_cool_kids_exp/train.py) which is related to a directory outside this path. This code automatically creates the
+[external_cool_kids_exp/train.py](../../external_cool_kids_exp/train.py) which is related to a directory outside this path. This code automatically creates the
 input csv files pointed by the `yaml` files that you copied inside the folder `custom_data`, saves them in `custom_data`, execute the source code of this paper
 using the input csv files and saves the predictions grouped by model inside the folder `results`. The folder `results` is present in this directory and
 structued as **DATASET/XXXX**, with **DATASET** being `movielens_1m` or `filtered(20)_lastfm_1K` and `XXXX` one of the list described in
@@ -84,7 +84,7 @@ as previously explained in [Section 4](#4-code-execution). For instance, if you 
 saved in **results/movielens_1m/gender_balanced** directory.
 
 The metrics can be computed by adding the filepath of the results to `metrics_reproduced.py` inside **/reproducibility_study/Evaluation** and following
-the instruction inside the [REPRODUCE.md](../Evaluation/REPRODUCE.md) file present in the same folder. In particular, the results contain different predictions and recommendation based on the
+the instruction inside the [REPRODUCE.md](../../Evaluation/REPRODUCE.md) file present in the same folder. In particular, the results contain different predictions and recommendation based on the
 trained model or the run of the experiments in case of a balanced setup. For the baselines only the correct filepath must be added, while the several predictions and
 recommendations files of each specific run must be added together in a list, by specifying the filepath for each run manually or loading them easily with `os.scandir()`.
 
@@ -92,6 +92,6 @@ recommendations files of each specific run must be added together in a list, by 
 Nothing relevant to be mentioned.
 
 # Citation
-Ekstrand, M.D., Tian, M., Azpiazu, I.M., Ekstrand, J.D., Anuyah, O., McNeill,D., Pera, M.S.: All the cool kids, how do they fit in?: Popularity and demographicbiases in
+Ekstrand, M.D., Tian, M., Azpiazu, I.M., Ekstrand, J.D., Anuyah, O., McNeill,D., Pera, M.S.: All the cool kids, how do they fit in?: Popularity and demographic biases in
 recommender evaluation and effectiveness. In: Friedler, S.A., Wilson, C.(eds.) Conference on Fairness, Accountability and Transparency, FAT 2018, 23-24 February 2018,
 New York, NY, USA. Proceedings of Machine Learning Re-search, vol. 81, pp. 172–186. PMLR (2018), http://proceedings.mlr.press/v81/ekstrand18b.html

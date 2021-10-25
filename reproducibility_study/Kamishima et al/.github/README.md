@@ -16,13 +16,13 @@ The original code is available in a [public repository](https://github.com/tkami
 shared as well in a [public repository](https://github.com/tkamishima/kamrecsys).
 
 The code has been modified to adjust the hyper-parameters reported in the paper, since it was not clear to set them with the argument parset provided by the
-main script. In particular, the files [kamiers/sp_pmf/bdist_match.py](kamiers/sp_pmf/bdist_match.py) and
-[kamiers/sp_pmf/mi_normal.py](kamiers/sp_pmf/mi_normal.py) has been modified in the constructor the properly
+main script. In particular, the files [kamiers/sp_pmf/bdist_match.py](../kamiers/sp_pmf/bdist_match.py) and
+[kamiers/sp_pmf/mi_normal.py](../kamiers/sp_pmf/mi_normal.py) has been modified in the constructor the properly
 set the variables `a` and `b`.
 
 ## 3. Input Data Preparation and Hyper-parameters Setting
 The input data can be generated with the script `generate_input_data.py` inside **/reproducibility_study/Preprocessing** by using the generation commands
-inside the same file or the [REPRODUCE.md](../Preprocessing/REPRODUCE.md) file inside the same folder. Once you specified the selected metadata for the dataset and sensitive attribute,
+inside the same file or the [REPRODUCE.md](../../Preprocessing/REPRODUCE.md) file inside the same folder. Once you specified the selected metadata for the dataset and sensitive attribute,
 you need to add the argument `--create_rec_independence_input_data` to generate the input files for this paper. You must copy the files from the
 related directory and copy them inside this directory `data` which is also present in the original code.
 
@@ -67,7 +67,7 @@ The prediction files will be saved in this directory in the form of json files, 
 and the sensitive attribute (except for the baseline), as specified by the argument of the `-o` placeholder in all of the commands
 
 The metrics can be computed by adding the filepath of the results to `metrics_reproduced.py` inside **/reproducibility_study/Evaluation** and following
-the instruction inside the [REPRODUCE.md](../Evaluation/REPRODUCE.md) file present in the same folder. In particular, since this paper use 3 models with a different in-processing mitigation
+the instruction inside the [REPRODUCE.md](../../Evaluation/REPRODUCE.md) file present in the same folder. In particular, since this paper use 3 models with a different in-processing mitigation
 and one only baseline, the predictions files of all the 3 models related to the same dataset and sensitive attribute will be passed as a list, and the names
 of the 3 models will be passed as a list, following the order of the prediction files.
 

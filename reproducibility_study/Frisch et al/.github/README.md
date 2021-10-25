@@ -25,7 +25,7 @@ saving sections to better load and save the files based on the dataset name and 
 
 ## 3. Input Data Preparation and Hyper-parameters Setting
 The input data can be generated with the script `generate_input_data.py` inside **/reproducibility_study/Preprocessing** by using the generation commands
-inside the same file or the [REPRODUCE.md](../Preprocessing/REPRODUCE.md) file inside the same folder. Once you specified the selected metadata for the dataset and sensitive attribute,
+inside the same file or the [REPRODUCE.md](../../Preprocessing/REPRODUCE.md) file inside the same folder. Once you specified the selected metadata for the dataset and sensitive attribute,
 you need to add the argument `--create_co_clustering_for_fair_input_data` to generate the input files for this paper. You must copy the files from the
 related directory and copy them inside this directory `data` that you can found in this folder.
 To select which input data to use you need to modify the following variables:
@@ -55,7 +55,7 @@ python3 start_experiments.py
 The prediction files will be saved inside the directory `results` and they will be named according to the selected dataset and sensitive attribute.
 
 The metrics can be computed by adding the filepath of the results to `metrics_reproduced.py` inside **/reproducibility_study/Evaluation** and following
-the instruction inside the [REPRODUCE.md](../Evaluation/REPRODUCE.md) file present in the same folder.
+the instruction inside the [REPRODUCE.md](../../Evaluation/REPRODUCE.md) file present in the same folder.
 
 ## 6. Further Notes
 Nothing relevant to be mentioned.

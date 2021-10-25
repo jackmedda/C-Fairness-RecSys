@@ -105,7 +105,7 @@ Here we explain some of the parameters passed to this script to better understan
 
 However, these commands are not yet complete because we still need to specify the data of which reproduced paper we want
 to generate. This can be done adding one or more of the following parameters that can be also found inside the function
-`_add_other_features_args` of the Argument Parser in [helpers/recsys_arg_parser.py](../../helpers/recsys_arg_parser.py):
+`_add_other_features_args` of the Argument Parser in [helpers/recsys_arg_parser.py](../../../helpers/recsys_arg_parser.py):
 - `--create_user_oriented_fairness_files_input_data`: it creates the input data for the fairness-aware post-processing
   method of *Li et al*, which will be saved in the folder **reproducibility_study/Preprocessing/input_data/DATASET/Li et al**
 - `--create_nlr_input_data`: it creates the input data for the `NLR` codebase of *Li et al*, which will be saved in

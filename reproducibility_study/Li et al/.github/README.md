@@ -42,7 +42,7 @@ to some bugs that we ecountered during the usage of the codebase or to reduce th
 
 ## 3. Input Data Preparation and Hyper-parameters Setting
 The input data can be generated with the script `generate_input_data.py` inside **/reproducibility_study/Preprocessing** by using the generation commands
-inside the same file or the [REPRODUCE.md](../Preprocessing/REPRODUCE.md) file inside the same folder. Once you specified the selected metadata for the dataset and sensitive attribute,
+inside the same file or the [REPRODUCE.md](../../Preprocessing/REPRODUCE.md) file inside the same folder. Once you specified the selected metadata for the dataset and sensitive attribute,
 you need to add the argument `--create_nlr_input_data` to generate the input files to train and test the baselines. You must copy the files from the
 related directory and copy them inside **NLR/dataset/DATASET_NAME**, where **DATASET_NAME** is one of `movielens_1m` (for MovieLens 1M input data) and
 `filtered(20)_lastfm_1K` (for Last.FM 1K input data). 
@@ -91,7 +91,7 @@ the above commands. The filename of the predictions files contains the name of t
 The re-ranked recommendation list obtained by the fairness-aware post-processing method will be saved inside the folder **out_results** that is present in this directory.
 
 The metrics can be computed by adding the filepath of the re-ranked recommendation list to `metrics_reproduced.py` inside **/reproducibility_study/Evaluation** and following
-the instruction inside the [REPRODUCE.md](../Evaluation/REPRODUCE.md) file present in the same folder.
+the instruction inside the [REPRODUCE.md](../../Evaluation/REPRODUCE.md) file present in the same folder.
 
 ## 6. Further Notes
 The code inside NLR is used to train and test the baselines. When the training procedure is executed other files will be created next to the input data and

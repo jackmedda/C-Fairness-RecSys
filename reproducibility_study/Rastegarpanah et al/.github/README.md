@@ -13,13 +13,13 @@ The source code was not linked in the paper, but it is available in a [public re
 
 Modifications have been necessary to load custom input data and to save the predictions before and after the mitigation procedure. In particular,
 our goal is the mitigation of group unfairness, but the codebase only contains an example of improvement of the polarization. We used the file
-[minimze_polarization.py](minimze_polarization.py) as a guide to create the file [minimize_group_unfairness.py](minimize_group_unfairness.py),
+[minimze_polarization.py](../minimze_polarization.py) as a guide to create the file [minimize_group_unfairness.py](../minimize_group_unfairness.py),
 which is not provided in the original repository. So, we made use of the utility `group_loss_variance` and adjusted the code
 to improve the fairness based on this utility.
 
 ## 3. Input Data Preparation and Hyper-parameters Setting
 The input data can be generated with the script `generate_input_data.py` inside **/reproducibility_study/Preprocessing** by using the generation commands
-inside the same file or the [REPRODUCE.md](../Preprocessing/REPRODUCE.md) file inside the same folder. Once you specified the selected metadata for the dataset and sensitive attribute,
+inside the same file or the [REPRODUCE.md](../../Preprocessing/REPRODUCE.md) file inside the same folder. Once you specified the selected metadata for the dataset and sensitive attribute,
 you need to add the argument `--create_antidote_data_input_data` to generate the input files for this paper. You must copy the files from the
 related directory and copy them inside the **Data** folder inside this directory.
 To select which input data to use you need to modify the following variables:
@@ -40,7 +40,7 @@ The prediction files will be saved in this directory. The predicionts of the bas
 after the mitigation procedure will have the filename ending with the selected sensitive attribute.
 
 The metrics can be computed by adding the filepath of the results to `metrics_reproduced.py` inside **/reproducibility_study/Evaluation** and following
-the instruction inside the [REPRODUCE.md](../Evaluation/REPRODUCE.md) file present in the same folder.
+the instruction inside the [REPRODUCE.md](../../Evaluation/REPRODUCE.md) file present in the same folder.
 
 ## 6. Further Notes
 Nothing relevant to be mentioned.

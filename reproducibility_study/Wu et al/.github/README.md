@@ -27,7 +27,7 @@ the code in any way.
 
 ## 3. Input Data Preparation and Hyper-parameters Setting
 The input data can be generated with the script `generate_input_data.py` inside **/reproducibility_study/Preprocessing** by using the generation commands
-inside the same file or the [REPRODUCE.md](../Preprocessing/REPRODUCE.md) file inside the same folder. Once you specified the selected metadata for the dataset and sensitive attribute,
+inside the same file or the [REPRODUCE.md](../../Preprocessing/REPRODUCE.md) file inside the same folder. Once you specified the selected metadata for the dataset and sensitive attribute,
 you need to add the argument `--create_fairgo_input_data` to generate the input files for this paper. You must copy the files from the
 related directory and copy them inside the directory **filtered(20)_lastfm_1K_reproduce_data** for Last.FM 1K and **movielens_1m_reproduce_data** for MovieLens 1M.
 
@@ -65,10 +65,10 @@ saved in the same folder that contains the input data, so **filtered(20)_lastfm_
 The end of the filename of the predictions will be `age` for experiment on age groups or `gender` for experiment on gender groups.
 
 The metrics can be computed by adding the filepath of the results to `metrics_reproduced.py` inside **/reproducibility_study/Evaluation** and following
-the instruction inside the [REPRODUCE.md](../Evaluation/REPRODUCE.md) file present in the same folder.
+the instruction inside the [REPRODUCE.md](../../Evaluation/REPRODUCE.md) file present in the same folder.
 
 ## 6. Further Notes
-The script [generate_input_data.py](../Preprocessing/generate_input_data.py) must be executed only once for this paper,
+The script [generate_input_data.py](../../Preprocessing/generate_input_data.py) must be executed only once for this paper,
 since the sensitive attributes (gender and age) are saved together in a common data structure.
 
 # Citation
