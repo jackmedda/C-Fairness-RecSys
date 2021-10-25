@@ -29,7 +29,7 @@ folders is only used to support the reproducibility study and make it independen
 ### `reproducibility_study`
 
 This is the directory that contains the source code of each reproduced paper identified by the surname of the first author
-of the respective paper. It also contains the folders to execute the 5 points described in [Subfolders](subfolders).
+of the respective paper. It also contains the folders to execute the 5 points described in [Subfolders](#subfolders).
 
 **Reproduced Papers**.
   - **Ashokan et al**: *Fairness metrics and bias mitigation strategies for rating predictions*
@@ -45,7 +45,8 @@ of the respective paper. It also contains the folders to execute the 5 points de
 * **Preprocessing**.
     * `preprocess_ml1m`: script to preprocess MovieLens 1M (best described in the relative [REPRODUCE.md](reproducibility_study/Preprocessing/REPRODUCE.md))
     * `preprocess_lastfm1K`: script to preprocess Last.FM 1K (best described in the relative [REPRODUCE.md](reproducibility_study/Preprocessing/REPRODUCE.md))
-    * `generate_input_data`: script to generate the input data of each reproduced paper (best described in the relative [REPRODUCE.md](Preprocessing/REPRODUCE.md))
+    * `generate_input_data`: script to generate the input data of each reproduced paper (best described in the relative
+                             [REPRODUCE.md](reproducibility_study/Preprocessing/REPRODUCE.md))
 * **Evaluation**.
     * `metrics_reproduced`: script the loads all the predictions of relevance scores and computes the metrics in form of
                             plots and latex tables (best described in the relative [REPRODUCE.md](reproducibility_study/Evaluation/REPRODUCE.md))
@@ -102,7 +103,7 @@ The commands and a deeper description of them is available inside the
 
 ## Training/Mitigation Procedures
 
-Each paper (folder) listed in [`reproducibility_study`](reproducibility-study) contains a **REPRODUCE.md** file that 
+Each paper (folder) listed in [`reproducibility_study`](#reproducibility-study) contains a **REPRODUCE.md** file that 
 describe everything to setup, prepare and run each reproduced paper. In particular, instructions to install the dependencies
 are provided, as well as the specific subfolders to fill with the input data generated in the previous step, in order to
 properly run the experiments of the selected paper. The procedure for each source code is better described in the already
@@ -112,7 +113,7 @@ mentioned **REPRODUCE.md** file.
 
 The **REPRODUCE.md** file contained in each "paper" folder describes also where the predictions can be found at the end 
 of the mitigation procedure and guide the developer on following the instructions of the 
-[REPRODUCE.md](reproducibility_study/Evaluation/metrics_reproduced.py) of the **Evaluation**. This is the script that
+[REPRODUCE.md](reproducibility_study/Evaluation/REPRODUCE.md) of the **Evaluation**. This is the script that
 must be configured the most, since the paths of the specific predictions of each paper and model must be copy and pasted
 inside the script. When the script is executed the predictions are loaded in a common form, the metrics are computed and
 finally converted in plot and latex table forms. The **REPRODUCE.MD** already mentioned better described these steps and

@@ -8,7 +8,7 @@ attributes mapping, data filtering, train-test splitting, data serialization and
 to store different types of data computed during the framework routines. These subfolders are described in
 [Data Folders Structure](#data-folders-structure).  
 
-The type of data *recommender_codebase* works with: the entire framework is based on datasets with a structures similar to
+The type of data *recommender_codebase* works with: the entire framework is based on datasets with a structure similar to
 [Features Dictionaries](https://www.tensorflow.org/datasets/api_docs/python/tfds/features/FeaturesDict).
 *recommender_codebase* expects dictionaries of tensors, whose structure in a TensorFlow Dataset is:
 > <Dataset shapes: {a: (), b: ()}, types: {a: tf.int32, b: tf.int32}>  
@@ -48,24 +48,11 @@ add type to parameters or return types.
 > ***logs***  
 > Its purpose is to store logs of the application with different log levels to record every step of the code executions
 
-> ***metrics***  
-> Its purpose is to store the metrics values. Currently two types of storing are supported:
-> * **csv**: by means of a pandas DataFrame with metrics names as header and values on first row.
-> * **npy**: by means of NumPy, so as to save metrics names and values as array of couples.
-
-> ***models***  
-> Its purpose is to store the trained models. The saving procedure for a trained model stores the user model,
-> the item model, training and testing data. The user and item models are none other than two sequential models, 
-> made up of two layers: a StringLookup layer and an Embedding layer. A StringLookup layer is used because
-> *recommender_codebase* excepts users (users IDs) and items (items IDs) as strings. Training and testing data are
-> necessary to recompute several attributes of `Model.py` and other important data to compute metrics, such as
-> observed (interacted with) and unobserved (not interacted with) items.
-
 > ***preprocessed_datasets***  
-> Its purpose is to store the datasets preprocessed to train particular recommender systems. Child classes of
-> `Model.py`, such as BPR and GMF, preprocess datasets in time-consuming ways, which can be saved with the 
-> `FeaturesDictTensorsWriter` and loaded with the `FeaturesDictTensorsReader`. The functions `save_tf_features_dataset`,
-> `load_tf_features_dataset` of `data/utils.py` can be used to easily interact with the writer and the reader.
+> Its purpose is to store the datasets preprocessed to train particular recommender systems. `data.utils` preprocess
+> datasets in time-consuming ways, which can be saved with the `FeaturesDictTensorsWriter` and loaded with the
+> `FeaturesDictTensorsReader`. The functions `save_tf_features_dataset`, `load_tf_features_dataset` of `data/utils.py`
+> can be used to easily interact with the writer and the reader.
 
 > ***relevance_matrices***  
 > Its purpose is to store the relevance matrices. Currently two types of storing are supported:
