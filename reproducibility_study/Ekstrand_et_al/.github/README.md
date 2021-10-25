@@ -49,8 +49,8 @@ For instance, to execute `gender-balanced` experiment you need to **uncomment** 
 For MovieLens 1M from each gender or age group 1500 users are randomly sampled (as stated in the paper) and for Last.FM 1K 100 users for each gender or age group.
 
 ## 4. Code Execution
-Once the input data files have been copied inside the folder `custom_data` that you can find in this directory, you can execute the code of the file 
-[train.py](../train.py) which is related to a directory outside this path. This code automatically creates the
+Once the input data files have been copied inside the folder `custom_data` that you can find in this directory, you can execute the code inside the file 
+[train.py](../train.py) which is not part of the original dataset of *Ekstrand et al*. This code automatically creates the
 input csv files pointed by the `yaml` files that you copied inside the folder `custom_data`, saves them in `custom_data`, execute the source code of this paper
 using the input csv files and saves the predictions grouped by model inside the folder `results`. The folder `results` is present in this directory and
 structued as **DATASET/XXXX**, with **DATASET** being `movielens_1m` or `filtered(20)_lastfm_1K` and `XXXX` one of the list described in
