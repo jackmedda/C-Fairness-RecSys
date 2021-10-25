@@ -1606,7 +1606,7 @@ def to_rating_prediction_fairness_input_data(metadata, orig_train, test, train=N
     out_path = os.path.join(
         constants.INPUT_DATA_REPRODUCIBILITY,
         f"{metadata['dataset']}_{metadata['dataset_size']}",
-        "Ashokan et al"
+        "Ashokan and Haas"
     )
 
     RcLogger.get().info(f"Generating input data in {out_path} for "
