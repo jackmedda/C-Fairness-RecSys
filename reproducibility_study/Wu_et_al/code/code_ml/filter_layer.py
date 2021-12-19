@@ -438,22 +438,22 @@ if __name__ == "__main__":
         res_val = round(np.mean(r_val), 4)
         str_print_evl += "validation:\trmse:" + str(res_val)
 
-        # if val_rmse is not None:
-        #     if r_val < val_rmse:
-        #         val_rmse = r_val
-        #         print("epoch", epoch)
-        #         np.save(
-        #             os.path.join(r'C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\FairGO\code',
-        #                          embs_path,
-        #                          r'new_gcn_embs\user_emb_epoch.npy'),
-        #             model.embed_user.weight.detach().numpy(), allow_pickle=True)
-        #         np.save(
-        #             os.path.join(r'C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\FairGO\code',
-        #                          embs_path,
-        #                          r'new_gcn_embs\item_emb_epoch.npy'),
-        #             model.embed_item.weight.detach().numpy(), allow_pickle=True)
-        # else:
-        #     val_rmse = r_val
+        if val_rmse is not None:
+            if r_val < val_rmse:
+                val_rmse = r_val
+                print("epoch", epoch)
+                np.save(
+                    os.path.join(r'C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\FairGO\code',
+                                 embs_path,
+                                 r'new_gcn_embs\user_emb_epoch.npy'),
+                    model.embed_user.weight.detach().numpy(), allow_pickle=True)
+                np.save(
+                    os.path.join(r'C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\FairGO\code',
+                                 embs_path,
+                                 r'new_gcn_embs\item_emb_epoch.npy'),
+                    model.embed_item.weight.detach().numpy(), allow_pickle=True)
+        else:
+            val_rmse = r_val
 
         print(str_print_evl)
 
