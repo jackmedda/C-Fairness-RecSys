@@ -48,6 +48,9 @@ For instance, to execute `gender-balanced` experiment you need to **uncomment** 
 
 For MovieLens 1M from each gender or age group 1500 users are randomly sampled (as stated in the paper) and for Last.FM 1K 100 users for each gender or age group.
 
+The hyper-parameters for each algorithm can be modified in [algorithms](algorithms/ml) folder, but only the ones inside `ml` folder, since also the `evaluateLFM1KReproduced` task
+uses the algorithms prepared for MovieLens 1M.
+
 ## 4. Code Execution
 Once the input data files have been copied inside the folder `custom_data` that you can find in this directory, you can execute the code inside the file 
 [train.py](train.py) which is not part of the original dataset of *Ekstrand et al*. This code automatically creates the
