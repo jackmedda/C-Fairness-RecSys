@@ -43,7 +43,7 @@ to some bugs that we encountered during the usage of the codebase or to reduce t
 
 ## 3. Input Data Preparation and Hyper-parameters Setting
 The input data can be generated with the script `generate_input_data.py` inside **/reproducibility_study/Preprocessing** by using the generation commands
-inside the same file or the [REPRODUCE.md](../../../Preprocessing/REPRODUCE.md) file inside the same folder. Once you specified the selected metadata for the dataset and sensitive attribute,
+inside the same file or the [REPRODUCE.md](../../Preprocessing/REPRODUCE.md) file inside the same folder. Once you specified the selected metadata for the dataset and sensitive attribute,
 you need to add the argument `--create_nlr_input_data` to generate the input files to train and test the baselines. You must copy the files from the
 related directory and copy them inside **NLR/dataset/DATASET_NAME**, where **DATASET_NAME** is one of `movielens_1m` (for MovieLens 1M input data) and
 `filtered(20)_lastfm_1K` (for Last.FM 1K input data). 
@@ -63,18 +63,24 @@ To select which input data to use in the fairness-aware post-processing method y
 - `run_id` (line 256): it is a unique id that is added by `generate_input_data.py` in the filename for the creation of the input files for the fairness-aware
 post-processing method. It is used to identify the right files with the string `rank` and the values of `group_1` and `group_2`.
 
-The hyper-parameters that we used are:
-- learning rate: 0.001
-- l2-regularization: 0.00001
-- epochs: 100 (best model is chosen on validation set)
-- embedding size: 64
-
-Some models other hyper-parameters could be selected and we set them to the following values:
-- NeuMF (NCF):
-    - MLP size: [32,16,8]
-    - Final Output Layer size: [64]
-- STAMP:
-    - Maximum User History Length: 30
+The hyper-parameters that we used for each model are:
+- l2 embedding: 0.00001 (for all models)
+- epochs: 100
+- **BiasedMF**
+    - user\item embedding_size: (MovieLens 1M: 32, Last.FM 1K: 64)
+    - learning rate: 0.001
+- **PMF**
+    - user\item embedding_size: 64
+    - learning rate: (MovieLens 1M: 0.001, Last.FM 1K: 0.01)
+- **NeuMF (NCF)**
+    - user\item embedding_size: (MovieLens 1M: 32, Last.FM 1K: 64)
+    - learning rate: 0.001
+    - layers: [32,16,8]
+    - p_layers (Prediction Layers): (MovieLens 1M: [128], Last.FM 1K: [64])
+- **STAMP**
+    - user\item embedding_size: 64
+    - learning rate: 0.001
+    - max_his (Maximum User History Length): 30
 
 For the training phase we added 1 negative sample for each interaction in the training set, and the same for the validation set.
 For the fairness-aware post-processing method we set `epsilon` to 0.0 to evaluate the consequences of aiming at a "perfect" fairness.
@@ -84,16 +90,16 @@ The code to train and test the models can be executed directly via command line.
 must be launched in the folder **NLR/src**. The commands in Windows (for Linux `python` must be replaced with `python3`) are:
 
 	MovieLens 1M
-	PMF: python main.py --rank 1 --model_name PMF --optimizer Adam --lr 0.001 --l2 0.00001 --dataset movielens_1m --metric ndcg@10 --random_seed 2018 --gpu 0 --verbose -1 --unlabel_test 1
-	STAMP: python main.py --rank 1 --model_name STAMP --optimizer Adam --lr 0.001 --l2 0.00001 --dataset movielens_1m --metric ndcg@10 --random_seed 2018 --gpu 0 --verbose -1 --unlabel_test 1 --max_his 30
-	BiasedMF: python main.py --rank 1 --model_name BiasedMF --optimizer Adam --lr 0.001 --l2 0.00001 --dataset movielens_1m --metric ndcg@10 --random_seed 2018 --gpu 0 --verbose -1 --unlabel_test 1
-	NeuMF (NCF.py): python main.py --rank 1 --model_name NCF --optimizer Adam --lr 0.001 --l2 0.00001 --dataset movielens_1m --metric ndcg@10 --random_seed 2018 --gpu 0 --verbose -1 --unlabel_test 1 --layers [32,16,8] --p_layers [64]
+	PMF: python main.py --rank 1 --model_name PMF --optimizer Adam --lr 0.001 --l2 0.00001 --dataset movielens_1m --metric ndcg@10 --random_seed 2018 --gpu 0 --verbose -1 --unlabel_test 1 --u_vector_size 64 --i_vector_size 64
+	STAMP: python main.py --rank 1 --model_name STAMP --optimizer Adam --lr 0.001 --l2 0.00001 --dataset movielens_1m --metric ndcg@10 --random_seed 2018 --gpu 0 --verbose -1 --unlabel_test 1 --u_vector_size 64 --i_vector_size 64 --max_his 30
+	BiasedMF: python main.py --rank 1 --model_name BiasedMF --optimizer Adam --lr 0.001 --l2 0.00001 --dataset movielens_1m --metric ndcg@10 --random_seed 2018 --gpu 0 --verbose -1 --unlabel_test 1 --u_vector_size 32 --i_vector_size 32
+	NeuMF (NCF.py): python main.py --rank 1 --model_name NCF --optimizer Adam --lr 0.001 --l2 0.00001 --dataset movielens_1m --metric ndcg@10 --random_seed 2018 --gpu 0 --verbose -1 --unlabel_test 1 --u_vector_size 32 --i_vector_size 32 --layers [32,16,8] --p_layers [128]
 	
 	Last.FM 1K
-	PMF: python main.py --rank 1 --model_name PMF --optimizer Adam --lr 0.001 --l2 0.00001 --dataset filtered(20)_lastfm_1K --metric ndcg@10 --random_seed 2018 --gpu 0 --verbose -1 --unlabel_test 1
-	STAMP: python main.py --rank 1 --model_name STAMP --optimizer Adam --lr 0.001 --l2 0.00001 --dataset filtered(20)_lastfm_1K --metric ndcg@10 --random_seed 2018 --gpu 0 --verbose -1 --unlabel_test 1 --max_his 30
-	BiasedMF: python main.py --rank 1 --model_name BiasedMF --optimizer Adam --lr 0.001 --l2 0.00001 --dataset filtered(20)_lastfm_1K --metric ndcg@10 --random_seed 2018 --gpu 0 --verbose -1 --unlabel_test 1
-	NeuMF (NCF.py): python main.py --rank 1 --model_name NCF --optimizer Adam --lr 0.001 --l2 0.00001 --dataset filtered(20)_lastfm_1K --metric ndcg@10 --random_seed 2018 --gpu 0 --verbose -1 --unlabel_test 1 --layers [32,16,8] --p_layers [64]
+	PMF: python main.py --rank 1 --model_name PMF --optimizer Adam --lr 0.01 --l2 0.00001 --dataset filtered(20)_lastfm_1K --metric ndcg@10 --random_seed 2018 --gpu 0 --verbose -1 --unlabel_test 1 --u_vector_size 64 --i_vector_size 64
+	STAMP: python main.py --rank 1 --model_name STAMP --optimizer Adam --lr 0.001 --l2 0.00001 --dataset filtered(20)_lastfm_1K --metric ndcg@10 --random_seed 2018 --gpu 0 --verbose -1 --unlabel_test 1 --u_vector_size 64 --i_vector_size 64 --max_his 30
+	BiasedMF: python main.py --rank 1 --model_name BiasedMF --optimizer Adam --lr 0.001 --l2 0.00001 --dataset filtered(20)_lastfm_1K --metric ndcg@10 --random_seed 2018 --gpu 0 --verbose -1 --unlabel_test 1 --u_vector_size 64 --i_vector_size 64
+	NeuMF (NCF.py): python main.py --rank 1 --model_name NCF --optimizer Adam --lr 0.001 --l2 0.00001 --dataset filtered(20)_lastfm_1K --metric ndcg@10 --random_seed 2018 --gpu 0 --verbose -1 --unlabel_test 1 --u_vector_size 64 --i_vector_size 64 --layers [32,16,8] --p_layers [64]
 	
 
 
@@ -103,7 +109,7 @@ the above commands. The filename of the predictions files contains the name of t
 The re-ranked recommendation list obtained by the fairness-aware post-processing method will be saved inside the folder **out_results** that is present in this directory.
 
 The metrics can be computed by adding the filepath of the re-ranked recommendation list to `metrics_reproduced.py` inside **/reproducibility_study/Evaluation** and following
-the instruction inside the [REPRODUCE.md](../../../Evaluation/REPRODUCE.md) file present in the same folder.
+the instruction inside the [REPRODUCE.md](../../Evaluation/REPRODUCE.md) file present in the same folder.
 
 ## 6. Further Notes
 The code inside NLR is used to train and test the baselines. When the training procedure is executed other files will be created next to the input data and

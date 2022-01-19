@@ -62,36 +62,35 @@ For each type of independence term applied to the PMF baseline we selected the f
 
 
 ## 4. Code Execution
-Differently from others source codes, this codebase perfectly accomodate different data in input with an easy-to-use argument parser to pass the information
+Differently from others source codes, this codebase perfectly accommodate different data in input with an easy-to-use argument parser to pass the information
 as arguments via command line. The following commands can be used to execute all the experiments in Windows for Python 3 (in Linux for Python 3 `python` must
 be replaced by `python3`) and must be executed from this directory:
-MovieLens 1M PMF Mean Matching Gender
 	
 	MovieLens 1M PMF Mean Matching Gender
-	python -m scripts.exp_iers_sp -i data\movielens_1m_train_gender.csv -o movielens_1m_out_mean_matching_gender.json -t data\movielens_1m_test_gender.csv -m pmf_mean_match --no-timestamp -e 1 -C 1 -k 7 -d 1 5 1
+	python -m scripts.exp_iers_sp -i data\movielens_1m_train_gender.csv -o movielens_1m_out_mean_matching_gender.json -t data\movielens_1m_test_gender.csv -m pmf_mean_match --no-timestamp -e 1e8 -C 10 -k 7 -d 1 5 1
 	MovieLens 1M PMF BDist Matching Gender
-	python -m scripts.exp_iers_sp -i data\movielens_1m_train_gender.csv -o movielens_1m_out_bdist_matching_gender.json -t data\movielens_1m_test_gender.csv -m pmf_bdist_match --no-timestamp -e 1 -C 1 -k 7 -d 1 5 1
+	python -m scripts.exp_iers_sp -i data\movielens_1m_train_gender.csv -o movielens_1m_out_bdist_matching_gender.json -t data\movielens_1m_test_gender.csv -m pmf_bdist_match --no-timestamp -e 1e8 -C 10 -k 7 -d 1 5 1
 	MovieLens 1M PMF Mi Normal Gender
-	python -m scripts.exp_iers_sp -i data\movielens_1m_train_gender.csv -o movielens_1m_out_mi_normal_gender.json -t data\movielens_1m_test_gender.csv -m pmf_mi_normal --no-timestamp -e 1 -C 1 -k 7 -d 1 5 1
+	python -m scripts.exp_iers_sp -i data\movielens_1m_train_gender.csv -o movielens_1m_out_mi_normal_gender.json -t data\movielens_1m_test_gender.csv -m pmf_mi_normal --no-timestamp -e 1e8 -C 10 -k 7 -d 1 5 1
 	MovieLens 1M PMF Mean Matching Age
-	python -m scripts.exp_iers_sp -i data\movielens_1m_train_age.csv -o movielens_1m_out_mean_matching_age.json -t data\movielens_1m_test_age.csv -mpmf_mean_match --no-timestamp -e 1 -C 1 -k 7 -d 1 5 1
+	python -m scripts.exp_iers_sp -i data\movielens_1m_train_age.csv -o movielens_1m_out_mean_matching_age.json -t data\movielens_1m_test_age.csv -mpmf_mean_match --no-timestamp -e 1e8 -C 10 -k 7 -d 1 5 1
 	MovieLens 1M PMF BDist Matching Age
-	python -m scripts.exp_iers_sp -i data\movielens_1m_train_age.csv -o movielens_1m_out_bdist_matching_age.json -t data\movielens_1m_test_age.csv -m pmf_bdist_match --no-timestamp -e 1 -C 1 -k 7 -d 1 5 1
+	python -m scripts.exp_iers_sp -i data\movielens_1m_train_age.csv -o movielens_1m_out_bdist_matching_age.json -t data\movielens_1m_test_age.csv -m pmf_bdist_match --no-timestamp -e 1e8 -C 10 -k 7 -d 1 5 1
 	MovieLens 1M PMF Mi Normal Age
-	python -m scripts.exp_iers_sp -i data\movielens_1m_train_age.csv -o movielens_1m_out_mi_normal_age.json -t data\movielens_1m_test_age.csv -m pmf_mi_normal --no-timestamp -e 1 -C 1 -k 7 -d 1 5 1
+	python -m scripts.exp_iers_sp -i data\movielens_1m_train_age.csv -o movielens_1m_out_mi_normal_age.json -t data\movielens_1m_test_age.csv -m pmf_mi_normal --no-timestamp -e 1e8 -C 10 -k 7 -d 1 5 1
 	
 	Last.FM 1K filtered(20) Mean Matching Gender
-	python -m scripts.exp_iers_sp -i "data\filtered(20)_lastfm-1K_train_user_gender.csv" -o "filtered(20)_lastfm-1K_out_mean_matching_gender.json" -t "data\filtered(20)_lastfm_1K_test_user_gender.csv" -m pmf_mean_match --no-timestamp -e 1 -C 1 -k 7 -d 1 5 1
+	python -m scripts.exp_iers_sp -i "data\filtered(20)_lastfm-1K_train_user_gender.csv" -o "filtered(20)_lastfm-1K_out_mean_matching_gender.json" -t "data\filtered(20)_lastfm_1K_test_user_gender.csv" -m pmf_mean_match --no-timestamp -e 1e6 -C 20 -k 30 -d 1 5 1
 	Last.FM 1K filtered(20) BDist Matching Gender
-	python -m scripts.exp_iers_sp -i "data\filtered(20)_lastfm-1K_train_user_gender.csv" -o "filtered(20)_lastfm-1K_out_bdist_matching_gender.json" -t "data\filtered(20)_lastfm_1K_test_user_gender.csv" -m pmf_bdist_match --no-timestamp -e 1 -C 1 -k 7 -d 1 5 1
+	python -m scripts.exp_iers_sp -i "data\filtered(20)_lastfm-1K_train_user_gender.csv" -o "filtered(20)_lastfm-1K_out_bdist_matching_gender.json" -t "data\filtered(20)_lastfm_1K_test_user_gender.csv" -m pmf_bdist_match --no-timestamp -e 1e6 -C 20 -k 30 -d 1 5 1
 	Last.FM 1K filtered(20) Mi Normal Gender
-	python -m scripts.exp_iers_sp -i "data\filtered(20)_lastfm-1K_train_user_gender.csv" -o "filtered(20)_lastfm-1K_out_mi_normal_gender.json" -t "data\filtered(20)_lastfm_1K_test_user_gender.csv" -m pmf_mi_normal --no-timestamp -e 1 -C 1 -k 7 -d 1 5 1
+	python -m scripts.exp_iers_sp -i "data\filtered(20)_lastfm-1K_train_user_gender.csv" -o "filtered(20)_lastfm-1K_out_mi_normal_gender.json" -t "data\filtered(20)_lastfm_1K_test_user_gender.csv" -m pmf_mi_normal --no-timestamp -e 1e6 -C 20 -k 30 -d 1 5 1
 	Last.FM 1K filtered(20) Mean Matching Age
-	python -m scripts.exp_iers_sp -i "data\filtered(20)_lastfm-1K_train_user_age.csv" -o "filtered(20)_lastfm-1K_out_mean_matching_age.json" -t "data\filtered(20)_lastfm_1K_test_user_age.csv" -m pmf_mean_match --no-timestamp -e 1 -C 1 -k 7 -d 1 5 1
+	python -m scripts.exp_iers_sp -i "data\filtered(20)_lastfm-1K_train_user_age.csv" -o "filtered(20)_lastfm-1K_out_mean_matching_age.json" -t "data\filtered(20)_lastfm_1K_test_user_age.csv" -m pmf_mean_match --no-timestamp -e 1e7 -C 20 -k 30 -d 1 5 1
 	Last.FM 1K filtered(20) BDist Matching Age
-	python -m scripts.exp_iers_sp -i "data\filtered(20)_lastfm-1K_train_user_age.csv" -o "filtered(20)_lastfm-1K_out_bdist_matching_age.json" -t "data\filtered(20)_lastfm_1K_test_user_age.csv" -m pmf_bdist_match --no-timestamp -e 1 -C 1 -k 7 -d 1 5 1
+	python -m scripts.exp_iers_sp -i "data\filtered(20)_lastfm-1K_train_user_age.csv" -o "filtered(20)_lastfm-1K_out_bdist_matching_age.json" -t "data\filtered(20)_lastfm_1K_test_user_age.csv" -m pmf_bdist_match --no-timestamp -e 1e7 -C 20 -k 30 -d 1 5 1
 	Last.FM 1K filtered(20) Mi Normal Age
-	python -m scripts.exp_iers_sp -i "data\filtered(20)_lastfm-1K_train_user_age.csv" -o "filtered(20)_lastfm-1K_out_mi_normal_age.json" -t "data\filtered(20)_lastfm_1K_test_user_age.csv" -m pmf_mi_normal --no-timestamp -e 1 -C 1 -k 7 -d 1 5 1
+	python -m scripts.exp_iers_sp -i "data\filtered(20)_lastfm-1K_train_user_age.csv" -o "filtered(20)_lastfm-1K_out_mi_normal_age.json" -t "data\filtered(20)_lastfm_1K_test_user_age.csv" -m pmf_mi_normal --no-timestamp -e 1e7 -C 20 -k 30 -d 1 5 1
 
 ## 5. Predictions Extraction
 The prediction files will be saved in this directory in the form of json files, named according to the dataset used, the model with the specific independence term

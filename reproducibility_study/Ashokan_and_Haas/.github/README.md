@@ -9,7 +9,7 @@ There wasn't a `requirements.txt` file in the source code, but Python 3 is used 
 - Numpy
 - Lenskit
 
-We added the file [requirements.txt](../requirements.txt) for a direct installation of required libraries. The dependencies can be installed with the following command in Windows:
+We added the file [requirements.txt](requirements.txt) for a direct installation of required libraries. The dependencies can be installed with the following command in Windows:
 ```shell script
 pip install -r requirements.txt
 ```
@@ -30,7 +30,7 @@ In particular the modifications are present in two ranges of lines:
 
 ## 3. Input Data Preparation and Hyper-parameters Setting
 The input data can be generated with the script `generate_input_data.py` inside **/reproducibility_study/Preprocessing** by using the generation commands
-inside the same file or the [REPRODUCE.md](../../../Preprocessing/REPRODUCE.md) file inside the same folder. Once you specified the selected metadata
+inside the same file or the [REPRODUCE.md](../../Preprocessing/REPRODUCE.md) file inside the same folder. Once you specified the selected metadata
 for the dataset and sensitive attribute, you need to add the argument `--create_rating_prediction_fairness_input_data` to generate the input files
 for this paper. You must copy the files from the related directory and copy them inside this directory.
 To select which input data to use you need to modify the following variables:
@@ -41,7 +41,12 @@ To select which input data to use you need to modify the following variables:
 									while `F` are the users of the minority group (female, old) that in the pre-processed datasets are identified with `False`.
 - `_dataset` (line 101): dataset used to generate the input data. It is also present at the beginnning of the input filename.
 
-In `Main.py` we set the maximum number of neighbors of ItemKNN to 20 and the number of features of BiasedMF to 50.
+In `Main.py` we set the following hyper-parameters for the two models:
+- **ItemKNN**
+    - maximum number of neighbors: (MovieLens 1M: 20, Last.FM 1K: 40)
+- **ALS BiasedMF**
+    - features: 60
+    - iterations: 25
 
 ## 4. Code Execution
 Once the variables to choose the input data and the sensitive attribute to consider have been set to the right value, the code can be executed with
@@ -62,7 +67,7 @@ denomination of the paper:
 - `_parity_adj`: files containing this string identify the predictions adjusted with *parity-based fairness*
 
 The metrics can be computed by adding the filepath of the results to `metrics_reproduced.py` inside **/reproducibility_study/Evaluation** and following
-the instruction inside the [REPRODUCE.md](../../../Evaluation/REPRODUCE.md) file present in the same folder.
+the instruction inside the [REPRODUCE.md](../../Evaluation/REPRODUCE.md) file present in the same folder.
 
 ## 6. Further Notes
 Nothing relevant to be mentioned.

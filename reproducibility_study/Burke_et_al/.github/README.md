@@ -46,13 +46,13 @@ The `<list-size>` of the metrics section has been modified setting it to the max
 has been set to `F`, which always represents the minority group (females, old).
 
 Actually, *librec-auto* 0.1.2 does not fully support the usage of a predefined test file, so we had to dig into the source code of the library and modify
-the file `librec_cmd.py`. Inside this directory you will find the [modified version](../librec_cmd.py) with modifications at the lines 115\-129.
+the file `librec_cmd.py`. Inside this directory you will find the [modified version](librec_cmd.py) with modifications at the lines 115\-129.
 The added lines use the right test set according to the selected dataset and it will work if the same input data used in our reproducibility study
 will be used. If you want to use different test sets or different datasets you need to modify these lines accordingly.
 
 ## 3. Input Data Preparation and Hyper-parameters Setting
 The input data can be generated with the script `generate_input_data.py` inside **/reproducibility_study/Preprocessing** by using the generation commands
-inside the same file or the [REPRODUCE.md](../../../Preprocessing/REPRODUCE.md) file inside the same folder. Once you specified the selected metadata for the dataset and sensitive attribute,
+inside the same file or the [REPRODUCE.md](../../Preprocessing/REPRODUCE.md) file inside the same folder. Once you specified the selected metadata for the dataset and sensitive attribute,
 you need to add the argument `--create_librec_auto_input_data` to generate the input files for this paper. You must copy the files from the
 related directory and copy them inside the specific directory for the selected experiment inside this path. For instance, if you create the input data
 of MovieLens 1M and selecting `user_gender` as sensitive attribute for gender experiments, you should copy the input data inside the directory **movielens_1m_gender_experiment/data**.
@@ -60,19 +60,39 @@ NOTICE: to reduce the number of labels we only use the labels `F` and `M`. The u
 that in the pre-processed datasets are identified with `True`, while `F` are the users of the minority group (female, old) that in the pre-processed datasets
 are identified with `False`, as done by the authors, who treat females as the protected class.
 
-The hyper-parameters for the *BN-SLIM-U* model that we used are:
+The hyper-parameters for the *SLIM-U* model that we used are:
 - early-stop: true
 - similarity (type="user"): cos
-- neighborhood-size: 50
 - shrinkage: 10
 - bold-driver: false
 - iterator-max: 10
-- &#955;<sub>1</sub> (`<l1-reg>`): 0.1
-- &#955;<sub>2</sub> (`<l2-reg>`): 0.001
-- &#955;<sub>3</sub> (`<l3-reg>`): 25
+- &#955;<sub>3</sub> (`<l3-reg>`): 0.0
 - min-sim: 0.0
 
-The baseline *SLIM-U* can be obtained by setting &#955;<sub>3</sub> to 0.0.
+The other hyper-parameters are different for each dataset:
+
+- **MovieLens 1M**
+    - neighborhood-size: 20
+    - &#955;<sub>1</sub> (`<l1-reg>`): 2.0
+    - &#955;<sub>2</sub> (`<l2-reg>`): 0.1
+- **Last.FM 1K**
+    - neighborhood-size: 60
+    - &#955;<sub>1</sub> (`<l1-reg>`): 1.0
+    - &#955;<sub>2</sub> (`<l2-reg>`): 0.1
+
+The baseline *SLIM-U* is obtained by setting &#955;<sub>3</sub> to 0.0, so the following list only show the different
+values of &#955;<sub>3</sub> that we used for each dataset and sensitive attribute:
+
+- **MovieLens 1M**
+    - *Gender*
+        - &#955;<sub>3</sub> (`<l3-reg>`): 5
+    - *Age*
+        - &#955;<sub>3</sub> (`<l3-reg>`): 25
+- **Last.FM 1K**
+    - *Gender*
+        - &#955;<sub>3</sub> (`<l3-reg>`): 100
+    - *Age*
+        - &#955;<sub>3</sub> (`<l3-reg>`): 50
 
 ## 4. Code Execution
 The specific experiment, represented by the name of the folder, can be executed with the following command inside this folder in Windows:
@@ -92,7 +112,7 @@ python -m librec_auto run filtered(20)_lastfm_1K_gender_experiment
 The prediction file will be saved inside the directory **exp00000/result** with the name **out-1.txt** inside the directory of the selected experiment.
 
 The metrics can be computed by adding the filepath of the results to `metrics_reproduced.py` inside **/reproducibility_study/Evaluation** and following
-the instruction inside the [REPRODUCE.md](../../../Evaluation/REPRODUCE.md) file present in the same folder.
+the instruction inside the [REPRODUCE.md](../../Evaluation/REPRODUCE.md) file present in the same folder.
 
 ## 6. Further Notes
 Nothing relevant to be mentioned.

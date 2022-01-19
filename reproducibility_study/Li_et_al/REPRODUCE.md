@@ -90,16 +90,16 @@ The code to train and test the models can be executed directly via command line.
 must be launched in the folder **NLR/src**. The commands in Windows (for Linux `python` must be replaced with `python3`) are:
 
 	MovieLens 1M
-	PMF: python main.py --rank 1 --model_name PMF --optimizer Adam --lr 0.001 --l2 0.00001 --dataset movielens_1m --metric ndcg@10 --random_seed 2018 --gpu 0 --verbose -1 --unlabel_test 1
-	STAMP: python main.py --rank 1 --model_name STAMP --optimizer Adam --lr 0.001 --l2 0.00001 --dataset movielens_1m --metric ndcg@10 --random_seed 2018 --gpu 0 --verbose -1 --unlabel_test 1 --max_his 30
-	BiasedMF: python main.py --rank 1 --model_name BiasedMF --optimizer Adam --lr 0.001 --l2 0.00001 --dataset movielens_1m --metric ndcg@10 --random_seed 2018 --gpu 0 --verbose -1 --unlabel_test 1
-	NeuMF (NCF.py): python main.py --rank 1 --model_name NCF --optimizer Adam --lr 0.001 --l2 0.00001 --dataset movielens_1m --metric ndcg@10 --random_seed 2018 --gpu 0 --verbose -1 --unlabel_test 1 --layers [32,16,8] --p_layers [64]
+	PMF: python main.py --rank 1 --model_name PMF --optimizer Adam --lr 0.001 --l2 0.00001 --dataset movielens_1m --metric ndcg@10 --random_seed 2018 --gpu 0 --verbose -1 --unlabel_test 1 --u_vector_size 64 --i_vector_size 64
+	STAMP: python main.py --rank 1 --model_name STAMP --optimizer Adam --lr 0.001 --l2 0.00001 --dataset movielens_1m --metric ndcg@10 --random_seed 2018 --gpu 0 --verbose -1 --unlabel_test 1 --u_vector_size 64 --i_vector_size 64 --max_his 30
+	BiasedMF: python main.py --rank 1 --model_name BiasedMF --optimizer Adam --lr 0.001 --l2 0.00001 --dataset movielens_1m --metric ndcg@10 --random_seed 2018 --gpu 0 --verbose -1 --unlabel_test 1 --u_vector_size 32 --i_vector_size 32
+	NeuMF (NCF.py): python main.py --rank 1 --model_name NCF --optimizer Adam --lr 0.001 --l2 0.00001 --dataset movielens_1m --metric ndcg@10 --random_seed 2018 --gpu 0 --verbose -1 --unlabel_test 1 --u_vector_size 32 --i_vector_size 32 --layers [32,16,8] --p_layers [128]
 	
 	Last.FM 1K
-	PMF: python main.py --rank 1 --model_name PMF --optimizer Adam --lr 0.001 --l2 0.00001 --dataset filtered(20)_lastfm_1K --metric ndcg@10 --random_seed 2018 --gpu 0 --verbose -1 --unlabel_test 1
-	STAMP: python main.py --rank 1 --model_name STAMP --optimizer Adam --lr 0.001 --l2 0.00001 --dataset filtered(20)_lastfm_1K --metric ndcg@10 --random_seed 2018 --gpu 0 --verbose -1 --unlabel_test 1 --max_his 30
-	BiasedMF: python main.py --rank 1 --model_name BiasedMF --optimizer Adam --lr 0.001 --l2 0.00001 --dataset filtered(20)_lastfm_1K --metric ndcg@10 --random_seed 2018 --gpu 0 --verbose -1 --unlabel_test 1
-	NeuMF (NCF.py): python main.py --rank 1 --model_name NCF --optimizer Adam --lr 0.001 --l2 0.00001 --dataset filtered(20)_lastfm_1K --metric ndcg@10 --random_seed 2018 --gpu 0 --verbose -1 --unlabel_test 1 --layers [32,16,8] --p_layers [64]
+	PMF: python main.py --rank 1 --model_name PMF --optimizer Adam --lr 0.01 --l2 0.00001 --dataset filtered(20)_lastfm_1K --metric ndcg@10 --random_seed 2018 --gpu 0 --verbose -1 --unlabel_test 1 --u_vector_size 64 --i_vector_size 64
+	STAMP: python main.py --rank 1 --model_name STAMP --optimizer Adam --lr 0.001 --l2 0.00001 --dataset filtered(20)_lastfm_1K --metric ndcg@10 --random_seed 2018 --gpu 0 --verbose -1 --unlabel_test 1 --u_vector_size 64 --i_vector_size 64 --max_his 30
+	BiasedMF: python main.py --rank 1 --model_name BiasedMF --optimizer Adam --lr 0.001 --l2 0.00001 --dataset filtered(20)_lastfm_1K --metric ndcg@10 --random_seed 2018 --gpu 0 --verbose -1 --unlabel_test 1 --u_vector_size 64 --i_vector_size 64
+	NeuMF (NCF.py): python main.py --rank 1 --model_name NCF --optimizer Adam --lr 0.001 --l2 0.00001 --dataset filtered(20)_lastfm_1K --metric ndcg@10 --random_seed 2018 --gpu 0 --verbose -1 --unlabel_test 1 --u_vector_size 64 --i_vector_size 64 --layers [32,16,8] --p_layers [64]
 	
 
 
