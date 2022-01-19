@@ -29,7 +29,7 @@ To select which input data to use you need to modify the following variables:
 
 For the ALS baseline we used the following hyper-parameters:
 - rank: 4
-- &#955;<sub>1</sub> (lambda): (MovieLens 1M: 0.1, Last.FM 1K: 10)
+- &#955; (lambda): (MovieLens 1M: 0.1, Last.FM 1K: 10)
 
 For "group loss variance" utility the parameters values that we used are:
 - runs: 10
