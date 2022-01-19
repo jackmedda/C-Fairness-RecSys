@@ -41,7 +41,12 @@ To select which input data to use you need to modify the following variables:
 									while `F` are the users of the minority group (female, old) that in the pre-processed datasets are identified with `False`.
 - `_dataset` (line 101): dataset used to generate the input data. It is also present at the beginnning of the input filename.
 
-In `Main.py` we set the maximum number of neighbors of ItemKNN to 20 and the number of features of BiasedMF to 50.
+In `Main.py` we set the following hyper-parameters for the two models:
+- **ItemKNN**
+    - maximum number of neighbors: (MovieLens 1M: 20, Last.FM 1K: 40)
+- **ALS BiasedMF**
+    - features: 60
+    - iterations: 25
 
 ## 4. Code Execution
 Once the variables to choose the input data and the sensitive attribute to consider have been set to the right value, the code can be executed with

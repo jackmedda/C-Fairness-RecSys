@@ -32,19 +32,19 @@ inside the same file or the [REPRODUCE.md](../../Preprocessing/REPRODUCE.md) fil
 you need to add the argument `--create_fairgo_input_data` to generate the input files for this paper. You must copy the files from the
 related directory and copy them inside the directory **filtered(20)_lastfm_1K_reproduce_data** for Last.FM 1K and **movielens_1m_reproduce_data** for MovieLens 1M.
 
-We used the following hyper-parameters:
-- learning rate for all the optimizers: 0.005
-- filtered embeddings size: 64
+The embedding of the GCN baseline have been created using the following hyper-parameters:
+- GCN embedding size: (MovieLens 1M: 64, Last.FM 1K: 128)
+- GCN learning rate: (MovieLens 1M: 0.01, Last.FM 1K: 0.005)
 
-For each dataset we used the following hyper-parameters:
-- MovieLens 1M:
-    - &#955; = 0.1
-    - 3 layers for each filter network with hidden layers size: [128,64]
-    - 4 layers for each discriminator with hidden layers size: [16,8]
-- Last.FM 1K:
-    - &#955; = 0.2
-    - 4 layers for each filter network with hidden layers size: [128,64,32]
-    - 4 layers for each discriminator with hidden layers size: [16,8,4]
+The parameters selected for the filtering mitigation approach are: 
+- **MovieLens 1M**:
+    - d_optimizer learning rate (Learning rate of the discriminators optimizer): 0.01
+    - f_optimizer learning rate (Learning rate of the filters optimizer): 0.005
+    - &#955; (lambda): 0.2
+- **Last.FM 1K**:
+    - d_optimizer learning rate (Learning rate of the discriminators optimizer): (Gender: 0.005, Age: 0.01)
+    - f_optimizer learning rate (Learning rate of the filters optimizer): (Gender: 0.01, Age: 0.005)
+    - &#955; (lambda): 0.3
 
 ## 4. Code Execution
 The code to train the GCN and save the embeddings can be executed with the following command in Windows inside the folder **code/code_ml** for MovieLens 1M or inside the folder

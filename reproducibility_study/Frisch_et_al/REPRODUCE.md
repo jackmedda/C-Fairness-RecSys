@@ -38,7 +38,15 @@ To select which input data to use you need to modify the following variables:
 - `dataset` (line 45): dataset used to generate the input data. It is also present at the beginning of the input filename.
 - `covariates` (line 90): 
 
-We set the number of iterations to 25 to repeat the training process of 300 epochs.
+We set the number of iterations to 25 to repeat the training process of 300 epochs and use the following hyper-parameters:
+- **MovieLens 1M**
+    - nq (number of row groups): 25
+    - nl (number of column groups): 25
+    - learning rate: 0.02
+- **Last.FM 1K**
+    - nq (number of row groups): 15
+    - nl (number of column groups): 25
+    - learning rate: 0.05
 
 ## 4. Code Execution
 Once the variables to choose the input data and the sensitive attribute to consider have been set to the right value, the code can be executed with

@@ -51,6 +51,24 @@ For MovieLens 1M from each gender or age group 1500 users are randomly sampled (
 The hyper-parameters for each algorithm can be modified in [algorithms](algorithms/ml) folder, but only the ones inside `ml` folder, since also the `evaluateLFM1KReproduced` task
 uses the algorithms prepared for MovieLens 1M.
 
+The hyper-parameters used for each model are the followings:
+- **Top-N Recommendation**
+    - *ItemKNN (Implicit)*
+        - maximum number of neighbors: 40
+    - *UserKNN (Implicit)*
+        - maximum number of neighbors: 40
+    - *SVD (Implicit)*
+        - features: 60
+        - iterations: 150
+- **Rating Prediction**
+    - *ItemKNN*
+        - maximum number of neighbors: (MovieLens 1M: 20, Last.FM 1K: 40)
+    - *UserKNN*
+        - maximum number of neighbors: (MovieLens 1M: 40, Last.FM 1K: 20)
+    - *SVD*
+        - features: 60
+        - iterations: (MovieLens 1M: 200, Last.FM 1K: 150)
+
 ## 4. Code Execution
 Once the input data files have been copied inside the folder `custom_data` that you can find in this directory, you can execute the code inside the file 
 [train.py](train.py) which is not part of the original dataset of *Ekstrand et al*. This code automatically creates the

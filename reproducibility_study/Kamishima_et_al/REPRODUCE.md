@@ -27,10 +27,39 @@ related directory and copy them inside this directory `data` which is also prese
 
 The hyper-parameters have been set modifying the files [kamiers/sp_pmf/bdist_match.py](kamiers/sp_pmf/bdist_match.py) and
 [kamiers/sp_pmf/mi_normal.py](kamiers/sp_pmf/mi_normal.py) by setting the variables `a` and `b` in the constructor.
-The hyper-parameters values that we selected are:
-- *a = 10<sup>-8</sup>*
-- *b = 10<sup>-24</sup>*
-- &#951;: 1.0
+The hyper-parameters values that we selected for the baseline are:
+- **MovieLens 1M**
+    - k (embedding size): 7
+    - C (regularization parameter): 10
+- **Last.FM 1K**
+    - k (embedding size): 30
+    - C (regularization parameter): 20
+    
+For each type of independence term applied to the PMF baseline we selected the following parameters:
+- **Mean Matching**
+    - *MovieLens 1M*
+        - &#951; (eta): 1e8
+    - *Last.FM 1K*
+        - &#951; (eta): (Gender: 1e6, Age: 1e7)
+- **BDist Matching**
+    - *MovieLens 1M*
+        - a = 1e-8
+        - b = (Gender: 1e-24, Age: 1e-12)
+        - &#951; (eta): 1e8
+    - *Last.FM 1K*
+        - a = (Gender: 1e-8, Age: 1e-4)
+        - b = 1e-24
+        - &#951; (eta): (Gender: 1e6, Age: 1e8)
+- **Mi Normal**
+    - *MovieLens 1M*
+        - a = (Gender: 1e-4, Age: 1e-8)
+        - b = (Gender: 1e-12, Age: 1e-24)
+        - &#951; (eta): Age: 1e8
+    - *Last.FM 1K*
+        - a = (Gender: 1e-8, Age: 1e-4)
+        - b = (Gender: 1e-12, Age: 1e-24)
+        - &#951; (eta): (Gender: 1e6, Age: 1e8)
+
 
 ## 4. Code Execution
 Differently from others source codes, this codebase perfectly accomodate different data in input with an easy-to-use argument parser to pass the information

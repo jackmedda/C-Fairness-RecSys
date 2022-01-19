@@ -60,19 +60,39 @@ NOTICE: to reduce the number of labels we only use the labels `F` and `M`. The u
 that in the pre-processed datasets are identified with `True`, while `F` are the users of the minority group (female, old) that in the pre-processed datasets
 are identified with `False`, as done by the authors, who treat females as the protected class.
 
-The hyper-parameters for the *BN-SLIM-U* model that we used are:
+The hyper-parameters for the *SLIM-U* model that we used are:
 - early-stop: true
 - similarity (type="user"): cos
-- neighborhood-size: 50
 - shrinkage: 10
 - bold-driver: false
 - iterator-max: 10
-- &#955;<sub>1</sub> (`<l1-reg>`): 0.1
-- &#955;<sub>2</sub> (`<l2-reg>`): 0.001
-- &#955;<sub>3</sub> (`<l3-reg>`): 25
+- &#955;<sub>3</sub> (`<l3-reg>`): 0.0
 - min-sim: 0.0
 
-The baseline *SLIM-U* can be obtained by setting &#955;<sub>3</sub> to 0.0.
+The other hyper-parameters are different for each dataset:
+
+- **MovieLens 1M**
+    - neighborhood-size: 20
+    - &#955;<sub>1</sub> (`<l1-reg>`): 2.0
+    - &#955;<sub>2</sub> (`<l2-reg>`): 0.1
+- **Last.FM 1K**
+    - neighborhood-size: 60
+    - &#955;<sub>1</sub> (`<l1-reg>`): 1.0
+    - &#955;<sub>2</sub> (`<l2-reg>`): 0.1
+
+The baseline *SLIM-U* is obtained by setting &#955;<sub>3</sub> to 0.0, so the following list only show the different
+values of &#955;<sub>3</sub> that we used for each dataset and sensitive attribute:
+
+- **MovieLens 1M**
+    - *Gender*
+        - &#955;<sub>3</sub> (`<l3-reg>`): 5
+    - *Age*
+        - &#955;<sub>3</sub> (`<l3-reg>`): 25
+- **Last.FM 1K**
+    - *Gender*
+        - &#955;<sub>3</sub> (`<l3-reg>`): 100
+    - *Age*
+        - &#955;<sub>3</sub> (`<l3-reg>`): 50
 
 ## 4. Code Execution
 The specific experiment, represented by the name of the folder, can be executed with the following command inside this folder in Windows:

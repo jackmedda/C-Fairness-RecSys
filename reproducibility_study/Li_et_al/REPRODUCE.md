@@ -63,18 +63,24 @@ To select which input data to use in the fairness-aware post-processing method y
 - `run_id` (line 256): it is a unique id that is added by `generate_input_data.py` in the filename for the creation of the input files for the fairness-aware
 post-processing method. It is used to identify the right files with the string `rank` and the values of `group_1` and `group_2`.
 
-The hyper-parameters that we used are:
-- learning rate: 0.001
-- l2-regularization: 0.00001
-- epochs: 100 (best model is chosen on validation set)
-- embedding size: 64
-
-Some models other hyper-parameters could be selected and we set them to the following values:
-- NeuMF (NCF):
-    - MLP size: [32,16,8]
-    - Final Output Layer size: [64]
-- STAMP:
-    - Maximum User History Length: 30
+The hyper-parameters that we used for each model are:
+- l2 embedding: 0.00001 (for all models)
+- epochs: 100
+- **BiasedMF**
+    - user\item embedding_size: (MovieLens 1M: 32, Last.FM 1K: 64)
+    - learning rate: 0.001
+- **PMF**
+    - user\item embedding_size: 64
+    - learning rate: (MovieLens 1M: 0.001, Last.FM 1K: 0.01)
+- **NeuMF (NCF)**
+    - user\item embedding_size: (MovieLens 1M: 32, Last.FM 1K: 64)
+    - learning rate: 0.001
+    - layers: [32,16,8]
+    - p_layers (Prediction Layers): (MovieLens 1M: [128], Last.FM 1K: [64])
+- **STAMP**
+    - user\item embedding_size: 64
+    - learning rate: 0.001
+    - max_his (Maximum User History Length): 30
 
 For the training phase we added 1 negative sample for each interaction in the training set, and the same for the validation set.
 For the fairness-aware post-processing method we set `epsilon` to 0.0 to evaluate the consequences of aiming at a "perfect" fairness.

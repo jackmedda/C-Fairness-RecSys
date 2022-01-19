@@ -27,9 +27,13 @@ To select which input data to use you need to modify the following variables:
 - `dataset` (line 16\-17): it is the dataset that you select for the experiment and it represents also the beginning of the input filename
 - `sensitive_attribute` (line 20\-21/23\-24): sensitive attribute to consider in the mitigation procedure and it represented the end of the input filename
 
+For the ALS baseline we used the following hyper-parameters:
+- rank: 4
+- &#955;<sub>1</sub> (lambda): (MovieLens 1M: 0.1, Last.FM 1K: 10)
+
 For "group loss variance" utility the parameters values that we used are:
-- &#955; = 1
-- rank = 8
+- runs: 10
+- budget percentage: (MovieLens 1M: 1.0, Last.FM 1K: 10.0)
 
 ## 4. Code Execution
 Once the variables to select the input data and the sensitive attribute to consider have been set to the right value, the code can be executed with
