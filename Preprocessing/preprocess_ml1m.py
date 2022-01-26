@@ -13,8 +13,8 @@ from helpers.logger import RcLogger
 """
  # per_user_timestamp train-validation-test split 70%-10%-20%, age binarised with age <= 34 
  python -m Preprocessing.preprocess_ml1m -dataset movielens --dataset_size 1m 
- --subdatasets ratings --dataset_split train --users_field user_id --items_field artist_id 
- --dataset_columns user_id movie_id user_rating user_gender bucketized_user_age --rating_field user_rating 
+ --subdatasets ratings --dataset_split train --users_field user_id --items_field movie_id 
+ --dataset_columns user_id movie_id user_rating user_gender bucketized_user_age timestamp --rating_field user_rating 
  --sensitive_field user_gender --train_val_test_split_type per_user_timestamp --train_val_test_split 70% 10% 20%
  --attribute_to_binary bucketized_user_age --binary_le_delimiter 34 -model Pointwise --n_reps 2
  --overwrite_preprocessed_dataset
