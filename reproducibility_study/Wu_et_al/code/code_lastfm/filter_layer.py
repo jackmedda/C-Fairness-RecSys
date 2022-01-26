@@ -371,7 +371,6 @@ if __name__ == "__main__":
     d_i_train = u_d
     d_j_train = i_d
 
-
     # user-item  to user-item matrix and item-user matrix
     def readTrainSparseMatrix(set_matrix, is_user):
         user_items_matrix_i = []
@@ -384,23 +383,20 @@ if __name__ == "__main__":
             d_i = i_d
             d_j = u_d
             shape = (item_num, user_num)
-        # for i in set_matrix:
-        #     for j in set_matrix[i]:
-        #         user_items_matrix_i.append([i, j])
-        #         d_i_j = np.sqrt(d_i[i] * d_j[j])
-        #         # 1/sqrt((d_i+1)(d_j+1))
-        #         user_items_matrix_v.append(d_i_j)  # (1./len_set)
-        for _user, _rating, _item in set_matrix:
-            user_items_matrix_i.append([_user, _item])
-            user_items_matrix_v.append(_rating / 1e4)
-
+        for i in set_matrix:
+            len_set = len(set_matrix[i])
+            for j in set_matrix[i]:
+                user_items_matrix_i.append([i, j])
+                d_i_j = np.sqrt(d_i[i] * d_j[j])
+                # 1/sqrt((d_i+1)(d_j+1))
+                user_items_matrix_v.append(d_i_j)  # (1./len_set)
         user_items_matrix_i = torch.LongTensor(user_items_matrix_i)
         user_items_matrix_v = torch.FloatTensor(user_items_matrix_v)
         return torch.sparse.FloatTensor(user_items_matrix_i.t(), user_items_matrix_v, shape)
 
 
-    sparse_u_i = readTrainSparseMatrix(training_ratings_dict.values(), True)
-    sparse_i_u = torch.clone(sparse_u_i.t())
+    sparse_u_i = readTrainSparseMatrix(training_user_set, True)
+    sparse_i_u = readTrainSparseMatrix(training_item_set, False)
 
     train_dataset = data_utils.BPRData(
         train_raing_dict=training_ratings_dict, is_training=True, data_set_count=train_dict_count)
@@ -410,12 +406,12 @@ if __name__ == "__main__":
     testing_dataset_loss = data_utils.BPRData(
         train_raing_dict=testing_ratings_dict, is_training=False, data_set_count=test_dict_count)
     testing_loader = DataLoader(testing_dataset_loss,
-                                batch_size=test_dict_count, shuffle=False)
+                                     batch_size=test_dict_count, shuffle=False)
 
     validation_dataset_loss = data_utils.BPRData(
         train_raing_dict=val_ratings_dict, is_training=False, data_set_count=val_dict_count)
     validation_loader = DataLoader(validation_dataset_loss,
-                                   batch_size=val_dict_count, shuffle=False)
+                                batch_size=val_dict_count, shuffle=False)
 
     model = BPR(user_num, item_num, factor_num, sparse_u_i, sparse_i_u, d_i_train, d_j_train)
 
@@ -425,13 +421,11 @@ if __name__ == "__main__":
     def rmse(predictions, targets):
         return np.sqrt(((predictions - targets) ** 2).mean())
 
-
     user_e = None
     item_e = None
     val_rmse = None
     print('--------training processing-------')
     for epoch in range(100):
-        print("Epoch:", epoch + 1)
         model.train()
         start_time = time.time()
         # pdb.set_trace()
@@ -486,29 +480,27 @@ if __name__ == "__main__":
                 val_rmse = r_val
                 print("epoch", epoch)
                 np.save(
-                    os.path.join(
-                        r'C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\FairGO\code',
-                        embs_path,
-                        r'new_gcn_embs\user_emb_epoch.npy'),
+                    os.path.join(r'C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\FairGO\code',
+                                 embs_path,
+                                 r'new_gcn_embs\user_emb_epoch.npy'),
                     model.embed_user.weight.detach().numpy(), allow_pickle=True)
                 np.save(
-                    os.path.join(
-                        r'C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\FairGO\code',
-                        embs_path,
-                        r'new_gcn_embs\item_emb_epoch.npy'),
+                    os.path.join(r'C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\FairGO\code',
+                                 embs_path,
+                                 r'new_gcn_embs\item_emb_epoch.npy'),
                     model.embed_item.weight.detach().numpy(), allow_pickle=True)
-
-                test_prediction = []
-                label_all = []
-                for pair_i in testing_ratings_dict:
-                    u_id, r_v, i_id = testing_ratings_dict[pair_i]
-                    pre_get = np.sum(user_e[u_id] * item_e[i_id])
-                    test_prediction.append(pre_get)
-
-                with open(os.path.join(dataset_base_path, f"predictions_baseline_{factor_num}_{lr}.pkl"), 'wb') as pk:
-                    pickle.dump(test_prediction, pk)
         else:
             val_rmse = r_val
 
         print(str_print_evl)
+
+    test_prediction = []
+    label_all = []
+    for pair_i in testing_ratings_dict:
+        u_id, r_v, i_id = testing_ratings_dict[pair_i]
+        pre_get = np.sum(user_e[u_id] * item_e[i_id])
+        test_prediction.append(pre_get)
+
+    with open(os.path.join(dataset_base_path, f"predictions_baseline.pkl"), 'wb') as pk:
+        pickle.dump(test_prediction, pk)
 
