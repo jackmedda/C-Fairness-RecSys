@@ -18,6 +18,8 @@ class RecSysArgumentParser(object):
                 if self._dataset_columns_sep in args.dataset_columns:
                     args.dataset_columns = RecSysArgumentParser._parse_dataset_columns(args.dataset_columns,
                                                                                        self._dataset_columns_sep)
+                else:
+                    args.dataset_columns = [args.dataset_columns]
 
             return args
 
