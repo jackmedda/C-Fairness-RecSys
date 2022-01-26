@@ -172,7 +172,7 @@ def filter_interactions(data: Union[pd.DataFrame, tf.data.Dataset],
 
         dataset_info += constants.PREFIX_BALANCED_DATASET.format(
             balance_attribute=balance_attribute,
-            balance_ratio=str(list(balance_ratio.items()))
+            balance_ratio=''.join(str(list(balance_ratio.items())).split())
         )
 
     # Sampling should be done always at the end
@@ -1570,12 +1570,14 @@ def to_librec_auto_input_data(metadata, orig_train, test, train=None, validation
     _orig_train[[users_field, items_field, rating_field]].to_csv(
         os.path.join(out_path, f"{metadata['dataset']}_{metadata['dataset_size']}_train.csv"),
         header=None,
-        index=None
+        index=None,
+        line_terminator='\n'
     )
     _test[[users_field, items_field, rating_field]].to_csv(
         os.path.join(out_path, f"{metadata['dataset']}_{metadata['dataset_size']}_test.csv"),
         header=None,
-        index=None
+        index=None,
+        line_terminator='\n'
     )
 
     RcLogger.get().info("Mapping the values of sensitive attribute for Librec Auto (Balanced Neighborhoods "
@@ -1591,7 +1593,8 @@ def to_librec_auto_input_data(metadata, orig_train, test, train=None, validation
 
     data_users.to_csv(
         os.path.join(out_path, f"{metadata['dataset']}_{metadata['dataset_size']}_user-features_({sensitive_field}).csv"),
-        header=None
+        header=None,
+        line_terminator='\n'
     )
 
 
