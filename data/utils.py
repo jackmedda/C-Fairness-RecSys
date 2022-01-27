@@ -2030,7 +2030,7 @@ class FeaturesDictTensorsWriter(FeaturesDictTensorsIO):
             if overwrite and os.path.exists(self._foldername):
                 if split is not None:
                     split_path = os.path.join(self._foldername, split)
-                    if os.path.exists(split):
+                    if os.path.exists(split_path):
                         shutil.rmtree(split_path)
         elif isinstance(overwrite, str) and overwrite.lower() == "all":
             if os.path.exists(self._foldername):
