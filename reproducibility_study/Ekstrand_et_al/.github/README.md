@@ -25,7 +25,7 @@ The other libraries have been installed using `R`. The [README.md](README.md) fi
 but we cannot give hints on this procedure, since our study did not depend on conda.
 
 ## 2. Original code and Modifications
-The original code is not linked in the paper, but it is available in a [public repository](https://scholarworks.boisestate.edu/cs_scripts/4/).
+The original code is linked in the paper and available in a [public repository](https://scholarworks.boisestate.edu/cs_scripts/4/).
 
 We modified the main file, which is [build.gradle](build.gradle), by commenting the section that use a 5-fold cross-validation of `evaluateML` task and adding the lines to use
 custom train and test files, and modified the `predict` and `recommend` task to also save the predictions and not only the computed metrics. We created a new task
