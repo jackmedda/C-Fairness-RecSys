@@ -576,11 +576,11 @@ def main():
         results[key] = []
         stats[key] = []
 
-    if os.path.exists(os.path.join(constants.BASE_PATH, "../reproducibility_study", "projects", "reproducibility_study", f"{args.dataset}_results_{args.sensitive_attribute}.pkl")):
-        with open(os.path.join(constants.BASE_PATH, "../reproducibility_study", "projects", "reproducibility_study", f"{args.dataset}_results_{args.sensitive_attribute}.pkl"), 'rb') as pk:
+    if os.path.exists(os.path.join(constants.BASE_PATH, os.pardir, "Evaluation", f"{args.dataset}_results_{args.sensitive_attribute}.pkl")):
+        with open(os.path.join(constants.BASE_PATH, os.pardir, "Evaluation", f"{args.dataset}_results_{args.sensitive_attribute}.pkl"), 'rb') as pk:
             results = pickle.load(pk)
 
-        with open(os.path.join(constants.BASE_PATH, "../reproducibility_study", "projects", "reproducibility_study", f"{args.dataset}_stats_{args.sensitive_attribute}.pkl"), 'rb') as pk:
+        with open(os.path.join(constants.BASE_PATH, os.pardir, "Evaluation", f"{args.dataset}_stats_{args.sensitive_attribute}.pkl"), 'rb') as pk:
             stats = pickle.load(pk)
 
     if not args.only_plot:
@@ -851,10 +851,10 @@ def main():
                 for _mod_name in exp['model']:
                     print(f"Completed: {exp['target']}", exp['paper'], _mod_name)
 
-            with open(os.path.join(constants.BASE_PATH, "../reproducibility_study", "projects", "reproducibility_study", f"{args.dataset}_results_{args.sensitive_attribute}.pkl"), 'wb') as pk:
+            with open(os.path.join(constants.BASE_PATH, os.pardir, "Evaluation", f"{args.dataset}_results_{args.sensitive_attribute}.pkl"), 'wb') as pk:
                 pickle.dump(results, pk, protocol=pickle.HIGHEST_PROTOCOL)
 
-            with open(os.path.join(constants.BASE_PATH, "../reproducibility_study", "projects", "reproducibility_study", f"{args.dataset}_stats_{args.sensitive_attribute}.pkl"), 'wb') as pk:
+            with open(os.path.join(constants.BASE_PATH, os.pardir, "Evaluation", f"{args.dataset}_stats_{args.sensitive_attribute}.pkl"), 'wb') as pk:
                 pickle.dump(stats, pk, protocol=pickle.HIGHEST_PROTOCOL)
 
     # Retrieve names of all the baselines in order to use the patch in the plots
@@ -925,7 +925,7 @@ def main():
                         for idx in range(idx_baseline, idx_baseline + 3):
                             patches[idx].set_hatch('/')
 
-    plots_path = os.path.join(constants.BASE_PATH, "../reproducibility_study", "projects", "reproducibility_study", "plots", args.dataset)
+    plots_path = os.path.join(constants.BASE_PATH, os.pardir, "Evaluation", "plots", args.dataset)
     if not os.path.exists(plots_path):
         os.makedirs(plots_path)
 
@@ -998,30 +998,32 @@ def load_specific_rel_matrix(function, _file, sens_attr):
         rel_matrix = RelevanceMatrix.load(_file)
     else:
         if function == RelevanceMatrix.from_co_clustering_fair_pickle:
-            co_clust_sens_attr = "gender" if sens_attr == "Gender" else "age"
             rel_matrix_args = [
                 os.path.join(
-                    r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\Co-clustering for fair recommendation\data",
-                    f"{args.dataset}_extra_data_{co_clust_sens_attr}.pkl"
+                    constants.BASE_PATH, os.pardir, "Preprocessing", "input_data", args.dataset,
+                    f"co_clustering_for_fair_input_data",
+                    f"{args.dataset}_extra_data_{args.sensitive_attribute}.pkl"
                 )
             ]
         elif function == RelevanceMatrix.from_nlr_models_result:
             rel_matrix_args = [
                 os.path.join(
-                    r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\NLR\dataset",
-                    f"{args.dataset}",
+                    constants.BASE_PATH, os.pardir, "Preprocessing", "input_data", args.dataset,
+                    f"nlr_input_data",
                     f"{args.dataset}.test.csv"
                 )
             ]
         elif function == RelevanceMatrix.from_fair_go_predictions:
             rel_matrix_args = [
                 os.path.join(
-                    r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\FairGO",
-                    f"{args.dataset}_reproduce_data", "testing_ratings_dict.npy"
+                    constants.BASE_PATH, os.pardir, "Preprocessing", "input_data", args.dataset,
+                    "fairgo_input_data",
+                    "testing_ratings_dict.npy"
                 ),
                 os.path.join(
-                    r"C:\Users\Giacomo\Desktop\University\Dottorato di Ricerca\Idee paper - Progetti\Reproducibility Study\FairGO",
-                    f"{args.dataset}_reproduce_data", "mapping_user_item.npy"
+                    constants.BASE_PATH, os.pardir, "Preprocessing", "input_data", args.dataset,
+                    "fairgo_input_data",
+                    "mapping_user_item.npy"
                 )
             ]
         else:
@@ -1063,12 +1065,12 @@ def parse_baseline(exp):
 
 
 def results_to_latex_table():
-    repr_path = os.path.join(constants.BASE_PATH, "../reproducibility_study", "projects", "reproducibility_study")
+    eval_path = os.path.join(constants.BASE_PATH, os.pardir, "Evaluation")
 
-    with open(os.path.join(repr_path, f"{args.dataset}_results_{args.sensitive_attribute}.pkl"), "rb") as pk:
+    with open(os.path.join(eval_path, f"{args.dataset}_results_{args.sensitive_attribute}.pkl"), "rb") as pk:
         results: dict = pickle.load(pk)
 
-    tables_path = os.path.join(repr_path, "tables", args.dataset)
+    tables_path = os.path.join(eval_path, "tables", args.dataset)
     if not os.path.exists(tables_path):
         os.makedirs(tables_path)
 
@@ -1101,16 +1103,16 @@ def results_to_latex_table():
 
 
 def results_to_latex_full_table():
-    repr_path = os.path.join(constants.BASE_PATH, "../reproducibility_study", "projects", "reproducibility_study")
+    eval_path = os.path.join(constants.BASE_PATH, os.pardir, "Evaluation")
 
-    with open(os.path.join(repr_path, f"{args.dataset}_results_Gender.pkl"), "rb") as pk:
+    with open(os.path.join(eval_path, f"{args.dataset}_results_Gender.pkl"), "rb") as pk:
         results_gender: dict = pickle.load(pk)
 
-    with open(os.path.join(repr_path, f"{args.dataset}_results_Age.pkl"), "rb") as pk:
+    with open(os.path.join(eval_path, f"{args.dataset}_results_Age.pkl"), "rb") as pk:
         results_age: dict = pickle.load(pk)
 
     if results_age and results_gender:
-        tables_path = os.path.join(repr_path, "full_tables", args.dataset)
+        tables_path = os.path.join(eval_path, "full_tables", args.dataset)
         if not os.path.exists(tables_path):
             os.makedirs(tables_path)
 
@@ -1184,15 +1186,15 @@ def results_to_latex_full_table():
 
 
 def results_to_paper_table():
-    repr_path = os.path.join(constants.BASE_PATH, "../reproducibility_study", "projects", "reproducibility_study")
+    eval_path = os.path.join(constants.BASE_PATH, os.pardir, "Evaluation")
 
-    with open(os.path.join(repr_path, f"{args.dataset}_results_{args.sensitive_attribute}.pkl"), "rb") as pk:
+    with open(os.path.join(eval_path, f"{args.dataset}_results_{args.sensitive_attribute}.pkl"), "rb") as pk:
         results: dict = pickle.load(pk)
 
-    with open(os.path.join(repr_path, f"{args.dataset}_stats_{args.sensitive_attribute}.pkl"), "rb") as pk:
+    with open(os.path.join(eval_path, f"{args.dataset}_stats_{args.sensitive_attribute}.pkl"), "rb") as pk:
         stats: dict = pickle.load(pk)
 
-    tables_path = os.path.join(repr_path, "paper_tables", args.dataset)
+    tables_path = os.path.join(eval_path, "paper_tables", args.dataset)
     if not os.path.exists(tables_path):
         os.makedirs(tables_path)
 
@@ -1374,8 +1376,8 @@ def results_to_paper_table():
 
                 new_df.loc[idx, "Value"] = f'{pval}{new_df.loc[idx, "Value"]}'
 
-        new_df['Paper'] = new_df['Paper'].map(paper_map)
-        new_df['Model'] = new_df['Model'].map(model_map)
+        new_df['Paper'] = new_df['Paper'].map(lambda x: paper_map.get(x, x))
+        new_df['Model'] = new_df['Model'].map(lambda x: model_map.get(x, x))
 
         new_df = new_df.pivot(index=["Paper", "Model"], columns=["Type", "Metric", "Status"])
         new_df.columns.names = [''] * len(new_df.columns.names)
@@ -1397,8 +1399,8 @@ def results_to_paper_table():
                     (new_df[col] == f"{best_val:<05s}") |
                     (new_df[col] == sig5p + f"-{best_val:<05s}") |
                     (new_df[col] == sig5p + f"{best_val:<05s}") |
-                    (new_df[col] == sig1p + f"^-{best_val:<05s}") |
-                    (new_df[col] == sig1p + f"^{best_val:<05s}")
+                    (new_df[col] == sig1p + f"-{best_val:<05s}") |
+                    (new_df[col] == sig1p + f"{best_val:<05s}")
             )
             new_df.loc[best_rows, col] = ['\\bftab ' + f"{val:<05s}"
                                           if float(val.replace(sig1p, '').replace(sig5p, '')) >= 0
@@ -1420,21 +1422,21 @@ def results_to_paper_table():
 
 
 def results_to_paper_table_fused_datasets():
-    repr_path = os.path.join(constants.BASE_PATH, "../reproducibility_study", "projects", "reproducibility_study")
+    eval_path = os.path.join(constants.BASE_PATH, os.pardir, "Evaluation")
 
-    with open(os.path.join(repr_path, f"movielens_1m_results_{args.sensitive_attribute}.pkl"), "rb") as pk:
+    with open(os.path.join(eval_path, f"movielens_1m_results_{args.sensitive_attribute}.pkl"), "rb") as pk:
         results_ml1m: dict = pickle.load(pk)
 
-    with open(os.path.join(repr_path, f"movielens_1m_stats_{args.sensitive_attribute}.pkl"), "rb") as pk:
+    with open(os.path.join(eval_path, f"movielens_1m_stats_{args.sensitive_attribute}.pkl"), "rb") as pk:
         stats_ml1m: dict = pickle.load(pk)
 
-    with open(os.path.join(repr_path, f"filtered(20)_lastfm_1K_results_{args.sensitive_attribute}.pkl"), "rb") as pk:
+    with open(os.path.join(eval_path, f"filtered(20)_lastfm_1K_results_{args.sensitive_attribute}.pkl"), "rb") as pk:
         results_lfm1k: dict = pickle.load(pk)
 
-    with open(os.path.join(repr_path, f"filtered(20)_lastfm_1K_stats_{args.sensitive_attribute}.pkl"), "rb") as pk:
+    with open(os.path.join(eval_path, f"filtered(20)_lastfm_1K_stats_{args.sensitive_attribute}.pkl"), "rb") as pk:
         stats_lfm1k: dict = pickle.load(pk)
 
-    tables_path = os.path.join(repr_path, "paper_tables", "fused")
+    tables_path = os.path.join(eval_path, "paper_tables", "fused")
     if not os.path.exists(tables_path):
         os.makedirs(tables_path)
 
@@ -1621,8 +1623,8 @@ def results_to_paper_table_fused_datasets():
 
                     new_df.loc[idx, "Value"] = f'{pval}{new_df.loc[idx, "Value"]}'
 
-            new_df['Paper'] = new_df['Paper'].map(paper_map)
-            new_df['Model'] = new_df['Model'].map(model_map)
+            new_df['Paper'] = new_df['Paper'].map(lambda x: paper_map.get(x, x))
+            new_df['Model'] = new_df['Model'].map(lambda x: model_map.get(x, x))
 
             new_df = new_df.pivot(index=["Paper", "Model"], columns=["Type", "Metric", "Status"])
             new_df.columns.names = [''] * len(new_df.columns.names)
@@ -1644,8 +1646,8 @@ def results_to_paper_table_fused_datasets():
                         (new_df[col] == f"{best_val:<05s}") |
                         (new_df[col] == sig5p + f"-{best_val:<05s}") |
                         (new_df[col] == sig5p + f"{best_val:<05s}") |
-                        (new_df[col] == sig1p + f"^-{best_val:<05s}") |
-                        (new_df[col] == sig1p + f"^{best_val:<05s}")
+                        (new_df[col] == sig1p + f"-{best_val:<05s}") |
+                        (new_df[col] == sig1p + f"{best_val:<05s}")
                 )
                 new_df.loc[best_rows, col] = ['\\bftab ' + f"{val:<05s}"
                                               if float(val.replace(sig1p, '').replace(sig5p, '')) >= 0
