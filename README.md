@@ -1,7 +1,7 @@
 # Consumer Fairness in Recommender Systems: Contextualizing Definitions and Mitigations
 ![reproducibility task](research_method.jpg)
 
-This is the repository for the paper *Consumer Fairness in Recommender Systems: Contextualizing Definitions and Mitigation*,
+This is the repository for the paper [*Consumer Fairness in Recommender Systems: Contextualizing Definitions and Mitigations*](https://arxiv.org/abs/2201.08614),
 developed by Giacomo Medda, PhD student at University of Cagliari, with the support of [Gianni Fenu](https://unica.it/unica/it/ateneo_s07_ss01.page?contentId=SHD30371),
 Full Professor at University of Cagliari, [Mirko Marras](https://www.mirkomarras.com/), Non-tenure Track Assistant Professor at University of Cagliari,
 and [Ludovico Boratto](https://www.ludovicoboratto.com/), Tenure Track Assistant Professor at University of Cagliari.
@@ -113,3 +113,5 @@ Python >= 3.5, while the [virtualenv Website](https://virtualenv.pypa.io/en/late
 
 ## Rating Prediction Age
 ![Rating Prediction Age](results/RMSE_age.png)
+
+# Citation
