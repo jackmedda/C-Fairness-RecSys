@@ -10,7 +10,12 @@ The goal of the paper was to find a common understanding and practical benchmark
 fairness in recommender systems can be used in comparison to the others.
 
 If this repository is useful for your research, we would appreciate an acknowledgment by citing our ECIR '22 paper:
-> Boratto, L., Fenu, G., Marras, M., & Medda, G. (2022, April). Consumer fairness in recommender systems: Contextualizing definitions and mitigations. In European Conference on Information Retrieval (pp. 552-566). Cham: Springer International Publishing.
+```
+Boratto, L., Fenu, G., Marras, M., & Medda, G. (2022, April).
+Consumer fairness in recommender systems: Contextualizing definitions and mitigations.
+In: European Conference on Information Retrieval (pp. 552-566).
+Cham: Springer International Publishing.
+```
 
 ## Repository Organization
 
