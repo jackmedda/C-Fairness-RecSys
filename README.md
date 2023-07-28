@@ -9,7 +9,7 @@ and [Ludovico Boratto](https://www.ludovicoboratto.com/), Tenure Track Assistant
 The goal of the paper was to find a common understanding and practical benchmarks on how and when each procedure of consumer
 fairness in recommender systems can be used in comparison to the others.
 
-If this repository is useful for your research, we would appreciate an acknowledgment by citing our ECIR '22 paper:
+If this repository is useful for your research, we would appreciate an acknowledgment by citing our [ECIR '22 paper](https://doi.org/10.1007/978-3-030-99736-6_37):
 ```
 Boratto, L., Fenu, G., Marras, M., & Medda, G. (2022, April).
 Consumer fairness in recommender systems: Contextualizing definitions and mitigations.
